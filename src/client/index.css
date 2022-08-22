@@ -1,0 +1,94 @@
+body,
+.root,
+.App {
+  height: 100%;
+  background-color: #e9ecef;
+  background-image: url("/resources/images/shadow_lines.png");
+  background-repeat: repeat;
+  background-size: 50%;
+}
+
+h1 {
+  text-align: center;
+}
+
+#responsive-navbar-nav {
+  flex-direction: row-reverse;
+}
+
+/* Modify the background color */
+.navbar-custom {
+  background-color: #092916 !important;
+  transition: all;
+  transition-duration: 300ms;
+  padding: 25px 0;
+}
+
+.mainContent {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: white;
+  box-shadow: 10px 10px 10px #00000028, -10px -5px 10px #00000028;
+  border-radius: 5px;
+}
+
+.carousel-caption {
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 5px;
+  /* -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: black; */
+  text-shadow: 1px 1px #000000, -1px 1px #000000, -1px -1px #000000,
+    1px -1px #000000 !important;
+}
+
+.ReactGridGallery_tile-viewport {
+  box-shadow: 1px 1px 5px #00000028;
+}
+
+.ReactGridGallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Modify brand and text color */
+
+.about {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.about-blurb {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.about-blurb img {
+  flex-shrink: 0;
+  width: auto;
+  height: 10rem;
+  border-radius: 5px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.406);
+}
+
+.about-blurb p {
+  padding: 20px;
+  align-self: center;
+}
+
+.small-gallery .ReactGridGallery {
+  max-height: 600px;
+  overflow-y: scroll;
+}
+
+
+
+.carousel-inner>.item {
+  -webkit-transition: 0s !important;
+  -o-transition: 0s !important;
+  transition: 0s !important;
+}

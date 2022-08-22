@@ -1,0 +1,51 @@
+.Auth-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.821);
+  z-index: 100;
+  position: fixed;
+}
+
+.Auth-form {
+  width: 420px;
+  box-shadow: rgba(0, 0, 0, 0.312) 1px 1px 10px;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  border-radius: 8px;
+  background-color: white;
+  transition: all;
+  transition-duration: 1s;
+}
+
+.Auth-form-content {
+  padding-left: 12%;
+  padding-right: 12%;
+}
+
+.Auth-form-title {
+  text-align: center;
+  margin-bottom: 1em;
+  font-size: 24px;
+  color: rgb(34, 34, 34);
+  font-weight: 800;
+}
+
+label {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(34, 34, 34);
+}
+
+.Auth-close {
+  position: relative;
+  top: 0px;
+  left: 10px;
+  cursor: pointer;
+}
+
+.Auth-error {
+  color: red;
+}

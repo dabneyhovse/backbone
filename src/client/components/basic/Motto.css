@@ -1,0 +1,13 @@
+.motto-bar {
+  background-color: #092916;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  text-shadow: 1px 1px #000000, -1px 1px #000000, -1px -1px #000000,
+    1px -1px #000000 !important;
+}
+
+.redacted {
+  background-color: black;
+  color: black;
+}
