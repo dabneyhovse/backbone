@@ -26,9 +26,6 @@ const User = db.define("user", {
     type: Sequelize.BOOLEAN,
     defaultValue: false,
   },
-  verifyCode: {
-    type: Sequelize.STRING,
-  },
   password: {
     type: Sequelize.STRING,
     get() {
@@ -44,6 +41,13 @@ const User = db.define("user", {
   passwordReset: {
     type: Sequelize.BOOLEAN,
     defaultValue: false,
+  },
+  verifyCode: {
+    type: Sequelize.STRING,
+  },
+  tokens: {
+    type: Sequelize.DOUBLE,
+    defaultValue: 0,
   },
 });
 

@@ -4,9 +4,28 @@
   align-items: center;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.821);
   z-index: 100;
   position: fixed;
+  transition: visibility 0s, opacity 0.5s linear;
+  visibility: visible;
+}
+.Auth-form-container.hidden {
+  visibility: hidden;
+}
+
+.Auth-blackout {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: -1;
+  background-color: rgba(0, 0, 0, 0.3);
+  transition: background-color 0.5s linear;
+}
+
+.Auth-blackout.hidden {
+  background-color: rgba(0, 0, 0, 0);
 }
 
 .Auth-form {
@@ -16,8 +35,13 @@
   padding-bottom: 20px;
   border-radius: 8px;
   background-color: white;
+  margin-top: 0%;
   transition: all;
-  transition-duration: 1s;
+  transition-duration: 0.5s;
+}
+
+.Auth-form.hidden {
+  margin-top: 200vh;
 }
 
 .Auth-form-content {
@@ -48,4 +72,8 @@ label {
 
 .Auth-error {
   color: red;
+}
+
+.link-primary {
+  cursor: pointer;
 }

@@ -11,7 +11,7 @@ import { ToastContainer, toast } from "react-toastify";
 
 import Routes from "./routes";
 import { me } from "./store/user";
-import { Navdarb } from "./components";
+import { AuthModal, Navdarb } from "./components";
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -27,10 +27,11 @@ class App extends React.Component {
   render() {
     return (
       <>
-        <Navdarb />
         <ToastContainer />
         {this.props.loaded ? (
           <>
+            <Navdarb />
+            <AuthModal />
             <Routes />
           </>
         ) : (

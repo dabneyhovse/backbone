@@ -22,12 +22,19 @@ export const updateModalStatus = (status, isLoggedIn) => {
   };
 };
 
+export const updateModalVisibility = (visible) => {
+  return {
+    type: UPDATE_MODAL_STATUS,
+    status: visible,
+  };
+};
+
 export const loadedAuth = () => {
   return { type: LOADED_AUTH };
 };
 
 const init = {
-  visible: true,
+  visible: false,
   loaded: false,
 };
 

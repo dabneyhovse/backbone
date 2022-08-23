@@ -8,24 +8,34 @@
  */
 
 import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { IoMdArrowRoundBack } from "react-icons/io";
 
 import { auth } from "../../store/user";
-import { updateModalStatus } from "../../store/authModal";
+import { updateModalVisibility } from "../../store/authModal";
 
 import "./AuthModal.css";
 
-function AuthModal(props) {
+function AuthModal() {
+  // Hooks
+  const [authMode, setAuthMode] = useState("signin");
   const [personalEmail, setPersonalEmail] = useState("");
   const [caltechEmail, setCaltechEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
-
   const [formError, setFormError] = useState({});
+  const navigate = useNavigate();
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const { user, visible } = useSelector((state) => ({
+    visible: state.auth.visible,
+    user: state.user,
+  }));
+
+  // handle form submission and form errors
   const clearError = (err) => {
-    console.log(formError);
     setFormError({ ...formError, [err]: "" });
   };
 
@@ -50,16 +60,42 @@ function AuthModal(props) {
     }
   };
 
-  let [authMode, setAuthMode] = useState("signin");
-
   const changeAuthMode = () => {
     setAuthMode(authMode === "signin" ? "signup" : "signin");
   };
 
+  /**
+   * handle clicking the back arrow (either going to home if at /auth
+   * or dissappear if on any other page)
+   * @param {click event} event
+   */
+  const handleBack = () => {
+    if (location.pathname == "/auth") {
+      // Go back in history or just go directly to "/" on click
+      if (window.history.state && window.history.state.idx > 0) {
+        navigate(-1);
+      } else {
+        navigate("/", { replace: true });
+      }
+    }
+    dispatch(updateModalVisibility(false));
+  };
+
   return (
-    <div className="Auth-form-container">
-      <form className="Auth-form">
-        <IoMdArrowRoundBack className="Auth-close" color="black" size="1.5em" />
+    <div
+      className={`Auth-form-container ${
+        visible || location.pathname == "/auth" ? "" : "hidden"
+      }`}
+    >
+      <div className={`Auth-blackout ${visible ? "" : "hidden"}`}></div>
+      <form className={`Auth-form ${visible ? "" : "hidden"}`}>
+        <div onClick={handleBack}>
+          <IoMdArrowRoundBack
+            className="Auth-close"
+            color="black"
+            size="1.5em"
+          />
+        </div>
         <div className="Auth-form-content">
           <h3 className="Auth-form-title">
             Sign {authMode == "signin" ? "In" : "Up"}
@@ -90,9 +126,7 @@ function AuthModal(props) {
             <small className="Auth-error">{formError.personalEmail}</small>
           </div>
 
-          {authMode == "signin" ? (
-            <></>
-          ) : (
+          {authMode == "signin" ? null : (
             <div className="form-group mt-3">
               <label>Caltech Email</label>
               <input
@@ -121,9 +155,7 @@ function AuthModal(props) {
             />
             <small className="Auth-error">{formError.password}</small>
           </div>
-          {authMode == "signin" ? (
-            <></>
-          ) : (
+          {authMode == "signin" ? null : (
             <div className="form-group mt-3">
               <label>Confirm Password</label>
               <input
@@ -158,25 +190,18 @@ function AuthModal(props) {
   );
 }
 
-const mapDispatch = (dispatch) => {
-  return {
-    hideModal: () => {
-      dispatch(updateModalStatus(false, false));
-    },
-    login: (email, password) => {
-      dispatch(auth(email, password, "login"));
-    },
-    register: (email, password, verification) => {
-      dispatch(auth(email, password, "signup", verification));
-    },
-  };
-};
+// const mapDispatch = (dispatch) => {
+//   return {
+//     hideModal: () => {
+//       dispatch(updateModalStatus(false, false));
+//     },
+//     login: (email, password) => {
+//       dispatch(auth(email, password, "login"));
+//     },
+//     register: (email, password, verification) => {
+//       dispatch(auth(email, password, "signup", verification));
+//     },
+//   };
+// };
 
-const mapState = (state) => {
-  return {
-    visible: state.auth.visible,
-    user: state.user,
-  };
-};
-
-export default connect(mapState, mapDispatch)(AuthModal);
+export default AuthModal;

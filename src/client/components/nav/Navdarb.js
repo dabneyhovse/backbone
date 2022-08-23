@@ -9,9 +9,11 @@
  */
 
 import React from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { useEffect, useRef } from "react";
+
+import { FaUserCircle } from "react-icons/fa";
 
 import Navbar from "react-bootstrap/Navbar";
 import Container from "react-bootstrap/Container";
@@ -50,25 +52,28 @@ function loadDynamic() {}
 
 const TRANS_FIXED_ROUTES = ["/", "/home"];
 
+/**
+ *
+ * @returns React.Component
+ */
 function Navdarb() {
+  // hooks
+  let dispatch = useDispatch();
   let location = useLocation();
 
   let dynServices = [];
 
+  // determing the styling of the navbar
   let navbarStyle = NAVBAR_DEFAULT;
   let navwrapStyle = NAVWRAP_DEFAULT;
   if (TRANS_FIXED_ROUTES.indexOf(location.pathname) !== -1) {
     navbarStyle = NAVBAR_TRANSPARENT;
     navwrapStyle = NAVWRAP_FIXED;
   }
-
   if (location.pathname == "/auth") {
     navwrapStyle = NAVBAR_HIDDEN;
   }
-
   const ref = useRef(null);
-  console.log(ref);
-
   useEffect(() => {
     if (
       ref.current !== null &&
@@ -102,9 +107,6 @@ function Navdarb() {
             <Nav className="transparent">
               <LinkContainer to="/gallery">
                 <Nav.Link>Gallery</Nav.Link>
-              </LinkContainer>
-              <LinkContainer to="/socialcalender">
-                <Nav.Link>Social Calender</Nav.Link>
               </LinkContainer>
               <NavDropdown title="Contact" id="collasible-nav-dropdown">
                 <NavDropdown.Item href="https://dabney.caltech.edu/wiki/doku.php?id=hovse_positions">
@@ -143,29 +145,26 @@ function Navdarb() {
                   <NavDropdown.Item>About Services</NavDropdown.Item>
                 </LinkContainer>
               </NavDropdown>
+              <NavDropdown title="Services" id="collasible-nav-dropdown">
+                <LinkContainer to="/profile">
+                  <NavDropdown.Item href>Profile</NavDropdown.Item>
+                </LinkContainer>
+                <NavDropdown.Divider />
+                <NavDropdown.Item>Logout</NavDropdown.Item>
+                <NavDropdown.Item
+                  onClick={() => {
+                    dispatch(updateModalStatus(true));
+                  }}
+                >
+                  Login / Signup
+                </NavDropdown.Item>
+              </NavDropdown>
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      {/* <>
-        <Offcanvas placement={"end"} show={this.show} onHide={this.handleClose}>
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title>Services</Offcanvas.Title>
-            <> http://dabneylibrary.loganapple.com/ </>
-          </Offcanvas.Header>
-          <Offcanvas.Body></Offcanvas.Body>
-        </Offcanvas>
-      </> */}
     </div>
   );
 }
 
-const mapDispatch = (dispatch) => {
-  return {
-    showLogin: () => {
-      dispatch(updateModalStatus(true));
-    },
-  };
-};
-
-export default connect(null, mapDispatch)(Navdarb);
+export default Navdarb;
