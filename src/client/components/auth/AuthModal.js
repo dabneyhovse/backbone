@@ -81,14 +81,19 @@ function AuthModal() {
     dispatch(updateModalVisibility(false));
   };
 
+  let hidden = visible || location.pathname == "/auth";
+
   return (
     <div
       className={`Auth-form-container ${
-        visible || location.pathname == "/auth" ? "" : "hidden"
+        hidden ? "" : "hidden"
       }`}
     >
-      <div className={`Auth-blackout ${visible ? "" : "hidden"}`}></div>
-      <form className={`Auth-form ${visible ? "" : "hidden"}`}>
+      <div
+        className={`Auth-blackout ${hidden ? "" : "hidden"}`}
+        onClick={handleBack}
+      ></div>
+      <form className={`Auth-form ${hidden ? "" : "hidden"}`}>
         <div onClick={handleBack}>
           <IoMdArrowRoundBack
             className="Auth-close"
@@ -101,7 +106,9 @@ function AuthModal() {
             Sign {authMode == "signin" ? "In" : "Up"}
           </h3>
           <div className="text-center">
-            Not registered yet?{" "}
+            {authMode == "signin"
+              ? "Not registered yet?"
+              : "Already registered?"}{" "}
             <span
               className="link-primary"
               onClick={() => {

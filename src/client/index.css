@@ -16,14 +16,6 @@ h1 {
   flex-direction: row-reverse;
 }
 
-/* Modify the background color */
-.navbar-custom {
-  background-color: #092916 !important;
-  transition: all;
-  transition-duration: 300ms;
-  padding: 25px 0;
-}
-
 .mainContent {
   margin-top: 20px;
   margin-bottom: 20px;
@@ -85,10 +77,24 @@ h1 {
   overflow-y: scroll;
 }
 
-
-
-.carousel-inner>.item {
+.carousel-inner > .item {
   -webkit-transition: 0s !important;
   -o-transition: 0s !important;
   transition: 0s !important;
+}
+
+
+
+
+/* remove the caret */
+.icon > .dropdown-toggle::after {
+  display: none !important;
+}
+
+/* Modify the background color */
+.navbar-custom {
+  background-color: #092916 !important;
+  transition: all;
+  transition-duration: 300ms;
+  padding: 25px 0;
 }

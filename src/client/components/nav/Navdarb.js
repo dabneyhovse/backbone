@@ -9,7 +9,7 @@
  */
 
 import React from "react";
-import { connect, useDispatch } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { useEffect, useRef } from "react";
 
@@ -60,6 +60,10 @@ function Navdarb() {
   // hooks
   let dispatch = useDispatch();
   let location = useLocation();
+
+  const { user } = useSelector((state) => ({
+    user: state.user,
+  }));
 
   let dynServices = [];
 
@@ -145,19 +149,29 @@ function Navdarb() {
                   <NavDropdown.Item>About Services</NavDropdown.Item>
                 </LinkContainer>
               </NavDropdown>
-              <NavDropdown title="Services" id="collasible-nav-dropdown">
-                <LinkContainer to="/profile">
-                  <NavDropdown.Item href>Profile</NavDropdown.Item>
-                </LinkContainer>
-                <NavDropdown.Divider />
-                <NavDropdown.Item>Logout</NavDropdown.Item>
-                <NavDropdown.Item
-                  onClick={() => {
-                    dispatch(updateModalStatus(true));
-                  }}
-                >
-                  Login / Signup
-                </NavDropdown.Item>
+              <NavDropdown
+                className="icon"
+                title={<FaUserCircle size="1.5em" />}
+                id="collasible-nav-dropdown"
+              >
+                {user.id == undefined ? (
+                  <NavDropdown.Item
+                    onClick={() => {
+                      dispatch(updateModalStatus(true));
+                    }}
+                  >
+                    Login / Signup
+                  </NavDropdown.Item>
+                ) : (
+                  <>
+                    <LinkContainer to="/profile">
+                      <NavDropdown.Item href>Profile</NavDropdown.Item>
+                    </LinkContainer>
+                    <NavDropdown.Divider />
+
+                    <NavDropdown.Item>Logout</NavDropdown.Item>
+                  </>
+                )}
               </NavDropdown>
             </Nav>
           </Navbar.Collapse>
