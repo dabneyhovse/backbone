@@ -10,6 +10,7 @@
 import React, { useEffect, useState } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
+import ReactLoading from "react-loading";
 
 import { IoMdArrowRoundBack } from "react-icons/io";
 
@@ -21,6 +22,7 @@ import "./AuthModal.css";
 function AuthModal() {
   // Hooks
   const [authMode, setAuthMode] = useState("signin");
+  const [username, setUsername] = useState("");
   const [personalEmail, setPersonalEmail] = useState("");
   const [caltechEmail, setCaltechEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -42,22 +44,30 @@ function AuthModal() {
   const handleSubmit = (event) => {
     event.preventDefault();
     let error = {};
-    if (password !== passwordConfirm) {
-      error.passwordConfirm = "Passwords do not match.";
+    if (authMode == "signup") {
+      if (password !== passwordConfirm) {
+        error.passwordConfirm = "Passwords do not match.";
+      }
+      if (caltechEmail === "") {
+        error.caltechEmail = "Caltech Email cannot be empty.";
+      }
+      if (personalEmail === "") {
+        error.personalEmail = "Personal Email cannot be empty.";
+      }
     }
     if (password === "") {
       error.password = "Password cannot be empty.";
     }
-    if (caltechEmail === "") {
-      error.caltechEmail = "Caltech Email cannot be empty.";
+    if (username === "") {
+      error.username = "Personal Email cannot be empty.";
     }
-    if (personalEmail === "") {
-      error.personalEmail = "Personal Email cannot be empty.";
-    }
-    if (error !== {}) {
+
+    if (Object.keys(error).length !== 0) {
       setFormError(error);
       return;
     }
+
+    dispatch(auth(username, password, authMode, personalEmail, caltechEmail));
   };
 
   const changeAuthMode = () => {
@@ -81,19 +91,26 @@ function AuthModal() {
     dispatch(updateModalVisibility(false));
   };
 
-  let hidden = visible || location.pathname == "/auth";
+  if (location.pathname == "/auth" && user.id !== undefined) {
+    if (window.history.state && window.history.state.idx > 0) {
+      navigate(-1);
+    } else {
+      navigate("/", { replace: true });
+    }
+  }
 
+  let hidden = !visible || location.pathname == "/auth";
+
+  if (!hidden && user.id !== undefined) {
+    hidden = true;
+  }
   return (
-    <div
-      className={`Auth-form-container ${
-        hidden ? "" : "hidden"
-      }`}
-    >
+    <div className={`Auth-form-container ${hidden ? "hidden" : ""}`}>
       <div
-        className={`Auth-blackout ${hidden ? "" : "hidden"}`}
+        className={`Auth-blackout ${hidden ? "hidden" : ""}`}
         onClick={handleBack}
       ></div>
-      <form className={`Auth-form ${hidden ? "" : "hidden"}`}>
+      <form className={`Auth-form ${hidden ? "hidden" : ""}`}>
         <div onClick={handleBack}>
           <IoMdArrowRoundBack
             className="Auth-close"
@@ -120,33 +137,49 @@ function AuthModal() {
             </span>
           </div>
           <div className="form-group mt-3">
-            <label>Personal Email</label>
+            <label>Username</label>
             <input
-              type="email"
+              type="username"
               className="form-control mt-1"
-              placeholder="Enter email"
+              placeholder="Enter username"
               onChange={(event) => {
-                setPersonalEmail(event.target.value);
-                clearError("personalEmail");
+                setUsername(event.target.value);
+                clearError("username");
               }}
             />
-            <small className="Auth-error">{formError.personalEmail}</small>
+            <small className="Auth-error">{formError.username}</small>
           </div>
 
           {authMode == "signin" ? null : (
-            <div className="form-group mt-3">
-              <label>Caltech Email</label>
-              <input
-                type="email"
-                className="form-control mt-1"
-                placeholder="Enter email"
-                onChange={(event) => {
-                  setCaltechEmail(event.target.value);
-                  clearError("caltechEmail");
-                }}
-              />
-              <small className="Auth-error">{formError.caltechEmail}</small>
-            </div>
+            <React.Fragment>
+              <div className="form-group mt-3">
+                <label>Personal Email</label>
+                <input
+                  type="email"
+                  className="form-control mt-1"
+                  placeholder="Enter email"
+                  onChange={(event) => {
+                    setPersonalEmail(event.target.value);
+                    clearError("personalEmail");
+                  }}
+                />
+                <small className="Auth-error">{formError.personalEmail}</small>
+              </div>
+
+              <div className="form-group mt-3">
+                <label>Caltech Email</label>
+                <input
+                  type="email"
+                  className="form-control mt-1"
+                  placeholder="Enter email"
+                  onChange={(event) => {
+                    setCaltechEmail(event.target.value);
+                    clearError("caltechEmail");
+                  }}
+                />
+                <small className="Auth-error">{formError.caltechEmail}</small>
+              </div>
+            </React.Fragment>
           )}
 
           <div className="form-group mt-3">

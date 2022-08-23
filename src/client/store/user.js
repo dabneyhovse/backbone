@@ -7,9 +7,10 @@
  */
 
 import axios from "axios";
+import { toast } from "react-toastify";
 import history from "../history";
 
-import { loadedAuth } from "./authModal";
+import { loadedAuth, updateModalVisibility } from "./authModal";
 
 /**
  * ACTION TYPES
@@ -38,40 +39,63 @@ export const me = () => async (dispatch) => {
     dispatch(getUser(res.data || defaultUser));
   } catch (err) {
     dispatch(loadedAuth());
+    toast.error(`There was an error loading your user.`);
     console.error(err);
   }
 };
 
-export const auth =
-  (username, password, method, verification) => async (dispatch) => {
+export const auth = (
+  username,
+  password,
+  method,
+  caltechEmail,
+  personalEmail
+) => {
+  console.log("hello there");
+  return async (dispatch) => {
     let res;
     try {
       if (method === "signup") {
         res = await axios.post("/auth/signup", {
           username,
           password,
-          verification,
+          caltechEmail,
+          personalEmail,
         });
-      } else if (method === "login") {
+        toast.success("Successfully signed up! Welcome to Dabney™.");
+        dispatch(updateModalVisibility(false));
+      } else if (method === "signin") {
         res = await axios.post("/auth/login", { username, password });
+        toast.success("Successfully logged in");
+        dispatch(updateModalVisibility(false));
       }
     } catch (authError) {
+      toast.error(
+        `There was an error ${
+          method == "signin" ? "signing in" : "signing up"
+        }.`
+      );
       return dispatch(getUser({ error: authError }));
     }
     try {
       dispatch(getUser(res.data));
       history.push("/home");
-    } catch (dispatchOrHistoryErr) {
-      console.error(dispatchOrHistoryErr);
+    } catch (error) {
+      toast.error(
+        `There was an error ${
+          method == "signin" ? "signing in" : "signing up"
+        }.`
+      );
     }
   };
+};
 
 export const logout = () => async (dispatch) => {
   try {
     await axios.post("/auth/logout");
     dispatch(removeUser());
   } catch (err) {
-    console.error(err);
+    toast.error("There was an error logging out");
   }
 };
 

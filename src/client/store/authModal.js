@@ -22,10 +22,15 @@ export const updateModalStatus = (status, isLoggedIn) => {
   };
 };
 
-export const updateModalVisibility = (visible) => {
+export const updateModalVisibility = (invisible) => {
+  if (invisible) {
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "";
+  }
   return {
     type: UPDATE_MODAL_STATUS,
-    status: visible,
+    status: invisible,
   };
 };
 

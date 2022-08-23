@@ -11,7 +11,7 @@ function DarbGallery() {
         "Surviving Caltech isn't always easy. Sometimes you just need to take
         some time out of your your day to have a good laugh."
       </p>
-      <Gallery images={images} />
+      {/* <Gallery images={images} /> */}
     </Container>
   );
 }

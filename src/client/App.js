@@ -11,7 +11,7 @@ import { ToastContainer, toast } from "react-toastify";
 
 import Routes from "./routes";
 import { me } from "./store/user";
-import { AuthModal, Navdarb } from "./components";
+import { AuthModal, Loading, Navdarb } from "./components";
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -27,7 +27,18 @@ class App extends React.Component {
   render() {
     return (
       <>
-        <ToastContainer />
+        <ToastContainer
+          position="top-right"
+          autoClose={1000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
         {this.props.loaded ? (
           <>
             <Navdarb />
@@ -35,7 +46,7 @@ class App extends React.Component {
             <Routes />
           </>
         ) : (
-          <div>loading animation goes brrrr</div>
+          <Loading />
         )}
       </>
     );

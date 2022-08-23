@@ -1,2 +1,5 @@
 /node_modules
 /public
+sendgrid.env
+.env
+/src/script/test.js

@@ -19,10 +19,10 @@ import Navbar from "react-bootstrap/Navbar";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import Offcanvas from "react-bootstrap/Offcanvas";
 import { LinkContainer } from "react-router-bootstrap";
 
-import { updateModalStatus } from "../../store/authModal";
+import { logout } from "../../store/user";
+import { updateModalVisibility } from "../../store/authModal";
 
 const NAVWRAP_DEFAULT = {};
 
@@ -48,7 +48,7 @@ const NAVBAR_HIDDEN = {
  * Loads in the services which request to be included in the services dropdown
  * // TODO
  */
-function loadDynamic() {}
+// function loadDynamic() {}
 
 const TRANS_FIXED_ROUTES = ["/", "/home"];
 
@@ -60,6 +60,8 @@ function Navdarb() {
   // hooks
   let dispatch = useDispatch();
   let location = useLocation();
+
+  const handleLogout = ()=>dispatch(logout())
 
   const { user } = useSelector((state) => ({
     user: state.user,
@@ -157,20 +159,20 @@ function Navdarb() {
                 {user.id == undefined ? (
                   <NavDropdown.Item
                     onClick={() => {
-                      dispatch(updateModalStatus(true));
+                      dispatch(updateModalVisibility(true));
                     }}
                   >
                     Login / Signup
                   </NavDropdown.Item>
                 ) : (
-                  <>
+                  <React.Fragment>
                     <LinkContainer to="/profile">
                       <NavDropdown.Item href>Profile</NavDropdown.Item>
                     </LinkContainer>
                     <NavDropdown.Divider />
 
-                    <NavDropdown.Item>Logout</NavDropdown.Item>
-                  </>
+                    <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
+                  </React.Fragment>
                 )}
               </NavDropdown>
             </Nav>

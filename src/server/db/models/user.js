@@ -8,8 +8,12 @@
 const crypto = require("crypto");
 const Sequelize = require("sequelize");
 const db = require("../db");
+const Verification = require("./verification");
 
 const User = db.define("user", {
+  /**
+   * below three are obvious
+   */
   firstName: {
     type: Sequelize.STRING,
   },
@@ -19,8 +23,21 @@ const User = db.define("user", {
   username: {
     type: Sequelize.STRING,
   },
+  /**
+   * the below two are emails for verifaction and contact purposes
+   */
+  personalEmail: {
+    type: Sequelize.STRING,
+  },
+  caltechEmail: {
+    type: Sequelize.STRING,
+  },
+  /**
+   * optional telegram linking
+   */
   telegram_id: {
     type: Sequelize.STRING,
+    defaultValue: null,
   },
   isAdmin: {
     type: Sequelize.BOOLEAN,
@@ -32,6 +49,9 @@ const User = db.define("user", {
       return () => this.getDataValue("password");
     },
   },
+  /**
+   * used to decode password
+   */
   salt: {
     type: Sequelize.STRING,
     get() {
@@ -42,9 +62,17 @@ const User = db.define("user", {
     type: Sequelize.BOOLEAN,
     defaultValue: false,
   },
-  verifyCode: {
-    type: Sequelize.STRING,
+  /**
+   * below two fields are for account verification
+   * mainly verify caltech email
+   */
+  active: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
   },
+  /**
+   * DBux owned by the user
+   */
   tokens: {
     type: Sequelize.DOUBLE,
     defaultValue: 0,
@@ -74,10 +102,25 @@ const setSaltAndPassword = (user) => {
   }
 };
 
+const setVerification = (user) => {
+  Verification.create({
+    userId: user.id,
+    email: user.personalEmail,
+    emailType: "personal",
+  });
+  Verification.create({
+    userId: user.id,
+    email: user.caltechEmail,
+    emailType: "caltech",
+  });
+};
+
 User.beforeCreate(setSaltAndPassword);
 User.beforeUpdate(setSaltAndPassword);
 User.beforeBulkCreate((users) => {
   users.forEach(setSaltAndPassword);
+  users.forEach(setVerification);
 });
 
+User.beforeCreate(setVerification);
 module.exports = User;

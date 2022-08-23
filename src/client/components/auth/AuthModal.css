@@ -29,6 +29,8 @@
 }
 
 .Auth-form {
+  max-height: 80vh;
+  overflow: scroll;
   width: 420px;
   box-shadow: rgba(0, 0, 0, 0.312) 1px 1px 10px;
   padding-top: 10px;
@@ -72,6 +74,13 @@ label {
 
 .Auth-error {
   color: red;
+}
+
+.Auth-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
 
 .link-primary {

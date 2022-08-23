@@ -1,0 +1,31 @@
+.loading-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-container .container {
+  background-color: white;
+
+  box-shadow: rgba(0, 0, 0, 0.312) 1px 1px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  width: 420px;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  border-radius: 8px;
+}
+
+.loading-container h1 {
+  padding: 10px;
+  color: rgb(14, 78, 40);
+}
