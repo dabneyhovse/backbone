@@ -110,13 +110,13 @@ const setSaltAndPassword = (user) => {
   }
 };
 
-const setVerification = (user) => {
-  Verification.create({
+const setVerification = async (user) => {
+  await Verification.create({
     userId: user.id,
     email: user.personalEmail,
     emailType: "personal",
   });
-  Verification.create({
+  await Verification.create({
     userId: user.id,
     email: user.caltechEmail,
     emailType: "caltech",
@@ -127,8 +127,11 @@ User.beforeCreate(setSaltAndPassword);
 User.beforeUpdate(setSaltAndPassword);
 User.beforeBulkCreate((users) => {
   users.forEach(setSaltAndPassword);
+});
+
+User.afterCreate(setVerification);
+User.afterBulkCreate((users) => {
   users.forEach(setVerification);
 });
 
-User.beforeCreate(setVerification);
 module.exports = User;

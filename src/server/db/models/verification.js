@@ -27,8 +27,23 @@ const Verification = db.define("verification", {
   },
 });
 
-const createHash = (ver) => {
-  ver.hash = crypto.createHash("sha256");
+const createHash = async (ver, options) => {
+  let notUnique = true;
+  let hash = "";
+  while (notUnique) {
+    hash = crypto
+      .createHmac("sha256", process.env.HASH_SECRET)
+      .update(`${Math.random()}`)
+      .digest("hex");
+
+    let duplicates = await Verification.findAll({
+      where: {
+        hash,
+      },
+    });
+    notUnique = duplicates.length > 0;
+  }
+  ver.hash = hash;
 
   // TODO send email
 
