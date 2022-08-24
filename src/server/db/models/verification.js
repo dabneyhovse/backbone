@@ -9,9 +9,6 @@ const crypto = require("crypto");
 const Sequelize = require("sequelize");
 const db = require("../db");
 
-const sgMail = require("@sendgrid/mail");
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
 const Verification = db.define("verification", {
   hash: {
     type: Sequelize.STRING,
@@ -45,24 +42,23 @@ const createHash = async (ver, options) => {
   }
   ver.hash = hash;
 
-  // TODO send email
-
-  // console.log("sending email");
-  // const msg = {
-  //   to: ver.email,
-  //   from: process.env.VERIFICATION_EMAIL,
-  //   subject: "Dabney Hovse Email Verification",
-  //   text: "Please verify your email by clicking the link below:\ndabney.calech.edu/verify/${hash}",
-  //   html: `<p>Please verify your email by clicking the link below:</p><br><a href = "dabney.calech.edu/verify/${hash}">dabney.calech.edu/verify/${hash}</a>`,
-  // };
-  // sgMail
-  //   .send(msg)
-  //   .then(() => {
-  //     console.log("Email sent");
-  //   })
-  //   .catch((error) => {
-  //     console.error(error);
-  //   });
+  // For whatever reason this only works when i require it here...
+  // why cant these packages be normal...
+  const sgMail = require("@sendgrid/mail");
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+  const msg = {
+    to: ver.email, // Change to your recipient
+    from: process.env.VERIFICATION_EMAIL, // Change to your verified sender
+    subject: "Dabney Hovse Email Verification",
+    text: `Hello, Please verify your email by clicking the link below: https://dabney.caltech.edu/verify/${hash}`,
+    html: `Hello, <br>Please verify your email by clicking the link below:<br><br><a href="https://dabney.caltech.edu/verify/${hash}">https://dabney.caltech.edu/verify/${hash}</a>`,
+  };
+  sgMail
+    .send(msg)
+    .then(() => {})
+    .catch((error) => {
+      console.error(error);
+    });
 };
 
 Verification.beforeCreate(createHash);

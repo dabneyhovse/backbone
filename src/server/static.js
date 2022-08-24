@@ -10,7 +10,13 @@
 const express = require("express");
 const router = express.Router();
 const path = require("path");
+const { isLoggedIn } = require("./api/middleware");
 module.exports = router;
 
 // static file-serving middleware
 router.use(express.static(path.join(__dirname, "../..", "public")));
+
+router.use(
+  isLoggedIn,
+  express.static(path.join(__dirname, "../..", "restricted/login"))
+);
