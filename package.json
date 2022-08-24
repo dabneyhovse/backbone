@@ -4,8 +4,8 @@
   "description": "A website made to be modular, without users having to touch the main code. I've constructed it likke this so we only need one node server running. This is sure to be impllemented poorly but it will work so what can you do. We dont have any super secure data here so.",
   "main": "src/server/index.js",
   "engines": {
-    "node": "",
-    "npm": ""
+    "node": "18.x",
+    "npm": "8.x"
   },
   "scripts": {
     "build": "webpack",

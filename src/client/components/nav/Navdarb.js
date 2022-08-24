@@ -61,10 +61,11 @@ function Navdarb() {
   let dispatch = useDispatch();
   let location = useLocation();
 
-  const handleLogout = ()=>dispatch(logout())
+  const handleLogout = () => dispatch(logout());
 
-  const { user } = useSelector((state) => ({
+  const { user, navbar } = useSelector((state) => ({
     user: state.user,
+    navbar: state.navbar,
   }));
 
   let dynServices = [];
@@ -92,6 +93,34 @@ function Navdarb() {
       );
     }
   });
+
+  const navItemToReact = (item, dropdown = false) => {
+    if (item.type == "href") {
+      return dropdown ? (
+        <NavDropdown.Item href={item.route}>{item.name}</NavDropdown.Item>
+      ) : (
+        <Nav.Link href={item.route}>{item.name}</Nav.Link>
+      );
+    } else if (item.type == "react-router") {
+      return (
+        <LinkContainer to={item.route}>
+          {dropdown ? (
+            <NavDropdown.Item>{item.name}</NavDropdown.Item>
+          ) : (
+            <Nav.Link>{item.name}</Nav.Link>
+          )}
+        </LinkContainer>
+      );
+    } else if ((item.type = "dropdown")) {
+      return (
+        <NavDropdown title="Contact" id="collasible-nav-dropdown">
+          {item.links.forEach((link) =>
+            navItemToReact(link, (dropdown = true))
+          )}
+        </NavDropdown>
+      );
+    }
+  };
 
   return (
     <div className="navwrap" style={navwrapStyle}>
@@ -171,7 +200,9 @@ function Navdarb() {
                     </LinkContainer>
                     <NavDropdown.Divider />
 
-                    <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
+                    <NavDropdown.Item onClick={handleLogout}>
+                      Logout
+                    </NavDropdown.Item>
                   </React.Fragment>
                 )}
               </NavDropdown>

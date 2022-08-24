@@ -64,7 +64,7 @@ const User = db.define("user", {
   },
   /**
    * below two fields are for account verification
-   * mainly verify caltech email
+   * mainly to verify caltech email
    */
   active: {
     type: Sequelize.BOOLEAN,
@@ -77,6 +77,14 @@ const User = db.define("user", {
     type: Sequelize.DOUBLE,
     defaultValue: 0,
   },
+  currentStudent: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: true,
+  },
+  // IDs of different affilation models so we dont need a through table
+  // houseAffiliations: {
+  //   type: Sequelize.ARRAY
+  // },
 });
 
 User.prototype.correctPassword = function (candidatePwd) {

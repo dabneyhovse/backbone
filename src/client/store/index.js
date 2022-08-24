@@ -14,11 +14,13 @@ import thunk from "redux-thunk";
 import user from "./user";
 import auth from "./authModal";
 import admin from "./admin";
+import navbar from "./navbar";
 
 const reducer = combineReducers({
   user,
   auth,
   admin,
+  navbar
 });
 
 let log = [];

@@ -12,7 +12,7 @@ const db = require("../db");
 const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-const Verification = db.define("user", {
+const Verification = db.define("verification", {
   hash: {
     type: Sequelize.STRING,
   },
