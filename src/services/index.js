@@ -12,8 +12,7 @@
  */
 
 const moduleServiceNames = [];
-
-const builtInServiceNames = ["social-calendar"];
+const builtInServiceNames = ["social-calendar", "about-services"];
 
 module.exports = {
   builtInServices: builtInServiceNames.map((name) => require(`./${name}.js`)),

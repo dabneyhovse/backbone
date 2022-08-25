@@ -12,7 +12,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Route } from "react-router-dom";
-import { AuthModal, Calender, DarbGallery, Home } from "./components";
+import {
+  AuthModal,
+  Calender,
+  DarbGallery,
+  Home,
+  VerfyPage,
+} from "./components";
 
 import SlideRoutes from "react-slide-routes";
 
@@ -47,6 +53,7 @@ class SiteRoutes extends Component {
           <Route exact path="/gallery" element={<DarbGallery />} />
           <Route exact path="/socialcalender" element={<Calender />} />
           <Route exact path="/auth" element={<AuthModal />} />
+          <Route path="/verify" element={<VerfyPage />} />
         </SlideRoutes>
         {/* Routes below are only visible to people not logged in*/}
         {!isLoggedIn && <>{/* <AuthPage /> */}</>}

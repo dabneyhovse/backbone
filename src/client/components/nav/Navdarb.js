@@ -23,6 +23,7 @@ import { LinkContainer } from "react-router-bootstrap";
 
 import { logout } from "../../store/user";
 import { updateModalVisibility } from "../../store/authModal";
+import { Tooltip, OverlayTrigger } from "react-bootstrap";
 
 const NAVWRAP_DEFAULT = {};
 
@@ -50,7 +51,64 @@ const NAVBAR_HIDDEN = {
  */
 // function loadDynamic() {}
 
-const TRANS_FIXED_ROUTES = ["/", "/home"];
+function navItemToReact(item, dropdown = false) {
+  let out = null;
+  if (item.type == "href") {
+    out = dropdown ? (
+      <NavDropdown.Item key={item.name} href={item.route}>
+        {item.name}
+      </NavDropdown.Item>
+    ) : (
+      <Nav.Link key={item.name} href={item.route}>
+        {item.name}
+      </Nav.Link>
+    );
+  } else if (item.type == "react-router") {
+    out = (
+      <LinkContainer key={item.name} to={item.route}>
+        {dropdown ? (
+          <NavDropdown.Item>{item.name}</NavDropdown.Item>
+        ) : (
+          <Nav.Link>{item.name}</Nav.Link>
+        )}
+      </LinkContainer>
+    );
+  } else if (item.type == "dropdown") {
+    out = (
+      <NavDropdown
+        key={item.name}
+        title={item.name}
+        id="collasible-nav-dropdown"
+      >
+        {item.links.map((link) => navItemToReact(link, (dropdown = true)))}
+      </NavDropdown>
+    );
+  } else if (item.type == "main") {
+    out = (
+      <>
+        {item.links.map((link) => {
+          return navItemToReact(link);
+        })}
+      </>
+    );
+  } else if (item.type == "line") {
+    out = <NavDropdown.Divider key={item.name} />;
+  }
+  // if (item.tooltip) {
+  //   out = (
+  //     <OverlayTrigger
+  //       placement="left"
+  //       delay={{ show: 250, hide: 400 }}
+  //       overlay={() => (
+  //         <Tooltip id={`tooltip-${item.name}`}>{item.tooltip}</Tooltip>
+  //       )}
+  //     >
+  //       {out}
+  //     </OverlayTrigger>
+  //   );
+  // }
+  return out;
+}
 
 /**
  *
@@ -68,23 +126,21 @@ function Navdarb() {
     navbar: state.navbar,
   }));
 
-  let dynServices = [];
-
   // determing the styling of the navbar
   let navbarStyle = NAVBAR_DEFAULT;
   let navwrapStyle = NAVWRAP_DEFAULT;
-  if (TRANS_FIXED_ROUTES.indexOf(location.pathname) !== -1) {
+  if (navbar.transparentRoutes.indexOf(location.pathname) !== -1) {
     navbarStyle = NAVBAR_TRANSPARENT;
     navwrapStyle = NAVWRAP_FIXED;
   }
-  if (location.pathname == "/auth") {
+  if (navbar.hiddenRoutes.indexOf(location.pathname) !== -1) {
     navwrapStyle = NAVBAR_HIDDEN;
   }
   const ref = useRef(null);
   useEffect(() => {
     if (
       ref.current !== null &&
-      TRANS_FIXED_ROUTES.indexOf(location.pathname) !== -1
+      navbar.transparentRoutes.indexOf(location.pathname) !== -1
     ) {
       ref.current.style.setProperty(
         "background-color",
@@ -93,34 +149,6 @@ function Navdarb() {
       );
     }
   });
-
-  const navItemToReact = (item, dropdown = false) => {
-    if (item.type == "href") {
-      return dropdown ? (
-        <NavDropdown.Item href={item.route}>{item.name}</NavDropdown.Item>
-      ) : (
-        <Nav.Link href={item.route}>{item.name}</Nav.Link>
-      );
-    } else if (item.type == "react-router") {
-      return (
-        <LinkContainer to={item.route}>
-          {dropdown ? (
-            <NavDropdown.Item>{item.name}</NavDropdown.Item>
-          ) : (
-            <Nav.Link>{item.name}</Nav.Link>
-          )}
-        </LinkContainer>
-      );
-    } else if ((item.type = "dropdown")) {
-      return (
-        <NavDropdown title="Contact" id="collasible-nav-dropdown">
-          {item.links.forEach((link) =>
-            navItemToReact(link, (dropdown = true))
-          )}
-        </NavDropdown>
-      );
-    }
-  };
 
   return (
     <div className="navwrap" style={navwrapStyle}>
@@ -140,46 +168,7 @@ function Navdarb() {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="transparent">
-              <LinkContainer to="/gallery">
-                <Nav.Link>Gallery</Nav.Link>
-              </LinkContainer>
-              <NavDropdown title="Contact" id="collasible-nav-dropdown">
-                <NavDropdown.Item href="https://dabney.caltech.edu/wiki/doku.php?id=hovse_positions">
-                  House Positions
-                </NavDropdown.Item>
-                <NavDropdown.Item href="https://dabney.caltech.edu/wiki/doku.php?id=student_resources">
-                  Student Resources
-                </NavDropdown.Item>
-                <NavDropdown.Item href="https://directory.caltech.edu/EmergencyInfo">
-                  Emergency
-                </NavDropdown.Item>
-              </NavDropdown>
-
-              <NavDropdown title="Services" id="collasible-nav-dropdown">
-                <NavDropdown.Item href="/wiki">Wiki</NavDropdown.Item>
-                {dynServices.map((service) => {
-                  <NavDropdown.Item href={`/${service.href}`}>
-                    service.name
-                  </NavDropdown.Item>;
-                })}
-                {/* TODO remove farther and dinner and port them as actual services */}
-                <NavDropdown.Item href="/farther">Farther</NavDropdown.Item>
-                <NavDropdown.Item href="/dinner">Dinner</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <LinkContainer to="/socialcalender">
-                  <NavDropdown.Item>Social Calender</NavDropdown.Item>
-                </LinkContainer>
-
-                {/* TODO include the library catalog as a service */}
-                <NavDropdown.Item href=" http://dabneylibrary.loganapple.com/">
-                  Library Catalog
-                </NavDropdown.Item>
-
-                <NavDropdown.Divider />
-                <LinkContainer to="/services/about">
-                  <NavDropdown.Item>About Services</NavDropdown.Item>
-                </LinkContainer>
-              </NavDropdown>
+              {navItemToReact(navbar.links)}
               <NavDropdown
                 className="icon"
                 title={<FaUserCircle size="1.5em" />}

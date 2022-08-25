@@ -2,23 +2,20 @@
  * Author:	Nick Jasinski
  * Date:		2022-08-23
  *
- * config file for the built in "service" "social-calendar"
- *
- * this doesnt really count as  service im just staying with this
- * config file to setup the format in the future...
+ * config file for the built in service "about-services"
  */
 
 module.exports = {
   /**
    * The name of the service, this is what you will see on the navbar dropdown of the main dabney website
    */
-  name: "Social Calendar",
+  name: "About Services",
 
   /**
    * A description of the service that will be given along with the name (above) on the services page
    */
   description:
-    "The Dabney Hovse social calendar. Is updated by the current Soc Vps",
+    "Description of what services are and how to make one. Also includes a list of the services (the page you're probably reading this from right now).",
 
   /**
    * the route you want your service to occupy ie "example" gives the service dabney.caltech.edu/example/*
@@ -31,7 +28,7 @@ module.exports = {
    *
    * do not request a route if your service is external or built in (leave route as null)
    */
-  route: "socialcalender",
+  route: "services/about",
 
   /**
    * If backbone should add the route about to the router
@@ -61,13 +58,13 @@ module.exports = {
    * "m" => middle
    * "t" => top
    */
-  dropdownItemPosition: "m",
+  dropdownItemPosition: "b",
 
   /**
    * Tool tip to display when hovering over the link in the services dropdown
    * try to keep the text short
    */
-  tooltip: "The current Dabney Social Calendar",
+  tooltip: "Info on services.",
 
   /**
    *  Amount of authorization that the user needs to view the service

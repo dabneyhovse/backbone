@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { Verification } = require("../db/models");
 const User = require("../db/models/user");
 module.exports = router;
 
@@ -71,13 +72,12 @@ router.post("/logout", (req, res) => {
   });
 });
 
-router.get("/verify", (req, res) => {
-  // if (user) {
-  //   await user.update({ password});
-  // } else {
-  //   res.status(404).send("Please check your verification code.");
-  //   return;
-  // }
+router.post("/verify/:hash", async (req, res) => {
+  let ver = await Verification.findOne({ where: { hash: req.params.hash } });
+  email = ver.email;
+  emailType = ver.emailType;
+  // await ver.destroy();
+  res.status(200).json({ email, emailType });
 });
 
 router.get("/me", (req, res) => {
