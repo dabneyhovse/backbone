@@ -51,7 +51,6 @@ export const auth = (
   caltechEmail,
   personalEmail
 ) => {
-  console.log("hello there");
   return async (dispatch) => {
     let res;
     try {

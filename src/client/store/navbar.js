@@ -50,7 +50,6 @@ const loadServices = () => {
   // };
   let allServices = [...moduleServices, ...builtInServices];
 
-  console.log(allServices);
   allServices.sort((a, b) =>
     a.dropdownItemPosition < b.dropdownItemPosition ? 1 : -1
   );
@@ -66,7 +65,6 @@ const loadServices = () => {
       added++;
     }
   }
-  console.log(copy);
   return copy;
 };
 
