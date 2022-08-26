@@ -106,11 +106,22 @@ export const logout = () => async (dispatch) => {
   }
 };
 
+const VERIFICATION_DELAY = 1000;
+const goHome = () => {
+  // spend a little time on the verification
+  // page so it isnt so jarring
+  setTimeout(() => {
+    history.push("/home");
+  }, VERIFICATION_DELAY);
+};
+
 export const verifyUser = (hash) => async (dispatch, getState) => {
-  console.log("aaaa");
   if (!getState().user.verifyAttempt) {
     dispatch(verifiedUser(null, true));
+    // remove the hash from the hash route
+    hash = hash.replace("#", "");
     try {
+      console.log(hash);
       if (hash.length !== 64) {
         throw "Improper verification hash, please use the link from the email you recieved.";
       }
@@ -118,20 +129,18 @@ export const verifyUser = (hash) => async (dispatch, getState) => {
         hash,
       });
 
-      console.log(res);
-
       if (res.status == 200) {
         toast.success(
           "Successfully verifed your email, this page will redirect you in a moment",
-          { duration: 3000 }
+          { duration: 5000 }
         );
-        history.push("/home");
+        goHome();
       } else {
-        throw "Verification code not fouond, perhaps you already verified";
+        throw "Verification code not found, perhaps you already verified.";
       }
     } catch (err) {
-      history.push("/home");
-      toast.error(err, {});
+      goHome();
+      toast.error(err, { duration: 5000 });
     }
   }
 };

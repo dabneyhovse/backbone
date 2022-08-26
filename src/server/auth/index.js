@@ -76,13 +76,14 @@ router.post("/logout", (req, res) => {
   }
 });
 
-router.post("/verify/:hash", async (req, res) => {
+router.post("/verify", async (req, res) => {
   try {
-    let ver = await Verification.findOne({ where: { hash: req.params.hash } });
+    let ver = await Verification.findOne({ where: { hash: req.body.hash } });
     if (ver) {
+      console.log(ver);
       email = ver.email;
       emailType = ver.emailType;
-      // await ver.destroy();
+      await ver.destroy();
       res.status(200).json({ email, emailType });
     } else res.sendStatus(202);
   } catch (error) {

@@ -51,7 +51,7 @@ const createHash = async (ver, options) => {
     from: process.env.VERIFICATION_EMAIL, // Change to your verified sender
     subject: "Dabney Hovse Email Verification",
     text: `Hello, Please verify your email by clicking the link below: https://dabney.caltech.edu/verify#${hash}`,
-    html: `Hello, <br>Please verify your email by clicking the link below:<br><br><a href="https://dabney.caltech.edu/verify#${hash}">https://dabney.caltech.edu/verify/${hash}</a>`,
+    html: `Hello, <br>Please verify your email by clicking the link below:<br><br><a href="https://dabney.caltech.edu/verify#${hash}">https://dabney.caltech.edu/verify#${hash}</a>`,
   };
   sgMail
     .send(msg)
