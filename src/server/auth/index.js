@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { Verification } = require("../db/models");
+const { Verification, Affilation } = require("../db/models");
 const User = require("../db/models/user");
 module.exports = router;
 
@@ -13,7 +13,10 @@ router.post("/login", async (req, res, next) => {
     } else if (!user.correctPassword(req.body.password)) {
       res.status(401).send("Wrong username and/or password");
     } else {
-      req.login(user, (err) => (err ? next(err) : res.json(user)));
+      const authLevel = await calculateAuthLevel(user);
+      req.login(user, (err) =>
+        err ? next(err) : res.json({ ...user, authLevel })
+      );
     }
   } catch (err) {
     next(err);
@@ -55,7 +58,9 @@ router.post("/signup", async (req, res, next) => {
       password,
     });
 
-    req.login(user, (err) => (err ? next(err) : res.status(200).json(user)));
+    req.login(user, (err) =>
+      err ? next(err) : res.status(200).json({ user, authLevel: 1 })
+    );
   } catch (err) {
     if (err.name === "SequelizeUniqueConstraintError") {
       res.status(401).send("User already exists");
@@ -91,6 +96,54 @@ router.post("/verify", async (req, res) => {
   }
 });
 
-router.get("/me", (req, res) => {
-  res.json(req.user);
+/**
+ *  requiredAuth values:
+ *    0.5 => need to verify
+ *    0 => no login required                      (or 1/2/3/4 reqs)
+ *    1 => login required (non darbs can access)  (or 2/3/4 reqs)
+ *    2 => login & socialDarb required            (or 3/4 reqs)
+ *    3 => login & fullDarb required              (or 4 reqs)
+ *    4 => admin status required
+ */
+
+/**
+ *
+ * @param {session user} user
+ * @returns auth level of the user, see above chart
+ *          yes i made this go from 0 to 3 (excepting 4)
+ *          in order on purpose
+ */
+async function calculateAuthLevel(user) {
+  if (!user) {
+    return 0;
+  } else {
+    // if (user.admin) {
+    //   return 4;
+    // }
+    // test verification emails
+    const ver = await Verification.findAll({ where: { userId: user.id } });
+    if (ver.length > 0) {
+      return 0.5;
+    }
+    const affiliation = await Affilation.findOne({
+      where: { house: "dabney" },
+    });
+    if (affiliation == null) {
+      return 1;
+    }
+    if (affiliation.status == "social") {
+      return 2;
+    }
+    if (affiliation.status == "full") {
+      return 3;
+    }
+  }
+}
+
+/**
+ * returns the currently logged in user
+ */
+router.get("/me", async (req, res) => {
+  const authLevel = await calculateAuthLevel(req.user);
+  res.json({ ...req.user, authLevel });
 });

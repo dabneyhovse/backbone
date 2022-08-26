@@ -41,6 +41,15 @@ module.exports = {
   createRoute: false,
 
   /**
+   * the name of the module (string|null)
+   *    string is module name so each part can import based on it
+   *    ie import "moduleName/server"
+   *
+   *    null for built in
+   */
+  moduleName: null,
+
+  /**
    * navlink type (href|react-router)
    *
    * href will be a normal link while react will use a link container

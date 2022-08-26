@@ -24,6 +24,7 @@ const VERIFIED_USER = "VERIFIED_USER";
  */
 const defaultUser = {
   verifyAttempt: false,
+  default: true,
 };
 
 /**
@@ -40,9 +41,12 @@ const verifiedUser = (email, attempt) => ({
 /**
  * THUNK CREATORS
  */
-export const me = () => async (dispatch) => {
+export const me = () => async (dispatch, getState) => {
   try {
     const res = await axios.get("/auth/me");
+    if (res.data.authLevel == 0.5) {
+      toast.warn("Please verify your email", { autoClose: 5000 });
+    }
     dispatch(loadedAuth());
     dispatch(getUser(res.data || defaultUser));
   } catch (err) {

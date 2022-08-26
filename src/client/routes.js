@@ -10,7 +10,7 @@
  */
 
 import React, { Component } from "react";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { Route } from "react-router-dom";
 import {
   AuthModal,
@@ -19,79 +19,95 @@ import {
   Home,
   VerfyPage,
 } from "./components";
+import { moduleServices, builtInServices } from "../services";
 
 import SlideRoutes from "react-slide-routes";
 
-class SiteRoutes extends Component {
-  constructor() {
-    super();
-    this.dynamicPublicRoutes = <></>;
-    this.dynamicLoggedinRoutes = <></>;
-    this.dynamicLoggedoutRoutes = <></>;
-    this.dynamicAdminRoutes = <></>;
-    this.dynamicUserPages = <></>;
-    this.dynamicRoutes.bind(this);
+/**
+ * imports in all of the routes for services
+ */
+function dynamicRoutes() {
+  let allServices = [...moduleServices, ...builtInServices];
+  let out = [];
+  for (let i = 0; i < allServices.length; i++) {
+    const curr = allServices[i];
+    if (!curr.createRoute) {
+      continue;
+    }
+    out.push({
+      exact: false,
+      path: curr.route,
+      requiredAuth: curr.requiredAuth,
+      element: <div>#TODO {curr.name}</div>,
+    });
   }
-
-  /**
-   * imports the main components for all services from the directory specified
-   * @param {string} directory path to the directory
-   */
-  dynamicRoutes(directory) {
-    // TODO: dynamic import new routes from the services folder
-  }
-
-  render() {
-    const { isLoggedIn, isAdmin } = this.props;
-    return (
-      <>
-        {/* the below routes are always visible */}
-        {/* <Route exact path="/" element={<Redirect to="/home" />} /> */}
-        <SlideRoutes>
-          <Route path="/" element={<Home />} />
-          <Route exact path="/home" element={<Home />} />
-          <Route exact path="/gallery" element={<DarbGallery />} />
-          <Route exact path="/socialcalender" element={<Calender />} />
-          <Route exact path="/auth" element={<AuthModal />} />
-          <Route path="/verify" element={<VerfyPage />} />
-        </SlideRoutes>
-        {/* Routes below are only visible to people not logged in*/}
-        {!isLoggedIn && (
-          <></>
-          // <SlideRoutes>
-          //   <Route exact path="/profile" element={<div>#TODO</div>} />
-          // </SlideRoutes>
-        )}
-        {/* Routes placed below are only available after logging in */}
-        {isLoggedIn && (
-          <>
-            {/* <Route exact path="/profile" component={ProfileWall} /> */}
-            {this.dynamicPublicRoutes}
-            {
-              // Below routes are only accessible if user is admin
-              isAdmin ? (
-                <>
-                  {/* <Route exact path="/users" component={} /> */}
-                  {this.dynamicAdminRoutes}
-                </>
-              ) : (
-                <></>
-              )
-            }
-            {/* TODO <Footer /> */}
-          </>
-        )}
-      </>
-    );
-  }
+  return out;
 }
 
-const mapState = (state) => {
-  return {
-    isLoggedIn: !!state.user.id,
-    isAdmin: state.user.isAdmin,
-  };
-};
+// list of routes and their restrictions so they can be
+// generated easily
+// only need to generate once?
+const ROUTES = [
+  { requiredAuth: 0, exact: false, path: "/", element: <Home /> },
+  { requiredAuth: 0, exact: true, path: "/home", element: <Home /> },
+  { requiredAuth: 0, exact: true, path: "/gallery", element: <DarbGallery /> },
+  {
+    requiredAuth: 0,
+    exact: true,
+    path: "/socialcalender",
+    element: <Calender />,
+  },
+  { requiredAuth: 0, exact: true, path: "/auth", element: <AuthModal /> },
+  { requiredAuth: 0, exact: false, path: "/verify", element: <VerfyPage /> },
+  ...dynamicRoutes(),
+];
 
-// TODO deal with with router bullshit
-export default connect(mapState)(SiteRoutes);
+/**
+ *  requiredAuth values:
+ *    0 => no login required                      (or 1/2/3/4 reqs)
+ *    1 => login required (non darbs can access)  (or 2/3/4 reqs)
+ *    2 => login & socialDarb required            (or 3/4 reqs)
+ *    3 => login & fullDarb required              (or 4 reqs)
+ *    4 => admin status required
+ */
+
+/**
+ *
+ * @param {array of objects} routes
+ * @returns a function of user authLevel that returns the
+ *          routes the user can access
+ */
+function generateRouteFunction(routes) {
+  let reactRoutes = routes.map((route) => (
+    <Route
+      exact={route.exact}
+      path={route.path}
+      element={route.element}
+      requiredAuth={route.requiredAuth}
+      key={route.path}
+    />
+  ));
+
+  return (authLevel) => {
+    let out = reactRoutes.filter(
+      (route) => route.props.requiredAuth <= authLevel
+    );
+    return out;
+  };
+}
+
+/**
+ * Function that returns accessiible routes based on the users
+ * auth level, should only have to be called a few times
+ */
+const ROUTE_FUNCTION = generateRouteFunction(ROUTES);
+
+function SiteRoutes() {
+  const { authLevel } = useSelector((state) => ({
+    authLevel: state.user.authLevel ? state.user.authLevel : 0,
+  }));
+
+  return <SlideRoutes>{ROUTE_FUNCTION(authLevel)}</SlideRoutes>;
+}
+
+export default SiteRoutes;
