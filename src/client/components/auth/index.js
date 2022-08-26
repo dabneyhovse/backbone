@@ -6,4 +6,4 @@
  */
 // export { default as AuthPage } from "./AuthPage";
 export { default as AuthModal } from "./AuthModal";
-export { default as VerfyPage } from "./VerfyPage";
+export { default as VerfyPage } from "./VerifyPage";

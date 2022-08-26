@@ -56,7 +56,12 @@ class SiteRoutes extends Component {
           <Route path="/verify" element={<VerfyPage />} />
         </SlideRoutes>
         {/* Routes below are only visible to people not logged in*/}
-        {!isLoggedIn && <>{/* <AuthPage /> */}</>}
+        {!isLoggedIn && (
+          <></>
+          // <SlideRoutes>
+          //   <Route exact path="/profile" element={<div>#TODO</div>} />
+          // </SlideRoutes>
+        )}
         {/* Routes placed below are only available after logging in */}
         {isLoggedIn && (
           <>

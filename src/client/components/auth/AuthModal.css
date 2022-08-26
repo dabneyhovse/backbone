@@ -9,6 +9,11 @@
   transition: visibility 0s, opacity 0.5s linear;
   visibility: visible;
 }
+
+.Auth-form-container.dark {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
 .Auth-form-container.hidden {
   visibility: hidden;
 }
@@ -85,4 +90,16 @@ label {
 
 .link-primary {
   cursor: pointer;
+}
+
+/* lazy styling ik */
+.verify-content {
+  padding: 0 12% 12% 12%;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+}
+.verify-content h2 {
+  margin-bottom: 12%;
 }

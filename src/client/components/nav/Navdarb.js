@@ -92,7 +92,7 @@ function navItemToReact(item, dropdown = false) {
       </>
     );
   } else if (item.type == "line") {
-    out = <NavDropdown.Divider key={item.name} />;
+    out = <NavDropdown.Divider key={item.key} />;
   }
   // if (item.tooltip) {
   //   out = (

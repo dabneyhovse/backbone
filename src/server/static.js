@@ -16,7 +16,10 @@ module.exports = router;
 // static file-serving middleware
 router.use(express.static(path.join(__dirname, "../..", "public")));
 
-router.use(
-  isLoggedIn,
-  express.static(path.join(__dirname, "../..", "restricted/login"))
-);
+
+// TODO for whatever reason this restricts what normal pages people can access, iim too lazy to look into it rn'
+
+// router.use(
+//   isLoggedIn,
+//   express.static(path.join(__dirname, "../..", "restricted/login"))
+// );

@@ -66,18 +66,28 @@ router.post("/signup", async (req, res, next) => {
 });
 
 router.post("/logout", (req, res) => {
-  req.logout(() => {
-    req.session.destroy();
-    res.redirect("/");
-  });
+  try {
+    req.logout(() => {
+      req.session.destroy();
+      res.redirect("/");
+    });
+  } catch (error) {
+    next(err);
+  }
 });
 
 router.post("/verify/:hash", async (req, res) => {
-  let ver = await Verification.findOne({ where: { hash: req.params.hash } });
-  email = ver.email;
-  emailType = ver.emailType;
-  // await ver.destroy();
-  res.status(200).json({ email, emailType });
+  try {
+    let ver = await Verification.findOne({ where: { hash: req.params.hash } });
+    if (ver) {
+      email = ver.email;
+      emailType = ver.emailType;
+      // await ver.destroy();
+      res.status(200).json({ email, emailType });
+    } else res.sendStatus(202);
+  } catch (error) {
+    next(err);
+  }
 });
 
 router.get("/me", (req, res) => {

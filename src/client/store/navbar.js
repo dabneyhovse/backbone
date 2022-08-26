@@ -42,12 +42,6 @@ export const defaultNav = () => {
 
 // load services from the /services/json
 const loadServices = () => {
-  // const end = {
-  //   name: "About Services",
-  //   route: "/services/about",
-  //   type: "react-router",
-  //   tooltip: "test",
-  // };
   let allServices = [...moduleServices, ...builtInServices];
 
   allServices.sort((a, b) =>
@@ -61,7 +55,7 @@ const loadServices = () => {
       allServices[i - 1].dropdownItemPosition !=
       allServices[i].dropdownItemPosition
     ) {
-      copy.splice(i + added, 0, { type: "line" });
+      copy.splice(i + added, 0, { type: "line", key: added });
       added++;
     }
   }

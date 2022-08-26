@@ -17,17 +17,25 @@ import { loadedAuth, updateModalVisibility } from "./authModal";
  */
 const GET_USER = "GET_USER";
 const REMOVE_USER = "REMOVE_USER";
+const VERIFIED_USER = "VERIFIED_USER";
 
 /**
  * INITIAL STATE
  */
-const defaultUser = {};
+const defaultUser = {
+  verifyAttempt: false,
+};
 
 /**
  * ACTION CREATORS
  */
 const getUser = (user) => ({ type: GET_USER, user });
 const removeUser = () => ({ type: REMOVE_USER });
+const verifiedUser = (email, attempt) => ({
+  type: VERIFIED_USER,
+  email,
+  attempt,
+});
 
 /**
  * THUNK CREATORS
@@ -98,15 +106,48 @@ export const logout = () => async (dispatch) => {
   }
 };
 
+export const verifyUser = (hash) => async (dispatch, getState) => {
+  console.log("aaaa");
+  if (!getState().user.verifyAttempt) {
+    dispatch(verifiedUser(null, true));
+    try {
+      if (hash.length !== 64) {
+        throw "Improper verification hash, please use the link from the email you recieved.";
+      }
+      const res = await axios.post("/auth/verify", {
+        hash,
+      });
+
+      console.log(res);
+
+      if (res.status == 200) {
+        toast.success(
+          "Successfully verifed your email, this page will redirect you in a moment",
+          { duration: 3000 }
+        );
+        history.push("/home");
+      } else {
+        throw "Verification code not fouond, perhaps you already verified";
+      }
+    } catch (err) {
+      history.push("/home");
+      toast.error(err, {});
+    }
+  }
+};
+
 /**
  * REDUCER
  */
 export default function (state = defaultUser, action) {
   switch (action.type) {
     case GET_USER:
-      return action.user;
+      return { ...state, ...action.user };
     case REMOVE_USER:
       return defaultUser;
+    case VERIFIED_USER: {
+      return { ...state, verifyAttempt: action.attempt };
+    }
     default:
       return state;
   }
