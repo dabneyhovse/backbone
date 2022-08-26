@@ -107,11 +107,14 @@ export const logout = () => async (dispatch) => {
 };
 
 const VERIFICATION_DELAY = 1000;
-const goHome = () => {
+const goHome = (dispatch) => {
   // spend a little time on the verification
   // page so it isnt so jarring
   setTimeout(() => {
     history.push("/home");
+    // change the status back so another verification can be done
+    // if this isnt working, the user can just reload the page ig
+    dispatch(verifiedUser(null, false));
   }, VERIFICATION_DELAY);
 };
 
@@ -134,12 +137,12 @@ export const verifyUser = (hash) => async (dispatch, getState) => {
           "Successfully verifed your email, this page will redirect you in a moment",
           { duration: 5000 }
         );
-        goHome();
+        goHome(dispatch);
       } else {
         throw "Verification code not found, perhaps you already verified.";
       }
     } catch (err) {
-      goHome();
+      goHome(dispatch);
       toast.error(err, { duration: 5000 });
     }
   }
