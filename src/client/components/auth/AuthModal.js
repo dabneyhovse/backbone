@@ -8,13 +8,12 @@
  */
 
 import React, { useEffect, useState } from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import ReactLoading from "react-loading";
 
 import { IoMdArrowRoundBack } from "react-icons/io";
 
-import { auth } from "../../store/user";
+import { auth, clearUserError } from "../../store/user";
 import { updateModalVisibility } from "../../store/authModal";
 
 import "./AuthModal.css";
@@ -38,13 +37,18 @@ function AuthModal() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-  const { user, visible } = useSelector((state) => ({
+
+  const { user, visible, error } = useSelector((state) => ({
     visible: state.auth.visible,
     user: state.user,
+    error: state.user.error ? state.user.error.response.data : "",
   }));
 
   // handle form submission and form errors
   const clearError = (err) => {
+    if (error !== "") {
+      dispatch(clearUserError());
+    }
     setFormError({ ...formError, [err]: "" });
   };
 
@@ -87,8 +91,12 @@ function AuthModal() {
     dispatch(auth(username, password, authMode, personalEmail, caltechEmail));
   };
 
+  /**
+   * change between signup and signin
+   */
   const changeAuthMode = () => {
     setAuthMode(authMode === "signin" ? "signup" : "signin");
+    dispatch(clearUserError());
   };
 
   /**
@@ -127,6 +135,7 @@ function AuthModal() {
     setCaltechEmail("");
     setPassword("");
     setPasswordConfirm("");
+    dispatch(clearUserError());
   }, [hidden]);
 
   /**
@@ -248,6 +257,8 @@ function AuthModal() {
           )}
 
           <div className="d-grid gap-2 mt-3">
+            <small className="Auth-error">{error}</small>
+
             <button
               type="submit"
               className="btn btn-primary"

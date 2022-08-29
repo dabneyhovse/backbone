@@ -21,27 +21,6 @@ function VerifyPage() {
   useEffect(() => {
     dispatch(verifyUser(location.hash));
   }, []);
-  // const [first, setFirst] = useState(true);
-  // if (first) {
-  //   console.log("first", first);
-  //   if (location.hash.length < HASH_LENGTH) {
-  //     // if this isnt in a check like this then it loops
-  //     // smth to do with the speed of render being faster
-  //     // than the speed of router changing (the side router i use)
-  //     // setTimeout(() => {
-  //     //   navigate("/home", { replace: true });
-  //     //   // toast.error(
-  //     //   //   "Improper verification hash, please use the link from the email you recieved.",
-  //     //   //   {}
-  //     //   // );
-  //     // }, 1000);
-  //   } else {
-  //     console.log(location.hash);
-  //   }
-  //   setFirst(false);
-  // }
-
-  // dispatch();
 
   /**
    * yeah i kinda stole the classes from the other thing

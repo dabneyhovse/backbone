@@ -12,12 +12,15 @@ import history from "../history";
 
 import { loadedAuth, updateModalVisibility } from "./authModal";
 
+const AUTH_ERR_TOAST_TIME = 3000;
+
 /**
  * ACTION TYPES
  */
 const GET_USER = "GET_USER";
 const REMOVE_USER = "REMOVE_USER";
 const VERIFIED_USER = "VERIFIED_USER";
+const CLEAR_USER_ERROR = "CLEAR_USER_ERROR";
 
 /**
  * INITIAL STATE
@@ -37,6 +40,9 @@ const verifiedUser = (email, attempt) => ({
   email,
   attempt,
 });
+export const clearUserError = () => ({
+  type: CLEAR_USER_ERROR,
+});
 
 /**
  * THUNK CREATORS
@@ -45,14 +51,17 @@ export const me = () => async (dispatch, getState) => {
   try {
     const res = await axios.get("/auth/me");
     if (res.data.authLevel == 0.5) {
-      toast.warn("Please verify your email");
+      toast.warn("Please verify your email", {
+        autoClose: AUTH_ERR_TOAST_TIME,
+      });
     }
     dispatch(loadedAuth());
     dispatch(getUser(res.data || defaultUser));
   } catch (err) {
     dispatch(loadedAuth());
-    toast.error(`There was an error loading your user.`);
-    console.error(err);
+    toast.error(`There was an error loading your user.`, {
+      autoClose: AUTH_ERR_TOAST_TIME,
+    });
   }
 };
 
@@ -84,18 +93,25 @@ export const auth = (
       toast.error(
         `There was an error ${
           method == "signin" ? "signing in" : "signing up"
-        }.`
+        }.`,
+        {
+          autoClose: AUTH_ERR_TOAST_TIME,
+        }
       );
       return dispatch(getUser({ error: authError }));
     }
     try {
+      // TODO: clean this up, not sure why two try catches
       dispatch(getUser(res.data));
       history.push("/home");
     } catch (error) {
       toast.error(
         `There was an error ${
           method == "signin" ? "signing in" : "signing up"
-        }.`
+        }.`,
+        {
+          autoClose: AUTH_ERR_TOAST_TIME,
+        }
       );
     }
   };
@@ -106,7 +122,9 @@ export const logout = () => async (dispatch) => {
     await axios.post("/auth/logout");
     dispatch(removeUser());
   } catch (err) {
-    toast.error("There was an error logging out");
+    toast.error("There was an error logging out", {
+      autoClose: AUTH_ERR_TOAST_TIME,
+    });
   }
 };
 
@@ -128,7 +146,6 @@ export const verifyUser = (hash) => async (dispatch, getState) => {
     // remove the hash from the hash route
     hash = hash.replace("#", "");
     try {
-      console.log(hash);
       if (hash.length !== 64) {
         throw "Improper verification hash, please use the link from the email you recieved.";
       }
@@ -146,7 +163,9 @@ export const verifyUser = (hash) => async (dispatch, getState) => {
       }
     } catch (err) {
       goHome(dispatch);
-      toast.error(err);
+      toast.error(err, {
+        autoClose: AUTH_ERR_TOAST_TIME,
+      });
     }
   }
 };
@@ -162,6 +181,9 @@ export default function (state = defaultUser, action) {
       return defaultUser;
     case VERIFIED_USER: {
       return { ...state, verifyAttempt: action.attempt };
+    }
+    case CLEAR_USER_ERROR: {
+      return { ...state, error: "" };
     }
     default:
       return state;
