@@ -15,7 +15,7 @@ router.post("/login", async (req, res, next) => {
     } else {
       const authLevel = await calculateAuthLevel(user);
       req.login(user, (err) =>
-        err ? next(err) : res.json({ ...user, authLevel })
+        err ? next(err) : res.json({ ...user.toJSON(), authLevel })
       );
     }
   } catch (err) {
@@ -50,7 +50,8 @@ router.post("/signup", async (req, res, next) => {
       res.status(403).send(`The username "${username}" is already taken.`);
       return;
     }
-
+    console.log("personal", personalEmail);
+    console.log("caltech", caltechEmail);
     user = await User.create({
       username,
       personalEmail,
@@ -59,7 +60,7 @@ router.post("/signup", async (req, res, next) => {
     });
 
     req.login(user, (err) =>
-      err ? next(err) : res.status(200).json({ user, authLevel: 1 })
+      err ? next(err) : res.status(200).json({ ...user.toJSON(), authLevel: 1 })
     );
   } catch (err) {
     if (err.name === "SequelizeUniqueConstraintError") {
@@ -145,5 +146,5 @@ async function calculateAuthLevel(user) {
  */
 router.get("/me", async (req, res) => {
   const authLevel = await calculateAuthLevel(req.user);
-  res.json({ ...req.user, authLevel });
+  res.json({ ...(req.user ? req.user.toJSON() : {}), authLevel });
 });

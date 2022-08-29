@@ -19,6 +19,13 @@ import { updateModalVisibility } from "../../store/authModal";
 
 import "./AuthModal.css";
 
+const EMAIL_REGEX =
+  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+const CALTECH_REGEX = /.*@caltech\.edu/;
+const validateEmail = (email, regex) => {
+  return !!email.match(regex);
+};
+
 function AuthModal() {
   // Hooks
   const [authMode, setAuthMode] = useState("signin");
@@ -50,16 +57,26 @@ function AuthModal() {
       }
       if (caltechEmail === "") {
         error.caltechEmail = "Caltech Email cannot be empty.";
+      } else if (!validateEmail(caltechEmail, EMAIL_REGEX)) {
+        error.caltechEmail = "Invalid email address";
+      } else if (!validateEmail(caltechEmail, CALTECH_REGEX)) {
+        error.caltechEmail = "Caltech email does not end in @caltech.edu";
       }
       if (personalEmail === "") {
         error.personalEmail = "Personal Email cannot be empty.";
+      } else if (!validateEmail(personalEmail, EMAIL_REGEX)) {
+        error.personalEmail = "Invalid email address";
+      } else if (validateEmail(personalEmail, CALTECH_REGEX)) {
+        error.personalEmail = "Personal email should not be caltech email";
       }
     }
     if (password === "") {
       error.password = "Password cannot be empty.";
+    } else if (password.length < 8) {
+      error.password = "Password must be at least 8 characters long.";
     }
     if (username === "") {
-      error.username = "Personal Email cannot be empty.";
+      error.username = "Username cannot be empty.";
     }
 
     if (Object.keys(error).length !== 0) {
@@ -101,6 +118,20 @@ function AuthModal() {
 
   let hidden = !visible || location.pathname == "/auth";
 
+  /**
+   * if hidden changed then the form should be cleared
+   */
+  useEffect(() => {
+    setUsername("");
+    setPersonalEmail("");
+    setCaltechEmail("");
+    setPassword("");
+    setPasswordConfirm("");
+  }, [hidden]);
+
+  /**
+   * if user is logged in hide anyway
+   */
   if (!hidden && user.id !== undefined) {
     hidden = true;
   }
@@ -146,6 +177,7 @@ function AuthModal() {
                 setUsername(event.target.value);
                 clearError("username");
               }}
+              value={username}
             />
             <small className="Auth-error">{formError.username}</small>
           </div>
@@ -162,6 +194,7 @@ function AuthModal() {
                     setPersonalEmail(event.target.value);
                     clearError("personalEmail");
                   }}
+                  value={personalEmail}
                 />
                 <small className="Auth-error">{formError.personalEmail}</small>
               </div>
@@ -176,6 +209,7 @@ function AuthModal() {
                     setCaltechEmail(event.target.value);
                     clearError("caltechEmail");
                   }}
+                  value={caltechEmail}
                 />
                 <small className="Auth-error">{formError.caltechEmail}</small>
               </div>
@@ -192,6 +226,7 @@ function AuthModal() {
                 setPassword(event.target.value);
                 clearError("password");
               }}
+              value={password}
             />
             <small className="Auth-error">{formError.password}</small>
           </div>
@@ -206,6 +241,7 @@ function AuthModal() {
                   setPasswordConfirm(event.target.value);
                   clearError("passwordConfirm");
                 }}
+                value={passwordConfirm}
               />
               <small className="Auth-error">{formError.passwordConfirm}</small>
             </div>

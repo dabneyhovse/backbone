@@ -46,10 +46,12 @@ const NAVBAR_HIDDEN = {
 };
 
 /**
- * Loads in the services which request to be included in the services dropdown
- * // TODO
+ * Recursive method that turns json representation of nav items into actual nested react
+ * the redux store loads in items from services automatically
+ * @param {obj} item the json item representing the nav item (see redux nav store for examples)
+ * @param {boolean} dropdown if the call is creating dropdown components
+ * @returns
  */
-// function loadDynamic() {}
 
 function navItemToReact(item, dropdown = false) {
   let out = null;
@@ -94,6 +96,7 @@ function navItemToReact(item, dropdown = false) {
   } else if (item.type == "line") {
     out = <NavDropdown.Divider key={item.key} />;
   }
+  // TODO fix tooltips
   // if (item.tooltip) {
   //   out = (
   //     <OverlayTrigger

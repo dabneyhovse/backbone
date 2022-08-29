@@ -45,7 +45,7 @@ export const me = () => async (dispatch, getState) => {
   try {
     const res = await axios.get("/auth/me");
     if (res.data.authLevel == 0.5) {
-      toast.warn("Please verify your email", { autoClose: 5000 });
+      toast.warn("Please verify your email");
     }
     dispatch(loadedAuth());
     dispatch(getUser(res.data || defaultUser));
@@ -60,8 +60,8 @@ export const auth = (
   username,
   password,
   method,
-  caltechEmail,
-  personalEmail
+  personalEmail,
+  caltechEmail
 ) => {
   return async (dispatch) => {
     let res;
@@ -138,8 +138,7 @@ export const verifyUser = (hash) => async (dispatch, getState) => {
 
       if (res.status == 200) {
         toast.success(
-          "Successfully verifed your email, this page will redirect you in a moment",
-          { duration: 5000 }
+          "Successfully verifed your email, this page will redirect you in a moment"
         );
         goHome(dispatch);
       } else {
@@ -147,7 +146,7 @@ export const verifyUser = (hash) => async (dispatch, getState) => {
       }
     } catch (err) {
       goHome(dispatch);
-      toast.error(err, { duration: 5000 });
+      toast.error(err);
     }
   }
 };
