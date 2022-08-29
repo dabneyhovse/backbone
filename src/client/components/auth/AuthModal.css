@@ -6,7 +6,7 @@
   height: 100vh;
   z-index: 100;
   position: fixed;
-  transition: visibility 0s, opacity 0.5s linear;
+  transition: visibility 0.5s, opacity 0.5s linear;
   visibility: visible;
 }
 
