@@ -74,7 +74,10 @@ function ProfileWall() {
           /**
            * yeah ik this is messy but im tired rn
            */
-        } else if (event.target.name !== "bio" && event.target.value.length > 69) {
+        } else if (
+          event.target.name !== "bio" &&
+          event.target.value.length > 69
+        ) {
           return;
         }
         setUser({
