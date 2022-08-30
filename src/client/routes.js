@@ -22,6 +22,7 @@ import {
 import { moduleServices, builtInServices } from "../services";
 
 import SlideRoutes from "react-slide-routes";
+import ProfileWall from "./components/user/Profile";
 
 /**
  * imports in all of the routes for services
@@ -59,11 +60,18 @@ const ROUTES = [
   },
   { requiredAuth: 0, exact: true, path: "/auth", element: <AuthModal /> },
   { requiredAuth: 0, exact: false, path: "/verify", element: <VerfyPage /> },
+  {
+    requiredAuth: 0.5,
+    exact: true,
+    path: "/profile",
+    element: <ProfileWall />,
+  },
   ...dynamicRoutes(),
 ];
 
 /**
  *  requiredAuth values:
+ *    0.5 => hasnt verified email yet
  *    0 => no login required                      (or 1/2/3/4 reqs)
  *    1 => login required (non darbs can access)  (or 2/3/4 reqs)
  *    2 => login & socialDarb required            (or 3/4 reqs)
@@ -104,7 +112,7 @@ const ROUTE_FUNCTION = generateRouteFunction(ROUTES);
 
 function SiteRoutes() {
   const { authLevel } = useSelector((state) => ({
-    authLevel: state.user.authLevel ? state.user.authLevel : 0,
+    authLevel: state.user.data.authLevel ? state.user.data.authLevel : 0,
   }));
 
   return <SlideRoutes>{ROUTE_FUNCTION(authLevel)}</SlideRoutes>;

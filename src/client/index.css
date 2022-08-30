@@ -8,6 +8,13 @@ body,
   background-size: 50%;
 }
 
+.dbux {
+  color: #85bb65;
+  font-weight: 900;
+  filter: drop-shadow(1px 1px 0px black) drop-shadow(-1px 1px 0px black)
+    drop-shadow(1px -1px 0px black) drop-shadow(-1px -1px 0px black) !important;
+}
+
 h1 {
   text-align: center;
 }
@@ -83,9 +90,6 @@ h1 {
   transition: 0s !important;
 }
 
-
-
-
 /* remove the caret */
 .icon > .dropdown-toggle::after {
   display: none !important;
@@ -97,4 +101,8 @@ h1 {
   transition: all;
   transition-duration: 300ms;
   padding: 25px 0;
+}
+
+.tooltip-profile {
+  margin-left: 5px;
 }

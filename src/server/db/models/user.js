@@ -16,29 +16,19 @@ const User = db.define("user", {
    */
   firstName: {
     type: Sequelize.STRING,
+    defaultValue: "",
   },
   lastName: {
     type: Sequelize.STRING,
+    defaultValue: "",
   },
   username: {
     type: Sequelize.STRING,
+    allowNull: false,
   },
   /**
-   * the below two are emails for verifaction and contact purposes
+   * for admin perms
    */
-  personalEmail: {
-    type: Sequelize.STRING,
-  },
-  caltechEmail: {
-    type: Sequelize.STRING,
-  },
-  /**
-   * optional telegram linking
-   */
-  telegram_id: {
-    type: Sequelize.STRING,
-    defaultValue: null,
-  },
   isAdmin: {
     type: Sequelize.BOOLEAN,
     defaultValue: false,
@@ -63,28 +53,64 @@ const User = db.define("user", {
     defaultValue: false,
   },
   /**
-   * below two fields are for account verification
-   * mainly to verify caltech email
-   */
-  active: {
-    type: Sequelize.BOOLEAN,
-    defaultValue: false,
-  },
-  /**
    * DBux owned by the user
    */
   tokens: {
     type: Sequelize.DOUBLE,
     defaultValue: 0,
   },
+
+  /**
+   * status as current student
+   */
   currentStudent: {
     type: Sequelize.BOOLEAN,
     defaultValue: true,
+  },
+  /**
+   * the below two are emails for verifaction and contact purposes
+   */
+  personalEmail: {
+    type: Sequelize.STRING,
+  },
+  caltechEmail: {
+    type: Sequelize.STRING,
+  },
+  /**
+   * optional telegram linking
+   */
+  telegram_id: {
+    type: Sequelize.STRING,
+    defaultValue: null,
+  },
+  /**
+   * Cell contact info
+   */
+  phone: {
+    type: Sequelize.STRING,
+    defaultValue: "",
+  },
+  /**
+   * Caltech specific information below
+   *
+   * uuid, and then room number
+   */
+  uuid: {
+    type: Sequelize.INTEGER,
+    defaultValue: 42069,
   },
   // IDs of different affilation models so we dont need a through table
   // houseAffiliations: {
   //   type: Sequelize.ARRAY
   // },
+  profile: {
+    type: Sequelize.JSON,
+    defaultValue: {
+      photo: "/resources/images/defaultProfile.png",
+      room: "420 Dabney Hovse",
+      bio: "",
+    },
+  },
 });
 
 User.prototype.correctPassword = function (candidatePwd) {

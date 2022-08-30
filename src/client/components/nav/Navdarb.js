@@ -125,7 +125,7 @@ function Navdarb() {
   const handleLogout = () => dispatch(logout());
 
   const { user, navbar } = useSelector((state) => ({
-    user: state.user,
+    user: state.user.data,
     navbar: state.navbar,
   }));
 

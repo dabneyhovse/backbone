@@ -28,6 +28,7 @@ const CLEAR_USER_ERROR = "CLEAR_USER_ERROR";
 const defaultUser = {
   verifyAttempt: false,
   default: true,
+  data: {},
 };
 
 /**
@@ -117,6 +118,53 @@ export const auth = (
   };
 };
 
+/**
+ * unflatten the compressed multer keys
+ * @param {object} obj data sent back by the server
+ * @returns unflattened object
+ */
+const unflattenObject = (obj) =>
+  Object.keys(obj).reduce((res, k) => {
+    k.split(".").reduce(
+      (acc, e, i, keys) =>
+        acc[e] ||
+        (acc[e] = isNaN(Number(keys[i + 1]))
+          ? keys.length - 1 === i
+            ? obj[k]
+            : {}
+          : []),
+      res
+    );
+    return res;
+  }, {});
+
+export const updateUser = (userData) => async (dispatch, getState) => {
+  try {
+    /**
+     * sanitizes in server
+     */
+    const res = await axios.put("/api/users", userData, {
+      headers: { "content-type": "multipart/form-data" },
+    });
+
+    let data = unflattenObject(res.data);
+    let oldData = getState().user.data;
+    // server sends back what we sent if it's ok
+    dispatch(
+      getUser({
+        ...oldData,
+        ...data,
+        profile: { ...oldData.profile, ...data.profile },
+      })
+    );
+    toast.success("Your information was updated!", { autoClose: 2000 });
+  } catch (error) {
+    toast.error("There was an error updating your information", {
+      autoClose: AUTH_ERR_TOAST_TIME,
+    });
+  }
+};
+
 export const logout = () => async (dispatch) => {
   try {
     await axios.post("/auth/logout");
@@ -176,14 +224,14 @@ export const verifyUser = (hash) => async (dispatch, getState) => {
 export default function (state = defaultUser, action) {
   switch (action.type) {
     case GET_USER:
-      return { ...state, ...action.user };
+      return { ...state, data: action.user };
     case REMOVE_USER:
       return defaultUser;
     case VERIFIED_USER: {
       return { ...state, verifyAttempt: action.attempt };
     }
     case CLEAR_USER_ERROR: {
-      return { ...state, error: "" };
+      return { ...state, data: { ...state.data, error: "" } };
     }
     default:
       return state;

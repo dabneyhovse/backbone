@@ -5,6 +5,12 @@
  * Middleware for the api rooutes to use as needed
  */
 
+const multer = require("multer");
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fieldSize: 25 * 1024 * 1024 },
+});
+
 const isLoggedIn = (req, res, next) => {
   if (req.user) {
     next();
@@ -29,4 +35,4 @@ const isNotLoggedIn = (req, res, next) => {
   }
 };
 
-module.exports = { isLoggedIn, isAdmin, isNotLoggedIn };
+module.exports = { isLoggedIn, isAdmin, isNotLoggedIn, upload };

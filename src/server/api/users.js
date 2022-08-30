@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { User } = require("../db/models");
-const { isAdmin, isLoggedIn } = require("./middleware");
+const { isAdmin, isLoggedIn, upload } = require("./middleware");
 module.exports = router;
 
 const paginate = (page) => {
@@ -71,6 +71,64 @@ router.put("/:userId", isLoggedIn, async (req, res, next) => {
     next(error);
   }
 });
+
+/**
+ * PUT single user based on req
+ */
+
+router.put(
+  "/",
+  isLoggedIn,
+  upload.single("profile"),
+  async (req, res, next) => {
+    try {
+      let oldUser = await User.findByPk(req.user.id);
+      const ALLOWED_USER_EDITS = [
+        "firstName",
+        "lastName",
+        "uuid",
+        "phone",
+        "room",
+        "bio",
+        "profile.photo",
+        "profile.room",
+        "profile.bio",
+      ];
+
+      sizeLimits = {
+        firstName: 69,
+        lastName: 69,
+        uuid: 69,
+        phone: 69,
+        room: 69,
+        bio: 421,
+        "profile.photo": -1,
+        "profile.room": 69,
+        "profile.bio": 421,
+      };
+
+      let filtered = Object.fromEntries(
+        Object.entries(req.body).filter(([key]) => {
+          if (sizeLimits[key] !== -1) {
+            if (sizeLimits[key] < req.body[key].length) {
+              return false;
+            }
+          }
+          return ALLOWED_USER_EDITS.indexOf(key) !== -1;
+        })
+      );
+
+      if (filtered.profile) {
+        filtered.profile = { ...oldUser.profile.toJSON(), ...filtered.profile };
+      }
+
+      await oldUser.update(filtered);
+      res.status(201).send(req.body);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 /**
  *  DELETE single user (api/users/:id)

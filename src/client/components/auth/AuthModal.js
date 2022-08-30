@@ -40,8 +40,8 @@ function AuthModal() {
 
   const { user, visible, error } = useSelector((state) => ({
     visible: state.auth.visible,
-    user: state.user,
-    error: state.user.error ? state.user.error.response.data : "",
+    user: state.user.data,
+    error: state.user.data.error ? state.user.data.error.response.data : "",
   }));
 
   // handle form submission and form errors
