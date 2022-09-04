@@ -13,6 +13,7 @@ import React, { Component } from "react";
 import { connect, useSelector } from "react-redux";
 import { Route } from "react-router-dom";
 import {
+  AdminPanel,
   AuthModal,
   Calender,
   DarbGallery,
@@ -66,6 +67,13 @@ const ROUTES = [
     path: "/profile",
     element: <ProfileWall />,
   },
+  {
+    requiredAuth: 4,
+    exact: false,
+    path: "/adminpanel",
+    element: <AdminPanel />,
+  },
+
   ...dynamicRoutes(),
 ];
 

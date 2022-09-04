@@ -190,6 +190,13 @@ function Navdarb() {
                     <LinkContainer to="/profile">
                       <NavDropdown.Item href>Profile</NavDropdown.Item>
                     </LinkContainer>
+                    {user.authLevel > 3 ? (
+                      <LinkContainer to="/adminpanel">
+                        <NavDropdown.Item href>Admin</NavDropdown.Item>
+                      </LinkContainer>
+                    ) : (
+                      ""
+                    )}
                     <NavDropdown.Divider />
 
                     <NavDropdown.Item onClick={handleLogout}>

@@ -118,9 +118,9 @@ async function calculateAuthLevel(user) {
   if (!user) {
     return 0;
   } else {
-    // if (user.admin) {
-    //   return 4;
-    // }
+    if (user.isAdmin) {
+      return 4;
+    }
     // test verification emails
     const ver = await Verification.findAll({ where: { userId: user.id } });
     if (ver.length > 0) {
