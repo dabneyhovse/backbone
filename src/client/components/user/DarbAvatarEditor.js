@@ -7,6 +7,7 @@ import Dropzone from "react-dropzone";
 import { useDispatch, useSelector } from "react-redux";
 
 import { updateUser } from "../../store/user";
+import { Row, Col, Card } from "react-bootstrap";
 
 function DarbAvatarEditor(props) {
   const { photo } = useSelector((state) => ({
@@ -39,52 +40,59 @@ function DarbAvatarEditor(props) {
           Update your profile icon:
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body className="d-flex  align-items-center justify-content-around">
-        <div
-          className="d-flex flex-column align-items-center"
-          style={{ maxWidth: "250px" }}
-        >
-          <AvatarEditor
-            ref={editor}
-            width={250}
-            height={250}
-            image={image}
-            scale={scale / 100}
-            borderRadius={125}
-          />
-          <Form.Range
-            label="Zoom"
-            value={scale}
-            onChange={(e) => {
-              if (e.target.value >= 100 && e.target.value <= 300)
-                setScale(e.target.value);
-            }}
-            min={100}
-            max={300}
-          />
-        </div>
-        <Dropzone
-          onDrop={(dropped) => setImage(dropped[0])}
-          noKeyboard
-          style={{ width: "250px", height: "250px", backgroundColor: "black" }}
-          inputContent="Drag profie picture here, or click to upload"
-        >
-          {({ getRootProps, getInputProps }) => {
-            return (
-              <section
-                style={{ backgroundColor: "#eee", width: "250px" }}
-                className="border p-5 rounded "
-              >
-                <div {...getRootProps({ className: "dropzone" })}>
-                  <input {...getInputProps()} />
-                  <p className="text-muted">
-                    Drag and drop pfp file here, or click to select
-                  </p>
-                </div>
-              </section>
-            );
-          }}
-        </Dropzone>
+      <Modal.Body>
+        <Row>
+          <Col lg="6" sm="12">
+            <Card className="d-flex flex-column align-items-center p-3">
+              <AvatarEditor
+                ref={editor}
+                width={250}
+                height={250}
+                image={image}
+                scale={scale / 100}
+                borderRadius={125}
+              />
+              <Form.Range
+                label="Zoom"
+                value={scale}
+                onChange={(e) => {
+                  if (e.target.value >= 100 && e.target.value <= 300)
+                    setScale(e.target.value);
+                }}
+                min={100}
+                max={300}
+              />
+            </Card>
+          </Col>
+          <Col lg="6" sm="12" className="d-flex justify-content-center">
+            <Dropzone
+              onDrop={(dropped) => setImage(dropped[0])}
+              noKeyboard
+              style={{
+                width: "250px",
+                height: "250px",
+                backgroundColor: "black",
+              }}
+              inputContent="Drag profie picture here, or click to upload"
+            >
+              {({ getRootProps, getInputProps }) => {
+                return (
+                  <section
+                    style={{ backgroundColor: "#eee", width: "250px" }}
+                    className="border m-3 p-5 rounded "
+                  >
+                    <div {...getRootProps({ className: "dropzone" })}>
+                      <input {...getInputProps()} />
+                      <p className="text-muted">
+                        Drag and drop pfp file here, or click to select
+                      </p>
+                    </div>
+                  </section>
+                );
+              }}
+            </Dropzone>
+          </Col>
+        </Row>
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={handleSave}>Save</Button>
