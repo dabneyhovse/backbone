@@ -29,6 +29,7 @@ import {
   MDBInput,
 } from "mdb-react-ui-kit";
 import DarbAvatarEditor from "./DarbAvatarEditor";
+import Affiliation from "./Affiliation";
 import { updateUser } from "../../store/user";
 
 const EDITABLE = ["firstName", "lastName", "uuid", "phone", "room", "bio"];
@@ -46,6 +47,10 @@ function ProfileWall() {
     storeUser: state.user.data,
   }));
 
+  const [user, setUser] = useState(storeUser);
+  const [modalShow, setModalShow] = React.useState(false);
+  const dispatch = useDispatch();
+
   /**
    * force update?
    */
@@ -53,10 +58,6 @@ function ProfileWall() {
   useEffect(() => {
     setUser(storeUser);
   }, [storeUser]);
-
-  const [user, setUser] = useState(storeUser);
-  const [modalShow, setModalShow] = React.useState(false);
-  const dispatch = useDispatch();
 
   const handleSave = () => {
     dispatch(updateUser(user));
@@ -91,7 +92,7 @@ function ProfileWall() {
   };
 
   return (
-    <>
+    <React.Fragment>
       <DarbAvatarEditor show={modalShow} hide={() => setModalShow(false)} />
       <Container className="mainContent" style={{ backgroundColor: "#eee" }}>
         <MDBContainer className="py-5">
@@ -118,6 +119,14 @@ function ProfileWall() {
                       Edit Picture
                     </Button>
                   </div>
+                </MDBCardBody>
+              </MDBCard>
+
+              <MDBCard className="mb-4 mb-lg-0">
+                <MDBCardBody className="p-0">
+                  <MDBRow className="d-flex justify-content-between align-items-center p-3 pt-0">
+                    <Affiliation />
+                  </MDBRow>
                 </MDBCardBody>
               </MDBCard>
 
@@ -344,7 +353,7 @@ function ProfileWall() {
           </MDBRow>
         </MDBContainer>
       </Container>
-    </>
+    </React.Fragment>
   );
 }
 

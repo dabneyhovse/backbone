@@ -7,12 +7,16 @@
 const Sequelize = require("sequelize");
 const db = require("../db");
 
-const Affilation = db.define("affilation",{
+const Affiliation = db.define("affiliation", {
   house: {
     type: Sequelize.STRING,
   },
   status: {
     type: Sequelize.ENUM(["social", "full"]),
+  },
+  verified: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
   },
 });
 
@@ -45,4 +49,4 @@ const membershipToNickname = (memberships) => {
   });
 };
 
-module.exports = Affilation;
+module.exports = Affiliation;

@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { Verification, Affilation } = require("../db/models");
+const { Verification, Affiliation } = require("../db/models");
 const User = require("../db/models/user");
 module.exports = router;
 
@@ -126,8 +126,8 @@ async function calculateAuthLevel(user) {
     if (ver.length > 0) {
       return 0.5;
     }
-    const affiliation = await Affilation.findOne({
-      where: { house: "dabney" },
+    const affiliation = await Affiliation.findOne({
+      where: { house: "dabney", userId: user.id },
     });
     if (affiliation == null) {
       return 1;

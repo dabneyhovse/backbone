@@ -99,10 +99,6 @@ const User = db.define("user", {
     type: Sequelize.INTEGER,
     defaultValue: 42069,
   },
-  // IDs of different affilation models so we dont need a through table
-  // houseAffiliations: {
-  //   type: Sequelize.ARRAY
-  // },
   profile: {
     type: Sequelize.JSON,
     defaultValue: {

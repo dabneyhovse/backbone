@@ -12,6 +12,7 @@ const router = require("express").Router();
 module.exports = router;
 
 router.use("/users", require("./users"));
+router.use("/affiliations", require("./affiliations"));
 // TODO: router.use("/bot", require("./bot"));
 // TODO dynamic import
 

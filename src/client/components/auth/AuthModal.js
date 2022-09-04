@@ -4,7 +4,7 @@
  *
  * Implement login modal using the ReactModaLogin package
  *
- * TODO signup by caltech email and affilation
+ * TODO signup by caltech email and affiliation
  */
 
 import React, { useEffect, useState } from "react";
