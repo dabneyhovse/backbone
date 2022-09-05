@@ -114,11 +114,28 @@ const startListening = () => {
   require("./socket")(io);
 };
 
+async function syncServiceDbs() {
+  const { builtInServices, moduleServices } = require("../services");
+  const allServices = [...builtInServices, ...moduleServices];
+
+  for (let i = 0; i < allServices.length; i++) {
+    try {
+      if (allServices[i].importDb) {
+        const dbService = require(`${allServices[i].moduleName}/Database`);
+        await dbService.sync();
+      }
+    } catch (error) {
+      console.log(`Error syncing db for ${allServices[i].name}`);
+    }
+  }
+}
+
 const syncDb = () => db.sync();
 
 async function bootApp() {
   await sessionStore.sync();
   await syncDb();
+  await syncServiceDbs();
   await createApp();
   await startListening();
 }
