@@ -40,7 +40,11 @@ function dynamicRoutes() {
       exact: false,
       path: curr.route,
       requiredAuth: curr.requiredAuth,
-      element: <div>#TODO {curr.name}</div>,
+      element: (
+        <Suspense fallback={<div>Loading...</div>}>
+          {React.lazy(() => import(`${curr.moduleName}/React`))}
+        </Suspense>
+      ),
     });
   }
   return out;
