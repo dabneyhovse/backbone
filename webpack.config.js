@@ -26,7 +26,7 @@ module.exports = {
     moduleAssets: false,
     modules: false,
     performance: false,
-    warnings: false,
+    // warnings: false,
   },
   devtool: "source-map",
   mode: isDev ? "development" : "production",

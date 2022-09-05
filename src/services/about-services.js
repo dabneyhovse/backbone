@@ -112,4 +112,5 @@ module.exports = {
   importDb: false,
   importReact: false,
   importExpress: false,
+  importAdmin: false,
 };

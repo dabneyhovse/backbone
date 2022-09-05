@@ -3,9 +3,10 @@ const { User } = require("../db/models");
 const { isAdmin, isLoggedIn, upload } = require("./middleware");
 module.exports = router;
 
+const USERS_PER_PAGE = 20;
 const paginate = (page) => {
-  const offset = (page - 1) * 20;
-  const limit = 21;
+  const offset = (page - 1) * USERS_PER_PAGE;
+  const limit = USERS_PER_PAGE;
 
   return {
     offset,
@@ -18,10 +19,13 @@ const paginate = (page) => {
  */
 router.get("/", isAdmin, async (req, res, next) => {
   try {
-    let allUsers = await User.findAll({
-      ...paginate(Number(req.query.pageNum)),
-      order: [["firstName", "ASC"]],
+    let allUsers = await User.findAndCountAll({
+      ...paginate(Number(req.query.pageNum || 1)),
+      order: [["id", "ASC"]],
     });
+
+    allUsers.count = Math.ceil(allUsers.count / USERS_PER_PAGE);
+
     res.json(allUsers).status(200);
   } catch (error) {
     next(error);
@@ -59,18 +63,28 @@ router.get("/telegram/:telegramId", async (req, res, next) => {
  *  PUT single user (api/users/:id)
  */
 
-router.put("/:userId", isLoggedIn, async (req, res, next) => {
-  try {
-    let oldUser = await User.findById(req.params.userId);
-    await oldUser.update({
-      email: req.body.email,
-      password: req.body.password,
-      googleId: req.body.googleId,
-    });
-  } catch (error) {
-    next(error);
+router.put(
+  "/:userId",
+  isAdmin,
+  upload.single("profile"),
+  async (req, res, next) => {
+    try {
+      console.log(req.body);
+      let oldUser = await User.findById(req.params.userId);
+
+      await oldUser.update({
+        ...req.body,
+        ...(req.body.profile
+          ? {
+              profile: { ...oldUser.profile.toJSON(), ...req.body.profile },
+            }
+          : {}),
+      });
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 /**
  * PUT single user based on req

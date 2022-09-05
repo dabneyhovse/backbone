@@ -70,7 +70,7 @@ const ROUTES = [
   {
     requiredAuth: 4,
     exact: false,
-    path: "/adminpanel",
+    path: "/adminpanel/*",
     element: <AdminPanel />,
   },
 

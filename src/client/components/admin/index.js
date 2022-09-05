@@ -5,4 +5,3 @@
  * standard index export file
  */
 export { default as AdminPanel } from "./AdminPanel";
-export { default as UserPanel } from "./UserPanel";

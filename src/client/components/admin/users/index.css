@@ -1,0 +1,9 @@
+.admin-user-card {
+  cursor: pointer;
+  transition: all;
+  transition-duration: 100ms;
+}
+
+.admin-user-card:hover {
+  background-color: lightgray;
+}
