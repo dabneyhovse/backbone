@@ -13,9 +13,6 @@ const Verification = db.define("verification", {
   hash: {
     type: Sequelize.STRING,
   },
-  userId: {
-    type: Sequelize.INTEGER,
-  },
   emailType: {
     type: Sequelize.ENUM(["personal", "caltech"]),
   },

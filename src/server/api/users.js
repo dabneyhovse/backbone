@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { Op } = require("sequelize");
-const { User, Affiliation } = require("../db/models");
+const { User, Affiliation, Verification } = require("../db/models");
 const { isAdmin, isLoggedIn, upload } = require("./middleware");
 module.exports = router;
 
@@ -146,9 +146,28 @@ router.get("/", isAdmin, async (req, res, next) => {
 /**
  *  GET single user (api/users/:id)
  */
+router.get("/admin/:userId", isAdmin, async (req, res, next) => {
+  try {
+    let user = await User.findByPk(req.params.userId, {
+      include: [{ model: Affiliation }, { model: Verification }],
+    });
+    res.json(user);
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * just a filtered version of the above
+ */
 router.get("/:userId", isLoggedIn, async (req, res, next) => {
   try {
-    let user = await User.findByPk(req.params.userId);
+    let user = await User.findByPk(req.params.userId, {
+      attributes: ["username", "firstName", "lastName", "profile"],
+      include: [
+        { model: Affiliation, attributes: ["house", "status", "verified"] },
+      ],
+    });
     res.json(user);
   } catch (err) {
     next(err);
@@ -180,7 +199,10 @@ router.put(
   upload.single("profile"),
   async (req, res, next) => {
     try {
-      let oldUser = await User.findById(req.params.userId);
+      console.log(req.params.userId);
+      let oldUser = await User.findByPk(req.params.userId);
+
+      console.log(req.body);
 
       await oldUser.update({
         ...req.body,

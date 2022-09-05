@@ -6,15 +6,12 @@
  */
 
 import React, { useEffect } from "react";
-import { Route, Routes, HashRouter } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import UserSearchPanel from "./UserSearchPanel";
 import "./index.css";
 import UserSinglePanel from "./UserSinglePanel";
 
 function UserPanel() {
-  useEffect(() => {
-    // TODO request users default
-  }, []);
   return (
     <Routes>
       <Route exact path="/" element={<UserSearchPanel />} />

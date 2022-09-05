@@ -6,6 +6,7 @@
  */
 
 import React from "react";
+import { useDispatch } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 
 function UserRow(props) {
@@ -13,7 +14,7 @@ function UserRow(props) {
 
   return (
     <LinkContainer to={`./${user.id}`}>
-      <tr className = "user-row">
+      <tr className="user-row">
         <td>{user.id}</td>
         <td>{user.username}</td>
         <td>{user.firstName}</td>

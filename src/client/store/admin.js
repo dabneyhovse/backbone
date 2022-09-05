@@ -42,13 +42,24 @@ export const fetchAdminUsers = (search) => {
   };
 };
 
+export const fetchAdminUser = (id) => {
+  return async (dispatch, getState) => {
+    try {
+      const { data } = await Axios.get(`/api/users/admin/${id}`);
+      dispatch(gotAdminUser(data));
+    } catch (error) {
+      toast.error("There was an error fetching the users");
+    }
+  };
+};
+
 export const updateAdminUser =
   (userData, userId) => async (dispatch, getState) => {
     try {
       /**
        * sanitizes in server
        */
-      const res = await axios.put(`/api/users/${userId}`, userData, {
+      const res = await Axios.put(`/api/users/${userId}`, userData, {
         headers: { "content-type": "multipart/form-data" },
       });
 
@@ -65,6 +76,7 @@ export const updateAdminUser =
       toast.success("The information was updated!", { autoClose: 2000 });
     } catch (error) {
       toast.error("There was an error updating the information");
+      console.log(error);
     }
   };
 
