@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { Op } = require("sequelize");
-const { User } = require("../db/models");
+const { User, Affiliation } = require("../db/models");
 const { isAdmin, isLoggedIn, upload } = require("./middleware");
 module.exports = router;
 
@@ -20,6 +20,22 @@ const sortMap = {
   ["2"]: [["id", "ASC"]],
   ["3"]: [["id", "DESC"]],
 };
+const houseMembershipMap = {
+  ["0"]: "any",
+  ["1"]: "dabney",
+  ["2"]: "blacker",
+  ["3"]: "venerable",
+  ["4"]: "avery",
+  ["5"]: "fleming",
+  ["6"]: "ricketts",
+  ["7"]: "page",
+  ["8"]: "lloyd",
+};
+const verificationStatusMap = {
+  ["1"]: null,
+  ["2"]: true,
+  ["3"]: false,
+};
 // TODO remove
 const util = require("util");
 /**
@@ -31,6 +47,7 @@ router.get("/", isAdmin, async (req, res, next) => {
     console.log(search);
 
     let where = {};
+    let include = [];
     if (search.name) {
       let fl = search.name.split(" ");
 
@@ -82,10 +99,35 @@ router.get("/", isAdmin, async (req, res, next) => {
         },
       };
     }
+    if (search.house_membership && search.house_membership !== "0") {
+      console.log("member", search.house_membership);
+      include = [
+        ...include,
+        {
+          model: Affiliation,
+          required: true,
+          where: { house: houseMembershipMap[search.house_membership] },
+        },
+      ];
+    }
+    if (search.verification_status && search.verification_status != "1") {
+      include = [
+        ...include,
+        {
+          model: Affiliation,
+          required: true,
+          where: {
+            verified: verificationStatusMap[search.verification_status],
+          },
+        },
+      ];
+    }
+
     let query = {
       ...paginate(Number(req.query.pageNum || 1)),
       order: sortMap[search.sort],
       where,
+      include,
     };
 
     console.log(

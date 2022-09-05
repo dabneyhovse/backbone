@@ -16,7 +16,7 @@ import UserSearchPagination from "./UserSearchPagination";
 function UserSearchPanel() {
   const [search, setSearch] = useState({
     verification_status: "1",
-    house_membership: "any",
+    house_membership: "0",
     sort: "1",
   });
   const dispatch = useDispatch();
@@ -88,15 +88,15 @@ function UserSearchPanel() {
                 <Form.Group>
                   <Form.Label>House Membership</Form.Label>
                   <Form.Select onChange={onChange} name="house_membership">
-                    <option value="any">Any</option>
-                    <option value="dabney">Dabney</option>
-                    <option value="blacker">Blacker</option>
-                    <option value="venerable">Venerable</option>
-                    <option value="avery">Avery</option>
-                    <option value="fleming">Fleming</option>
-                    <option value="ricketts">Ricketts</option>
-                    <option value="page">Page</option>
-                    <option value="lloyd">LLoyd</option>
+                    <option value="0">Any</option>
+                    <option value="1">Dabney</option>
+                    <option value="2">Blacker</option>
+                    <option value="3">Venerable</option>
+                    <option value="4">Avery</option>
+                    <option value="5">Fleming</option>
+                    <option value="6">Ricketts</option>
+                    <option value="7">Page</option>
+                    <option value="8">LLoyd</option>
                   </Form.Select>
                 </Form.Group>
 
