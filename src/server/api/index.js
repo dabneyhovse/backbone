@@ -4,9 +4,31 @@
  *
  * Api index file
  *
- * // TODO: dynasmic import of routes from services
  * // TODO: implement telegram bot for verification
  */
+
+/**
+ * attaches all services apis to the router
+ * @param {express router} apiRouter
+ */
+function attachServices(apiRouter) {
+  /**
+   * only need these json files loaded while
+   * loading this so seems prudent to do this
+   */
+  const { builtInServices, moduleServices } = require("../../services");
+  const allServices = [...builtInServices, ...moduleServices];
+
+  // TODO: possiby differientate between Express and Api in the future
+  allServices.forEach((service) => {
+    if (service.importExpress) {
+      apiRouter.use(
+        `${sevice.moduleName}`,
+        require(`${service.moduleName}/Express`)
+      );
+    }
+  });
+}
 
 const router = require("express").Router();
 module.exports = router;
@@ -14,7 +36,7 @@ module.exports = router;
 router.use("/users", require("./users"));
 router.use("/affiliations", require("./affiliations"));
 // TODO: router.use("/bot", require("./bot"));
-// TODO dynamic import
+attachServices(router);
 
 router.use((req, res, next) => {
   const error = new Error("Not Found");

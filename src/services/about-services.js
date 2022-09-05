@@ -19,14 +19,14 @@ module.exports = {
 
   /**
    * the route you want your service to occupy ie "example" gives the service dabney.caltech.edu/example/*
-   * simply use your own react router to get vaired routes from the base ie
+   * simply use your own routes to get varried routes from the base ie
    * dabney.caltech.edu/example/about and dabney.caltech.edu/example/home
    * would be two different routes
    *
    * if your route overlaps with an existing one the serivce that has been up longer will recieve the route,
    * and the other will not be connected
    *
-   * do not request a route if your service is external or built in (leave route as null)
+   * do not request a route if your service is external (no react) or built in (leave route as null)
    */
   route: "services/about",
 
