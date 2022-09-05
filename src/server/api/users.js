@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { Op } = require("sequelize");
 const { User } = require("../db/models");
 const { isAdmin, isLoggedIn, upload } = require("./middleware");
 module.exports = router;
@@ -14,15 +15,83 @@ const paginate = (page) => {
   };
 };
 
+const sortMap = {
+  ["1"]: [["updatedAt", "ASC"]],
+  ["2"]: [["id", "ASC"]],
+  ["3"]: [["id", "DESC"]],
+};
+// TODO remove
+const util = require("util");
 /**
  *  GET all users (api/users)
  */
 router.get("/", isAdmin, async (req, res, next) => {
   try {
-    let allUsers = await User.findAndCountAll({
+    const search = JSON.parse(req.query.search);
+    console.log(search);
+
+    let where = {};
+    if (search.name) {
+      let fl = search.name.split(" ");
+
+      let or = [];
+      for (let i = 0; i < fl.length; i++) {
+        or.push(
+          ...[
+            {
+              firstName: {
+                [Op.iLike]: "%" + fl[0] + "%",
+              },
+            },
+            {
+              lastName: {
+                [Op.iLike]: "%" + fl[0] + "%",
+              },
+            },
+          ]
+        );
+      }
+
+      where = {
+        ...where,
+        [Op.or]: or,
+      };
+    }
+    if (search.email) {
+      where = {
+        ...where,
+        [Op.or]: [
+          {
+            personalEmail: {
+              [Op.iLike]: "%" + search.email + "%",
+            },
+          },
+          {
+            caltechEmail: {
+              [Op.iLike]: "%" + search.email + "%",
+            },
+          },
+        ],
+      };
+    }
+    if (search.username) {
+      where = {
+        ...where,
+        username: {
+          [Op.iLike]: "%" + username + "%",
+        },
+      };
+    }
+    let query = {
       ...paginate(Number(req.query.pageNum || 1)),
-      order: [["id", "ASC"]],
-    });
+      order: sortMap[search.sort],
+      where,
+    };
+
+    console.log(
+      util.inspect(query, { showHidden: false, depth: null, colors: true })
+    );
+    let allUsers = await User.findAndCountAll(query);
 
     allUsers.count = Math.ceil(allUsers.count / USERS_PER_PAGE);
 

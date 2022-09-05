@@ -37,7 +37,7 @@ export const fetchAdminUsers = (search) => {
       });
       dispatch(gotAdminUsers(data));
     } catch (error) {
-      toast.error("There was an error feching the users");
+      toast.error("There was an error fetching the users");
     }
   };
 };

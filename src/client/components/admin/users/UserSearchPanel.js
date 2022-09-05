@@ -76,15 +76,6 @@ function UserSearchPanel() {
                   />
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="searchFormVerified">
-                  <Form.Check
-                    onChange={onChange}
-                    name="verified"
-                    type="checkbox"
-                    label="View House Membership Verified Users Only"
-                  />
-                </Form.Group>
-
                 <Form.Group>
                   <Form.Label>Membership Verification Status</Form.Label>
                   <Form.Select onChange={onChange} name="verification_status">
