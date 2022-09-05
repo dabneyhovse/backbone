@@ -44,7 +44,6 @@ const util = require("util");
 router.get("/", isAdmin, async (req, res, next) => {
   try {
     const search = JSON.parse(req.query.search);
-    console.log(search);
 
     let where = {};
     let include = [];
@@ -100,7 +99,6 @@ router.get("/", isAdmin, async (req, res, next) => {
       };
     }
     if (search.house_membership && search.house_membership !== "0") {
-      console.log("member", search.house_membership);
       include = [
         ...include,
         {
@@ -129,10 +127,6 @@ router.get("/", isAdmin, async (req, res, next) => {
       where,
       include,
     };
-
-    console.log(
-      util.inspect(query, { showHidden: false, depth: null, colors: true })
-    );
     let allUsers = await User.findAndCountAll(query);
 
     allUsers.count = Math.ceil(allUsers.count / USERS_PER_PAGE);
@@ -199,11 +193,7 @@ router.put(
   upload.single("profile"),
   async (req, res, next) => {
     try {
-      console.log(req.params.userId);
       let oldUser = await User.findByPk(req.params.userId);
-
-      console.log(req.body);
-
       await oldUser.update({
         ...req.body,
         ...(req.body.profile
@@ -212,6 +202,7 @@ router.put(
             }
           : {}),
       });
+      res.sendStatus(201);
     } catch (error) {
       next(error);
     }
@@ -283,7 +274,7 @@ router.put(
 router.delete("/:userId", isAdmin, async (req, res, next) => {
   try {
     await User.destroy({
-      where: { id: req.body.userId },
+      where: { id: req.params.userId },
     });
     res.sendStatus(200);
   } catch (error) {
@@ -300,7 +291,7 @@ router.patch("/:userId", isAdmin, async (req, res, next) => {
       {
         isAdmin: true,
       },
-      { where: { id: req.body.userId } }
+      { where: { id: req.params.userId } }
     );
     res.sendStatus(200);
   } catch (error) {

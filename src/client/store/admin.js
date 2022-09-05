@@ -7,8 +7,10 @@
  * #TODO: get all users, remove user edit user etc
  */
 
+import axios from "axios";
 import Axios from "axios";
 import { toast } from "react-toastify";
+import { unflattenObject } from "./helpers";
 
 // Action Types
 export const GOT_ADMIN_USERS = "GOT_ADMIN_USERS";
@@ -62,23 +64,31 @@ export const updateAdminUser =
       const res = await Axios.put(`/api/users/${userId}`, userData, {
         headers: { "content-type": "multipart/form-data" },
       });
-
-      let data = unflattenObject(res.data);
-      let oldData = getState().user.data;
-      // server sends back what we sent if it's ok
-      dispatch(
-        gotAdminUser({
-          ...oldData,
-          ...data,
-          profile: { ...oldData.profile, ...data.profile },
-        })
-      );
-      toast.success("The information was updated!", { autoClose: 2000 });
+      toast.success("The information was updated!");
     } catch (error) {
-      toast.error("There was an error updating the information");
       console.log(error);
+      toast.error("There was an error updating the information");
     }
   };
+
+export const deleteAdminUser = (userId) => async (dispatch) => {
+  try {
+    const res = await Axios.delete(`/api/users/${userId}`);
+    toast.success("The user was deleted. /goodbyeforever");
+  } catch (error) {
+    toast.error("There was an error deleting this user");
+  }
+};
+
+export const promoteAdminUser = (userId) => async (dispatch) => {
+  try {
+    const res = await Axios.patch(`/api/users/${userId}`);
+    toast.success("The user was promoted");
+    dispatch(fetchAdminUser(userId));
+  } catch (error) {
+    toast.error("There was an error promoting this user");
+  }
+};
 
 // Reducer
 const init = {

@@ -26,7 +26,6 @@ function UserSearchPanel() {
 
   const onChange = (event) => {
     setSearch({ ...search, [event.target.name]: event.target.value });
-    console.log(search);
   };
 
   const onSearch = (event) => {
