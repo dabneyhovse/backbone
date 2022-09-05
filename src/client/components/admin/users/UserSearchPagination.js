@@ -11,7 +11,6 @@ function UserSearchPagination(props) {
 
   const dispatch = useDispatch();
   const handlePageMove = (newPage) => (event) => {
-    console.log(newPage);
     dispatch(adminUsersSetPage(newPage));
     props.updateList(event);
   };

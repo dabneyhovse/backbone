@@ -44,7 +44,6 @@ function Affiliation() {
 
   const handleSave = () => {
     if (affilationChanged) {
-      console.log("React:\t", affiliations);
       dispatch(updateAffiliations(affiliations));
     }
   };

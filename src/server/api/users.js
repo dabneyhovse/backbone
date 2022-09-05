@@ -69,7 +69,6 @@ router.put(
   upload.single("profile"),
   async (req, res, next) => {
     try {
-      console.log(req.body);
       let oldUser = await User.findById(req.params.userId);
 
       await oldUser.update({

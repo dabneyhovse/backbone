@@ -14,7 +14,11 @@ import UserRow from "./UserRow";
 import UserSearchPagination from "./UserSearchPagination";
 
 function UserSearchPanel() {
-  const [search, setSearch] = useState({});
+  const [search, setSearch] = useState({
+    verification_status: "1",
+    house_membership: "any",
+    sort: "1",
+  });
   const dispatch = useDispatch();
   const { users } = useSelector((state) => ({
     users: state.admin.users,
@@ -22,7 +26,9 @@ function UserSearchPanel() {
 
   const onChange = (event) => {
     setSearch({ ...search, [event.target.name]: event.target.value });
+    console.log(search);
   };
+
   const onSearch = (event) => {
     event.preventDefault();
     dispatch(fetchAdminUsers(search));
@@ -33,7 +39,7 @@ function UserSearchPanel() {
   }, []);
 
   return (
-    <Row>
+    <Row className="mt-3">
       <Col sm="12">
         <Accordion>
           <Accordion.Item eventKey="0">
@@ -80,8 +86,32 @@ function UserSearchPanel() {
                 </Form.Group>
 
                 <Form.Group>
+                  <Form.Label>Membership Verification Status</Form.Label>
+                  <Form.Select onChange={onChange} name="verification_status">
+                    <option value="1">Any</option>
+                    <option value="2">Verified</option>
+                    <option value="2">Unverified</option>
+                  </Form.Select>
+                </Form.Group>
+
+                <Form.Group>
+                  <Form.Label>House Membership</Form.Label>
+                  <Form.Select onChange={onChange} name="house_membership">
+                    <option value="any">Any</option>
+                    <option value="dabney">Dabney</option>
+                    <option value="blacker">Blacker</option>
+                    <option value="venerable">Venerable</option>
+                    <option value="avery">Avery</option>
+                    <option value="fleming">Fleming</option>
+                    <option value="ricketts">Ricketts</option>
+                    <option value="page">Page</option>
+                    <option value="lloyd">LLoyd</option>
+                  </Form.Select>
+                </Form.Group>
+
+                <Form.Group>
                   <Form.Label>Sort By</Form.Label>
-                  <Form.Select name="sort">
+                  <Form.Select onChange={onChange} name="sort">
                     <option value="1">Recently modified</option>
                     <option value="2">New Users First</option>
                     <option value="3">Old Users First</option>
@@ -105,6 +135,7 @@ function UserSearchPanel() {
         <Table striped bordered hover className="p-3">
           <thead>
             <tr>
+              <td>ID</td>
               <td>Username</td>
               <td>First Name</td>
               <td>Last Name</td>

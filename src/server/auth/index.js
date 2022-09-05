@@ -50,8 +50,6 @@ router.post("/signup", async (req, res, next) => {
       res.status(403).send(`The username "${username}" is already taken.`);
       return;
     }
-    console.log("personal", personalEmail);
-    console.log("caltech", caltechEmail);
     user = await User.create({
       username,
       personalEmail,
@@ -86,7 +84,6 @@ router.post("/verify", async (req, res) => {
   try {
     let ver = await Verification.findOne({ where: { hash: req.body.hash } });
     if (ver) {
-      console.log(ver);
       email = ver.email;
       emailType = ver.emailType;
       await ver.destroy();

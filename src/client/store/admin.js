@@ -32,11 +32,9 @@ export const adminUsersSetPage = (page) => ({
 export const fetchAdminUsers = (search) => {
   return async (dispatch, getState) => {
     try {
-      console.log(getState().admin.page);
       const { data } = await Axios.get(`/api/users`, {
         params: { search, pageNum: getState().admin.page },
       });
-      console.log(data);
       dispatch(gotAdminUsers(data));
     } catch (error) {
       toast.error("There was an error feching the users");
@@ -81,7 +79,6 @@ const init = {
 const reducer = (state = init, action) => {
   switch (action.type) {
     case GOT_ADMIN_USERS: {
-      console.log(action.users.rows);
       return { ...state, users: action.users.rows, count: action.users.count };
     }
     case GOT_ADMIN_USER: {

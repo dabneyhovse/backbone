@@ -13,7 +13,8 @@ function UserRow(props) {
 
   return (
     <LinkContainer to={`./${user.id}`}>
-      <tr>
+      <tr className = "user-row">
+        <td>{user.id}</td>
         <td>{user.username}</td>
         <td>{user.firstName}</td>
         <td>{user.lastName}</td>
