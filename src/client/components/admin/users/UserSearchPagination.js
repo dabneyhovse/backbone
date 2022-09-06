@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Pagination from "react-bootstrap/Pagination";
 import { useDispatch, useSelector } from "react-redux";
 import { adminUsersSetPage } from "../../../store/admin";
@@ -14,6 +14,10 @@ function UserSearchPagination(props) {
     dispatch(adminUsersSetPage(newPage));
     props.updateList(event);
   };
+
+  useEffect(() => {
+    dispatch(adminUsersSetPage(1));
+  }, []);
 
   const before = page == 1 ? "disabled" : "";
   const after = page == count ? "disabled" : "";

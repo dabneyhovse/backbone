@@ -6,8 +6,8 @@
  * // TODO dynamic import for admin pages of other services?
  */
 
-import React, { useState } from "react";
-import { Route, Routes } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Route, Routes, useLocation } from "react-router-dom";
 
 import Container from "react-bootstrap/Container";
 import { Nav } from "react-bootstrap";
@@ -16,6 +16,8 @@ import { UserPanel } from "./users";
 import { LinkContainer } from "react-router-bootstrap";
 
 import { moduleServices } from "../../../services";
+import { clearAdminStore } from "../../store/admin";
+import { useDispatch } from "react-redux";
 
 /**
  * converts the service json file into a nav tab and route content
@@ -92,7 +94,37 @@ function servicesToTCS() {
   return tcs;
 }
 
+function clearAllIntervals() {
+  const upperBound = setInterval(() => {}, 999999);
+  for (let i = 1; i < upperBound + 1; i++) {
+    clearInterval(i);
+  }
+}
+
+function clearAllTimeouts() {
+  const upperBound = setTimeout(() => {}, 999999);
+  for (let i = 1; i < upperBound + 1; i++) {
+    clearTimeout(i);
+  }
+}
+
 function AdminPanel() {
+  const location = useLocation();
+  const dispatch = useDispatch();
+  /**
+   * Clear any sus intervals, timeouts
+   * cheap way of defending against lurking from other services
+   * isnt very good but it protects a tiny bit
+   */
+  useEffect(() => {
+    clearAllIntervals();
+    clearAllTimeouts();
+    return () => {
+      if (location.pathname.indexOf("adminpanel") == -1) {
+        dispatch(clearAdminStore());
+      }
+    };
+  }, []);
   const dynamicTCS = servicesToTCS();
   return (
     <Container className="mainContent">

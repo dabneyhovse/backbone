@@ -7,6 +7,8 @@
  * // TODO: implement telegram bot for verification
  */
 
+const router = require("express").Router();
+
 /**
  * attaches all services apis to the router
  * @param {express router} apiRouter
@@ -23,14 +25,13 @@ function attachServices(apiRouter) {
   allServices.forEach((service) => {
     if (service.importExpress) {
       apiRouter.use(
-        `${sevice.moduleName}`,
+        `${sevice.route}`,
         require(`${service.moduleName}/Express`)
       );
     }
   });
 }
 
-const router = require("express").Router();
 module.exports = router;
 
 router.use("/users", require("./users"));

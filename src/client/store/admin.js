@@ -16,6 +16,7 @@ import { unflattenObject } from "./helpers";
 export const GOT_ADMIN_USERS = "GOT_ADMIN_USERS";
 export const GOT_ADMIN_USER = "GOT_ADMIN_USER";
 export const ADMIN_USERS_SET_PAGE = "ADMIN_USERS_SET_PAGE";
+export const CLEAR_ADMIN_STORE = "CLEAR_ADMIN_STORE";
 
 // Action Creators
 export const gotAdminUsers = (users) => ({
@@ -30,6 +31,9 @@ export const adminUsersSetPage = (page) => ({
   type: ADMIN_USERS_SET_PAGE,
   page,
 });
+export const clearAdminStore = () => ({
+  type: CLEAR_ADMIN_STORE,
+});
 
 export const fetchAdminUsers = (search) => {
   return async (dispatch, getState) => {
@@ -37,6 +41,7 @@ export const fetchAdminUsers = (search) => {
       const { data } = await Axios.get(`/api/users`, {
         params: { search, pageNum: getState().admin.page },
       });
+      console.log(data);
       dispatch(gotAdminUsers(data));
     } catch (error) {
       toast.error("There was an error fetching the users");
@@ -95,7 +100,7 @@ const init = {
   users: [],
   user: {},
   page: 1,
-  count: 0,
+  count: 1,
 };
 
 const reducer = (state = init, action) => {
@@ -108,6 +113,9 @@ const reducer = (state = init, action) => {
     }
     case ADMIN_USERS_SET_PAGE: {
       return { ...state, page: action.page };
+    }
+    case CLEAR_ADMIN_STORE: {
+      return init;
     }
     default:
       return state;
