@@ -9,7 +9,7 @@
  * // TODO special routes allowing any user to host a personal website
  */
 
-import React, { Component } from "react";
+import React, { Component, Suspense } from "react";
 import { connect, useSelector } from "react-redux";
 import { Route } from "react-router-dom";
 import {
@@ -20,35 +20,44 @@ import {
   Home,
   VerfyPage,
 } from "./components";
-import { moduleServices, builtInServices } from "../services";
+import { moduleServices, builtInServices, moduleImports } from "../services";
 
 import SlideRoutes from "react-slide-routes";
 import ProfileWall from "./components/user/Profile";
 
+import Example from "service-example/React";
+
 /**
  * imports in all of the routes for services
  */
-function dynamicRoutes() {
-  let allServices = [...moduleServices, ...builtInServices];
-  let out = [];
-  for (let i = 0; i < allServices.length; i++) {
-    const curr = allServices[i];
-    if (!curr.createRoute) {
-      continue;
-    }
-    out.push({
-      exact: false,
-      path: curr.route,
-      requiredAuth: curr.requiredAuth,
-      element: (
-        <Suspense fallback={<div>Loading...</div>}>
-          {React.lazy(() => import(`${curr.moduleName}/submodules/React`))}
-        </Suspense>
-      ),
-    });
-  }
-  return out;
-}
+// async function dynamicRoutes() {
+//   let allServices = [...moduleServices, ...builtInServices];
+//   let out = [];
+//   for (let i = 0; i < allServices.length; i++) {
+//     const curr = allServices[i];
+//     if (!curr.importReact) {
+//       continue;
+//     }
+
+//     let { default: CurrModule } = await moduleImports[curr.moduleName].react;
+//     console.log(CurrModule);
+//     out.push({
+//       exact: false,
+//       path: curr.route,
+//       requiredAuth: curr.requiredAuth,
+//       element: (
+//         // <Suspense fallback={<div>Loading...</div>}>
+//         //   {React.lazy(() => currModule)}
+//         // </Suspense>
+//         <CurrModule />
+//       ),
+//     });
+//   }
+//   return out;
+// }
+
+// const dynRoutes = await dynamicRoutes();
+// console.log(dynRoutes);
 
 // list of routes and their restrictions so they can be
 // generated easily
@@ -77,8 +86,14 @@ const ROUTES = [
     path: "/adminpanel/*",
     element: <AdminPanel />,
   },
+  {
+    requiredAuth: 4,
+    exact: false,
+    path: "/example",
+    element: <Example />,
+  },
 
-  ...dynamicRoutes(),
+  // ...dynRoutes,
 ];
 
 /**

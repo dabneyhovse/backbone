@@ -124,7 +124,7 @@ async function syncServiceDbs() {
   for (let i = 0; i < allServices.length; i++) {
     try {
       if (allServices[i].importDb) {
-        const dbService = require(`${allServices[i].moduleName}/submodules/Database`);
+        const dbService = require(`${allServices[i].moduleName}/Database`);
         await dbService.sync();
         console.log(
           `\t[${allServices[i].name}]:\tsynced database "${allServices[i].route}"`

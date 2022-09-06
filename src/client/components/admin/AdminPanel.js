@@ -51,7 +51,7 @@ function serivceToTC(service) {
         path={service.route}
         element={
           <Suspense fallback={<div>Loading...</div>}>
-            {React.lazy(() => import(`${service.moduleName}/submodules/Admin`))}
+            {React.lazy(() => import(`${service.moduleName}/Admin`))}
           </Suspense>
         }
       />

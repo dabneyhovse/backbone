@@ -29,7 +29,7 @@ function attachServices(apiRouter) {
     if (service.importExpress) {
       apiRouter.use(
         `/${service.route}`,
-        require(`${service.moduleName}/submodules/Express`)
+        require(`${service.moduleName}/Express`)
       );
       count++;
       console.log(

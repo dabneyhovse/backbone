@@ -39,6 +39,11 @@ module.exports = {
   },
   resolve: {
     extensions: [".js", ".jsx", ".ts"],
+    alias: {
+      react: path.resolve(__dirname, "node_modules/react"),
+      redux: path.resolve(__dirname, "node_modules/redux"),
+      "react-redux": path.resolve(__dirname, "node_modules/react-redux"),
+    },
   },
   watchOptions: {
     ignored: /node_modules/,
