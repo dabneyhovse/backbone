@@ -47,7 +47,7 @@ router.get("/", isAdmin, async (req, res, next) => {
     if (req.query.search == undefined) {
       search = {};
     } else {
-      seatch = JSON.parse(req.query.search);
+      search = JSON.parse(req.query.search);
     }
 
     let where = {};

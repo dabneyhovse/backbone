@@ -27,7 +27,7 @@ import { useDispatch } from "react-redux";
 async function serivceToTC(service) {
   const tab = (
     <Nav.Item key={service.moduleName}>
-      <LinkContainer to={"/adminpanel" + service.route}>
+      <LinkContainer to={"/adminpanel/" + service.route}>
         <Nav.Link eventKey={service.moduleName}>{service.name}</Nav.Link>
       </LinkContainer>
     </Nav.Item>
@@ -40,7 +40,7 @@ async function serivceToTC(service) {
     content = (
       <Route
         key={service.moduleName}
-        path={service.route + "/*"}
+        path={"/" + service.route + "/*"}
         element={service.element}
       />
     );
@@ -49,7 +49,7 @@ async function serivceToTC(service) {
     content = (
       <Route
         key={service.moduleName}
-        path={service.route}
+        path={"/" + service.route + "/*"}
         element={<CurrModule />}
       />
     );
@@ -68,7 +68,7 @@ const BUILT_IN_ADMIN = [
     importAdmin: true,
     name: "Users",
     moduleName: "users",
-    route: "/users",
+    route: "users",
     element: <UserPanel />,
   },
 ];
