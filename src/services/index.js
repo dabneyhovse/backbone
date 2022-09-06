@@ -12,7 +12,11 @@
  */
 
 const moduleServiceNames = ["service-example"];
-const builtInServiceNames = ["social-calendar", "about-services"];
+const builtInServiceNames = [
+  "social-calendar",
+  "about-services",
+  "wiki-service",
+];
 
 let moduleServices = [];
 let moduleImports = {};

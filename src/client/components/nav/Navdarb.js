@@ -61,7 +61,10 @@ function navItemToReact(item, authLevel, dropdown = false) {
 
   if (item.type == "href") {
     out = dropdown ? (
-      <NavDropdown.Item key={item.name} href={item.route}>
+      <NavDropdown.Item
+        key={item.name}
+        href={item.href ? item.href : item.route}
+      >
         {item.name}
       </NavDropdown.Item>
     ) : (
