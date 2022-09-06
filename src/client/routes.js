@@ -25,8 +25,6 @@ import { moduleServices, builtInServices, moduleImports } from "../services";
 import SlideRoutes from "react-slide-routes";
 import ProfileWall from "./components/user/Profile";
 
-import Example from "service-example/React";
-
 /**
  * imports in all of the routes for services
  */
@@ -40,17 +38,11 @@ async function dynamicRoutes() {
     }
 
     let { default: CurrModule } = await moduleImports[curr.moduleName].react;
-    console.log(CurrModule);
     out.push({
       exact: false,
       path: curr.route,
       requiredAuth: curr.requiredAuth,
-      element: (
-        // <Suspense fallback={<div>Loading...</div>}>
-        //   {React.lazy(() => currModule)}
-        // </Suspense>
-        <CurrModule />
-      ),
+      element: <CurrModule />,
     });
   }
   return out;
@@ -85,12 +77,6 @@ const ROUTES = [
     path: "/adminpanel/*",
     element: <AdminPanel />,
   },
-  // {
-  //   requiredAuth: 4,
-  //   exact: false,
-  //   path: "/example",
-  //   element: <Example />,
-  // },
 
   ...dynRoutes,
 ];
