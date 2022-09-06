@@ -68,7 +68,8 @@
     "redux-devtools-extension": "^2.13.9",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.4.1",
-    "sequelize": "^6.21.3",
+    "sequelize": "^6.21.4",
+    "service-example": "file:../ExampleService",
     "socket.io": "^4.5.1"
   }
 }

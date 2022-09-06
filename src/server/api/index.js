@@ -14,6 +14,7 @@ const router = require("express").Router();
  * @param {express router} apiRouter
  */
 function attachServices(apiRouter) {
+  console.log("Attaching service api routes...");
   /**
    * only need these json files loaded while
    * loading this so seems prudent to do this
@@ -22,17 +23,25 @@ function attachServices(apiRouter) {
   const allServices = [...builtInServices, ...moduleServices];
 
   // TODO: possiby differientate between Express and Api in the future
+
+  let count = 0;
   allServices.forEach((service) => {
     if (service.importExpress) {
       apiRouter.use(
-        `${sevice.route}`,
+        `/${service.route}`,
         require(`${service.moduleName}/submodules/Express`)
       );
+      count++;
+      console.log(
+        `\t[${service.name}]:\tattached api routes at /api/${service.route}/`
+      );
+    } else {
+      console.log(`\t[${service.name}]:\tdoes not have api routes`);
     }
   });
+  console.log(`Attached ${count} service api Route(s)\n`);
+  // console.log(apiRouter.stack);
 }
-
-module.exports = router;
 
 router.use("/users", require("./users"));
 router.use("/affiliations", require("./affiliations"));
@@ -40,7 +49,9 @@ router.use("/affiliations", require("./affiliations"));
 attachServices(router);
 
 router.use((req, res, next) => {
-  const error = new Error("Not Found");
+  const error = new Error("API Route Not Found");
   error.status = 404;
   next(error);
 });
+
+module.exports = router;

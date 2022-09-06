@@ -11,12 +11,26 @@
  * though.
  */
 
-const moduleServiceNames = [];
+const moduleServiceNames = ["service-example"];
 const builtInServiceNames = ["social-calendar", "about-services"];
 
 module.exports = {
   builtInServices: builtInServiceNames.map((name) => require(`./${name}.js`)),
-  moduleServices: moduleServiceNames.map((name) =>
-    require(`${name}/service.config.js`)
-  ),
+  moduleServices: moduleServiceNames.map((name) => {
+    let res;
+    if (
+      typeof window !== "undefined" &&
+      typeof window.document !== "undefined"
+    ) {
+      // only for browser
+      import("react-bootstrap/Container");
+      return import(`${name}/submodules/Config`);
+    } else {
+      // This is for the serverside
+      res = require(`${name}/submodules/Config`);
+    }
+    console.log("hello there2");
+
+    return res;
+  }),
 };

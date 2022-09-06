@@ -43,7 +43,12 @@ const util = require("util");
  */
 router.get("/", isAdmin, async (req, res, next) => {
   try {
-    const search = JSON.parse(req.query.search);
+    let search;
+    if (req.query.search == undefined) {
+      search = {};
+    } else {
+      seatch = JSON.parse(req.query.search);
+    }
 
     let where = {};
     let include = [];
