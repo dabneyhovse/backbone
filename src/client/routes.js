@@ -30,34 +30,33 @@ import Example from "service-example/React";
 /**
  * imports in all of the routes for services
  */
-// async function dynamicRoutes() {
-//   let allServices = [...moduleServices, ...builtInServices];
-//   let out = [];
-//   for (let i = 0; i < allServices.length; i++) {
-//     const curr = allServices[i];
-//     if (!curr.importReact) {
-//       continue;
-//     }
+async function dynamicRoutes() {
+  let allServices = [...moduleServices, ...builtInServices];
+  let out = [];
+  for (let i = 0; i < allServices.length; i++) {
+    const curr = allServices[i];
+    if (!curr.importReact) {
+      continue;
+    }
 
-//     let { default: CurrModule } = await moduleImports[curr.moduleName].react;
-//     console.log(CurrModule);
-//     out.push({
-//       exact: false,
-//       path: curr.route,
-//       requiredAuth: curr.requiredAuth,
-//       element: (
-//         // <Suspense fallback={<div>Loading...</div>}>
-//         //   {React.lazy(() => currModule)}
-//         // </Suspense>
-//         <CurrModule />
-//       ),
-//     });
-//   }
-//   return out;
-// }
+    let { default: CurrModule } = await moduleImports[curr.moduleName].react;
+    console.log(CurrModule);
+    out.push({
+      exact: false,
+      path: curr.route,
+      requiredAuth: curr.requiredAuth,
+      element: (
+        // <Suspense fallback={<div>Loading...</div>}>
+        //   {React.lazy(() => currModule)}
+        // </Suspense>
+        <CurrModule />
+      ),
+    });
+  }
+  return out;
+}
 
-// const dynRoutes = await dynamicRoutes();
-// console.log(dynRoutes);
+const dynRoutes = await dynamicRoutes();
 
 // list of routes and their restrictions so they can be
 // generated easily
@@ -86,14 +85,14 @@ const ROUTES = [
     path: "/adminpanel/*",
     element: <AdminPanel />,
   },
-  {
-    requiredAuth: 4,
-    exact: false,
-    path: "/example",
-    element: <Example />,
-  },
+  // {
+  //   requiredAuth: 4,
+  //   exact: false,
+  //   path: "/example",
+  //   element: <Example />,
+  // },
 
-  // ...dynRoutes,
+  ...dynRoutes,
 ];
 
 /**
