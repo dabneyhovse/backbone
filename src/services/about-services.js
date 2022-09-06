@@ -113,4 +113,5 @@ module.exports = {
   importReact: false,
   importExpress: false,
   importAdmin: false,
+  importRedux: false,
 };

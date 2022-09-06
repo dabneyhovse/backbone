@@ -18,6 +18,18 @@ import admin from "./admin";
 import navbar from "./navbar";
 import affiliation from "./affiliation";
 
+import { builtInServices, moduleServices } from "../../services";
+const allServices = [...builtInServices, ...moduleServices];
+const serviceReducers = {};
+for (let i = 0; i < allServices.length; i++) {
+  const curr = allServices[i];
+  if (curr.importRedux) {
+    serviceReducers[curr.route] = await import(
+      `${curr.moduleName}/submodules/Redux`
+    ).default();
+  }
+}
+
 const reducer = combineReducers({
   user,
   auth,

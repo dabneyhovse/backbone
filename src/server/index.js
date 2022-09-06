@@ -121,7 +121,7 @@ async function syncServiceDbs() {
   for (let i = 0; i < allServices.length; i++) {
     try {
       if (allServices[i].importDb) {
-        const dbService = require(`${allServices[i].moduleName}/Database`);
+        const dbService = require(`${allServices[i].moduleName}/submodules/Database`);
         await dbService.sync();
       }
     } catch (error) {

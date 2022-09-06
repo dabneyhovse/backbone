@@ -26,7 +26,7 @@ function attachServices(apiRouter) {
     if (service.importExpress) {
       apiRouter.use(
         `${sevice.route}`,
-        require(`${service.moduleName}/Express`)
+        require(`${service.moduleName}/submodules/Express`)
       );
     }
   });
