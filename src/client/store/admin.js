@@ -41,7 +41,6 @@ export const fetchAdminUsers = (search) => {
       const { data } = await Axios.get(`/api/users`, {
         params: { search, pageNum: getState().admin.page },
       });
-      console.log(data);
       dispatch(gotAdminUsers(data));
     } catch (error) {
       toast.error("There was an error fetching the users");
@@ -71,7 +70,6 @@ export const updateAdminUser =
       });
       toast.success("The information was updated!");
     } catch (error) {
-      console.log(error);
       toast.error("There was an error updating the information");
     }
   };

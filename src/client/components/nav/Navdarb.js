@@ -53,8 +53,12 @@ const NAVBAR_HIDDEN = {
  * @returns
  */
 
-function navItemToReact(item, dropdown = false) {
+function navItemToReact(item, authLevel, dropdown = false) {
   let out = null;
+  if (authLevel < item.requiredAuth) {
+    return "";
+  }
+
   if (item.type == "href") {
     out = dropdown ? (
       <NavDropdown.Item key={item.name} href={item.route}>
@@ -82,14 +86,16 @@ function navItemToReact(item, dropdown = false) {
         title={item.name}
         id="collasible-nav-dropdown"
       >
-        {item.links.map((link) => navItemToReact(link, (dropdown = true)))}
+        {item.links.map((link) =>
+          navItemToReact(link, authLevel, (dropdown = true))
+        )}
       </NavDropdown>
     );
   } else if (item.type == "main") {
     out = (
       <>
         {item.links.map((link) => {
-          return navItemToReact(link);
+          return navItemToReact(link, authLevel);
         })}
       </>
     );
@@ -171,7 +177,7 @@ function Navdarb() {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="transparent">
-              {navItemToReact(navbar.links)}
+              {navItemToReact(navbar.links, user.authLevel)}
               <NavDropdown
                 className="icon"
                 title={<FaUserCircle size="1.5em" />}

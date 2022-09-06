@@ -15,7 +15,7 @@ import { Nav } from "react-bootstrap";
 import { UserPanel } from "./users";
 import { LinkContainer } from "react-router-bootstrap";
 
-import { moduleServices } from "../../../services";
+import { moduleImports, moduleServices } from "../../../services";
 import { clearAdminStore } from "../../store/admin";
 import { useDispatch } from "react-redux";
 
@@ -24,7 +24,7 @@ import { useDispatch } from "react-redux";
  * @param {object} service service json
  * @returns
  */
-function serivceToTC(service) {
+async function serivceToTC(service) {
   const tab = (
     <Nav.Item key={service.moduleName}>
       <LinkContainer to={"/adminpanel" + service.route}>
@@ -45,15 +45,12 @@ function serivceToTC(service) {
       />
     );
   } else {
+    let { default: CurrModule } = await moduleImports[service.moduleName].admin;
     content = (
       <Route
         key={service.moduleName}
         path={service.route}
-        element={
-          <Suspense fallback={<div>Loading...</div>}>
-            {React.lazy(() => import(`${service.moduleName}/Admin`))}
-          </Suspense>
-        }
+        element={<CurrModule />}
       />
     );
   }
@@ -81,12 +78,12 @@ const BUILT_IN_ADMIN = [
  * into nav tabs and route elements
  * @returns object with navlink array .tabs & route array .content
  */
-function servicesToTCS() {
+async function servicesToTCS() {
   let tcs = { tabs: [], content: [] };
   let all = [...moduleServices, ...BUILT_IN_ADMIN];
   for (let i = 0; i < all.length; i++) {
     if (all[i].importAdmin) {
-      const { tab, content } = serivceToTC(all[i]);
+      const { tab, content } = await serivceToTC(all[i]);
       tcs.tabs.push(tab);
       tcs.content.push(content);
     }
@@ -94,38 +91,19 @@ function servicesToTCS() {
   return tcs;
 }
 
-function clearAllIntervals() {
-  const upperBound = setInterval(() => {}, 999999);
-  for (let i = 1; i < upperBound + 1; i++) {
-    clearInterval(i);
-  }
-}
-
-function clearAllTimeouts() {
-  const upperBound = setTimeout(() => {}, 999999);
-  for (let i = 1; i < upperBound + 1; i++) {
-    clearTimeout(i);
-  }
-}
+const dynamicTCS = await servicesToTCS();
 
 function AdminPanel() {
   const location = useLocation();
   const dispatch = useDispatch();
-  /**
-   * Clear any sus intervals, timeouts
-   * cheap way of defending against lurking from other services
-   * isnt very good but it protects a tiny bit
-   */
   useEffect(() => {
-    clearAllIntervals();
-    clearAllTimeouts();
     return () => {
       if (location.pathname.indexOf("adminpanel") == -1) {
         dispatch(clearAdminStore());
       }
     };
   }, []);
-  const dynamicTCS = servicesToTCS();
+
   return (
     <Container className="mainContent">
       <Nav variant="tabs">{dynamicTCS.tabs}</Nav>

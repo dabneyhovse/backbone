@@ -37,7 +37,6 @@ const reducerList = {
   affiliation,
   ...serviceReducers,
 };
-console.log(reducerList);
 
 const reducer = combineReducers(reducerList);
 
