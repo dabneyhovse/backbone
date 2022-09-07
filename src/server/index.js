@@ -118,16 +118,30 @@ async function syncServiceDbs() {
   const { builtInServices, moduleServices } = require("../services");
   const allServices = [...builtInServices, ...moduleServices];
 
+  console.log("Syncing service databases...");
+  let count = 0;
+
   for (let i = 0; i < allServices.length; i++) {
     try {
       if (allServices[i].importDb) {
-        const dbService = require(`${allServices[i].moduleName}/submodules/Database`);
+        const dbService = require(`${allServices[i].moduleName}/Database`);
         await dbService.sync();
+        console.log(
+          `\t[${allServices[i].name}]:\tsynced database "${allServices[i].route}"`
+        );
+
+        count++;
+        console;
+      } else {
+        console.log(`\t[${allServices[i].name}]:\tdoes not have a database`);
       }
     } catch (error) {
-      console.log(`Error syncing db for ${allServices[i].name}`);
+      console.log(
+        `\t syncing db for ${allServices[i].name}, ${allServices.route}`
+      );
     }
   }
+  console.log(`Synced ${count} serivce database(s)\n`);
 }
 
 const syncDb = () => db.sync();

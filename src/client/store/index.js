@@ -18,25 +18,27 @@ import admin from "./admin";
 import navbar from "./navbar";
 import affiliation from "./affiliation";
 
-import { builtInServices, moduleServices } from "../../services";
+import { builtInServices, moduleImports, moduleServices } from "../../services";
 const allServices = [...builtInServices, ...moduleServices];
 const serviceReducers = {};
 for (let i = 0; i < allServices.length; i++) {
   const curr = allServices[i];
   if (curr.importRedux) {
-    serviceReducers[curr.route] = await import(
-      `${curr.moduleName}/submodules/Redux`
-    ).default();
+    const { default: reducer } = await moduleImports[curr.moduleName].redux;
+    serviceReducers[curr.route] = reducer;
   }
 }
 
-const reducer = combineReducers({
+const reducerList = {
   user,
   auth,
   admin,
   navbar,
   affiliation,
-});
+  ...serviceReducers,
+};
+
+const reducer = combineReducers(reducerList);
 
 let log = [];
 if (process.env.NODE_ENV === "development") {

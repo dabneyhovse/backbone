@@ -11,12 +11,47 @@
  * though.
  */
 
-const moduleServiceNames = [];
-const builtInServiceNames = ["social-calendar", "about-services"];
+const moduleServiceNames = ["service-example"];
+const builtInServiceNames = [
+  "social-calendar",
+  "about-services",
+  "wiki-service",
+];
+
+let moduleServices = [];
+let moduleImports = {};
+if (typeof window !== "undefined" && typeof window.document !== "undefined") {
+  // only does this in browser, webpack is mean and cant do dynamic imports with the names maping rn
+  let service_example_config = require("service-example");
+  moduleServices = [service_example_config];
+  moduleImports = {
+    "service-example": {
+      config: require("service-example"),
+      ...(service_example_config.importReact
+        ? {
+            react: import("service-example/React"),
+          }
+        : {}),
+      ...(service_example_config.importAdmin
+        ? {
+            admin: import("service-example/Admin"),
+          }
+        : {}),
+      ...(service_example_config.importRedux
+        ? {
+            redux: import("service-example/Redux"),
+          }
+        : {}),
+    },
+  };
+
+  import("service-example/React");
+} else {
+  moduleServices = moduleServiceNames.map((name) => require(`${name}`));
+}
 
 module.exports = {
   builtInServices: builtInServiceNames.map((name) => require(`./${name}.js`)),
-  moduleServices: moduleServiceNames.map((name) =>
-    require(`${name}/service.config.js`)
-  ),
+  moduleServices,
+  moduleImports,
 };
