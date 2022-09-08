@@ -9,6 +9,8 @@ const crypto = require("crypto");
 const Sequelize = require("sequelize");
 const db = require("../db");
 
+const sendEmail = require("module-dabney-email");
+
 const Verification = db.define("verification", {
   hash: {
     type: Sequelize.STRING,
@@ -39,23 +41,11 @@ const createHash = async (ver, options) => {
   }
   ver.hash = hash;
 
-  // For whatever reason this only works when i require it here...
-  // why cant these packages be normal...
-  const sgMail = require("@sendgrid/mail");
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-  const msg = {
-    to: ver.email, // Change to your recipient
-    from: process.env.VERIFICATION_EMAIL, // Change to your verified sender
-    subject: "Dabney Hovse Email Verification",
-    text: `Hello, Please verify your email by clicking the link below: https://dabney.caltech.edu/verify#${hash}`,
-    html: `Hello, <br>Please verify your email by clicking the link below:<br><br><a href="https://dabney.caltech.edu/verify#${hash}">https://dabney.caltech.edu/verify#${hash}</a>`,
-  };
-  sgMail
-    .send(msg)
-    .then(() => {})
-    .catch((error) => {
-      console.error(error);
-    });
+  await sendEmail(
+    ver.email,
+    "Dabney Hovse Email Verification",
+    `Hello, <br>Please verify your email by clicking the link below:<br><br><a href="https://dabney.caltech.edu/verify#${hash}">https://dabney.caltech.edu/verify#${hash}</a>`
+  );
 };
 
 Verification.beforeCreate(createHash);
