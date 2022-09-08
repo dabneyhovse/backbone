@@ -41,7 +41,8 @@ const createHash = async (ver, options) => {
   }
   ver.hash = hash;
 
-  await sendEmail(
+  // TODO report error sending email
+  const res = await sendEmail(
     ver.email,
     "Dabney Hovse Email Verification",
     `Hello, <br>Please verify your email by clicking the link below:<br><br><a href="https://dabney.caltech.edu/verify#${hash}">https://dabney.caltech.edu/verify#${hash}</a>`
