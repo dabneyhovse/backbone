@@ -18,4 +18,6 @@ module.exports = {
   User,
   Verification,
   Affiliation,
+  Group,
+  UserGroup,
 };

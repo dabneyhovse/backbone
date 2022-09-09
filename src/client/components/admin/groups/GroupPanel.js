@@ -1,8 +1,9 @@
 // TODO, create and delete groups
 
-function GroupPanel(props){
+import React from "react";
 
-  return (<div>#TODO groups panel</div>)
+function GroupPanel(props) {
+  return <div>#TODO groups panel</div>;
 }
 
-export default GroupPanel
+export default GroupPanel;

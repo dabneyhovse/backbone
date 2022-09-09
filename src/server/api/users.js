@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { Op } = require("sequelize");
-const { User, Affiliation, Verification } = require("../db/models");
+const { User, Affiliation, Verification, Group } = require("../db/models");
 const { isAdmin, isLoggedIn, upload } = require("./middleware");
 module.exports = router;
 
@@ -38,6 +38,7 @@ const verificationStatusMap = {
 };
 // TODO remove
 const util = require("util");
+const UserGroup = require("../db/models/userGroup");
 /**
  *  GET all users (api/users)
  */

@@ -18,6 +18,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import { moduleImports, moduleServices } from "../../../services";
 import { clearAdminStore } from "../../store/admin";
 import { useDispatch } from "react-redux";
+import { GroupPanel } from "./groups";
 
 /**
  * converts the service json file into a nav tab and route content
@@ -71,6 +72,13 @@ const BUILT_IN_ADMIN = [
     route: "users",
     element: <UserPanel />,
   },
+  {
+    importAdmin: true,
+    name: "Groups",
+    moduleName: "groups",
+    route: "groups",
+    element: <GroupPanel />,
+  },
 ];
 
 /**
@@ -80,7 +88,7 @@ const BUILT_IN_ADMIN = [
  */
 async function servicesToTCS() {
   let tcs = { tabs: [], content: [] };
-  let all = [...moduleServices, ...BUILT_IN_ADMIN];
+  let all = [...BUILT_IN_ADMIN, ...moduleServices];
   for (let i = 0; i < all.length; i++) {
     if (all[i].importAdmin) {
       const { tab, content } = await serivceToTC(all[i]);
