@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { default: validate } = require("deep-email-validator");
 const { Verification, Affiliation } = require("../db/models");
 const User = require("../db/models/user");
 module.exports = router;
@@ -27,6 +28,24 @@ router.post("/signup", async (req, res, next) => {
   try {
     const { username, personalEmail, caltechEmail, password } = req.body;
 
+    /**
+     * checks regex, if email is disposable, MX records and SMTP records
+     */
+    let caltechRes = await validate(caltechEmail);
+    let personalRes = await validate(personalEmail);
+
+    if (!caltechRes.valid) {
+      res.status(403).send("The provided Caltech Email is not valid.");
+      return;
+    }
+    if (!personalRes.valid) {
+      res.status(403).send("The provided Personal Email is not valid.");
+      return;
+    }
+
+    /**
+     * email is valid, check if it is in use already
+     */
     let user = await User.findOne({
       where: {
         caltechEmail,
@@ -40,6 +59,25 @@ router.post("/signup", async (req, res, next) => {
       return;
     }
 
+    /**
+     * check personal email for usage
+     */
+    user = await User.findOne({
+      where: {
+        personalEmail,
+      },
+    });
+
+    if (user) {
+      res
+        .status(403)
+        .send("An account already exists with this Personal Email.");
+      return;
+    }
+
+    /**
+     * check username for useage
+     */
     user = await User.findOne({
       where: {
         username,
@@ -50,6 +88,10 @@ router.post("/signup", async (req, res, next) => {
       res.status(403).send(`The username "${username}" is already taken.`);
       return;
     }
+
+    /**
+     * create user after passing checks
+     */
     user = await User.create({
       username,
       personalEmail,

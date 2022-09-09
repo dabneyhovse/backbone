@@ -43,12 +43,7 @@ const util = require("util");
  */
 router.get("/", isAdmin, async (req, res, next) => {
   try {
-    let search;
-    if (req.query.search == undefined) {
-      search = {};
-    } else {
-      search = JSON.parse(req.query.search);
-    }
+    const search = req.query.search ? JSON.parse(req.query.search) : {};
 
     let where = {};
     let include = [];
@@ -61,12 +56,12 @@ router.get("/", isAdmin, async (req, res, next) => {
           ...[
             {
               firstName: {
-                [Op.iLike]: "%" + fl[0] + "%",
+                [Op.iLike]: "%" + fl[i] + "%",
               },
             },
             {
               lastName: {
-                [Op.iLike]: "%" + fl[0] + "%",
+                [Op.iLike]: "%" + fl[i] + "%",
               },
             },
           ]
