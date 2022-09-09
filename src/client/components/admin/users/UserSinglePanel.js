@@ -332,13 +332,18 @@ function UserSinglePanel() {
                     <MDBCardText className="text-muted">
                       {groups.map((group) => {
                         return (
-                          <MDBCheckbox
-                            name={`group-check-${group.id}`}
-                            label={group.groupName}
-                            key={group.id}
-                            onChange={handleChange}
-                            checked={!!user[`group-check-${group.id}`]}
-                          />
+                          <MDBRow>
+                            <MDBCol sm="6">{group.description}</MDBCol>
+                            <MDBCol sm="6">
+                              <MDBCheckbox
+                                name={`group-check-${group.id}`}
+                                label={group.groupName}
+                                key={group.id}
+                                onChange={handleChange}
+                                checked={!!user[`group-check-${group.id}`]}
+                              />
+                            </MDBCol>
+                          </MDBRow>
                         );
                       })}
                     </MDBCardText>

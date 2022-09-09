@@ -208,6 +208,12 @@ router.put(
         return true;
       });
 
+      const cleanBody = {};
+      cleaned.forEach((key) => {
+        cleanBody[key] = req.body[key];
+      });
+      console.log(cleanBody);
+
       /**
        * edit dokuwiki groups
        */
@@ -237,7 +243,7 @@ router.put(
        */
       let oldUser = await User.findByPk(req.params.userId);
       await oldUser.update({
-        ...cleaned,
+        ...cleanBody,
         ...(req.body.profile
           ? {
               profile: { ...oldUser.profile.toJSON(), ...req.body.profile },
