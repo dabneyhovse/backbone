@@ -57,6 +57,10 @@ export const fetchAdminUser = (id) => {
   return async (dispatch, getState) => {
     try {
       const { data } = await Axios.get(`/api/users/admin/${id}`);
+      data.groups.forEach((group) => {
+        data[`group-check-${group.id}`] = true;
+      });
+      console.log("\nDATA\n", data);
       dispatch(gotAdminUser(data));
     } catch (error) {
       toast.error("There was an error fetching the users");

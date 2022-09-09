@@ -198,9 +198,49 @@ router.put(
   upload.single("profile"),
   async (req, res, next) => {
     try {
+      console.log(req.body);
+      const changeGroups = [];
+      const cleaned = Object.keys(req.body).filter((key) => {
+        if (key.indexOf("group-check-") == 0) {
+          console.log(key);
+          changeGroups.push([key.replace("group-check-", ""), req.body[key]]);
+          return false;
+        }
+        // TODO filter the real params
+        return true;
+      });
+      console.log(changeGroups);
+
+      /**
+       * edit dokuwiki groups
+       */
+      for (let i = 0; i < changeGroups.length; i++) {
+        if (changeGroups[i][1] == "true") {
+          await UserGroup.findOrCreate({
+            where: {
+              userId: req.params.userId,
+              groupId: changeGroups[i][0],
+            },
+          });
+        } else {
+          const toRemove = await UserGroup.findOne({
+            where: {
+              userId: req.params.userId,
+              groupId: changeGroups[i][0],
+            },
+          });
+          if (toRemove) {
+            await toRemove.destroy();
+          }
+        }
+      }
+
+      /**
+       * update all params actually stored in the user model
+       */
       let oldUser = await User.findByPk(req.params.userId);
       await oldUser.update({
-        ...req.body,
+        ...cleaned,
         ...(req.body.profile
           ? {
               profile: { ...oldUser.profile.toJSON(), ...req.body.profile },
