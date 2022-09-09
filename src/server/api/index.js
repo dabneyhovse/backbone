@@ -40,7 +40,6 @@ function attachServices(apiRouter) {
     }
   });
   console.log(`Attached ${count} service api Route(s)\n`);
-  // console.log(apiRouter.stack);
 }
 
 router.use("/users", require("./users"));

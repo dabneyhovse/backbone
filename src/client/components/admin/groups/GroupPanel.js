@@ -11,7 +11,6 @@ function GroupPanel(props) {
     groups: state.admin.groups,
   }));
 
-  console.log(groups);
   const [newGroup, setNewGroup] = useState({ groupName: "", description: "" });
 
   const onChange = (event) => {

@@ -98,7 +98,6 @@ function UserSinglePanel() {
     dispatch(promoteAdminUser(params.userId));
   };
 
-  console.log(user.groups, user);
   return (
     <>
       <UserConfirmModal

@@ -198,18 +198,15 @@ router.put(
   upload.single("profile"),
   async (req, res, next) => {
     try {
-      console.log(req.body);
       const changeGroups = [];
       const cleaned = Object.keys(req.body).filter((key) => {
         if (key.indexOf("group-check-") == 0) {
-          console.log(key);
           changeGroups.push([key.replace("group-check-", ""), req.body[key]]);
           return false;
         }
         // TODO filter the real params
         return true;
       });
-      console.log(changeGroups);
 
       /**
        * edit dokuwiki groups
