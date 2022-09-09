@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { Op } = require("sequelize");
-const { User, Affiliation, Verification } = require("../db/models");
+const { User, Affiliation, Verification, Group } = require("../db/models");
 const { isAdmin, isLoggedIn, upload } = require("./middleware");
 module.exports = router;
 
@@ -38,6 +38,7 @@ const verificationStatusMap = {
 };
 // TODO remove
 const util = require("util");
+const UserGroup = require("../db/models/userGroup");
 /**
  *  GET all users (api/users)
  */
@@ -143,7 +144,11 @@ router.get("/", isAdmin, async (req, res, next) => {
 router.get("/admin/:userId", isAdmin, async (req, res, next) => {
   try {
     let user = await User.findByPk(req.params.userId, {
-      include: [{ model: Affiliation }, { model: Verification }],
+      include: [
+        { model: Affiliation },
+        { model: Verification },
+        { model: Group },
+      ],
     });
     res.json(user);
   } catch (err) {
@@ -193,9 +198,52 @@ router.put(
   upload.single("profile"),
   async (req, res, next) => {
     try {
+      const changeGroups = [];
+      const cleaned = Object.keys(req.body).filter((key) => {
+        if (key.indexOf("group-check-") == 0) {
+          changeGroups.push([key.replace("group-check-", ""), req.body[key]]);
+          return false;
+        }
+        // TODO filter the real params
+        return true;
+      });
+
+      const cleanBody = {};
+      cleaned.forEach((key) => {
+        cleanBody[key] = req.body[key];
+      });
+      console.log(cleanBody);
+
+      /**
+       * edit dokuwiki groups
+       */
+      for (let i = 0; i < changeGroups.length; i++) {
+        if (changeGroups[i][1] == "true") {
+          await UserGroup.findOrCreate({
+            where: {
+              userId: req.params.userId,
+              groupId: changeGroups[i][0],
+            },
+          });
+        } else {
+          const toRemove = await UserGroup.findOne({
+            where: {
+              userId: req.params.userId,
+              groupId: changeGroups[i][0],
+            },
+          });
+          if (toRemove) {
+            await toRemove.destroy();
+          }
+        }
+      }
+
+      /**
+       * update all params actually stored in the user model
+       */
       let oldUser = await User.findByPk(req.params.userId);
       await oldUser.update({
-        ...req.body,
+        ...cleanBody,
         ...(req.body.profile
           ? {
               profile: { ...oldUser.profile.toJSON(), ...req.body.profile },

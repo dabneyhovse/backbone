@@ -20,12 +20,14 @@ import {
   MDBTextArea,
   MDBIcon,
   MDBInput,
+  MDBCheckbox,
 } from "mdb-react-ui-kit";
 import {
   deleteAdminUser,
   promoteAdminUser,
   fetchAdminUser,
   updateAdminUser,
+  fetchAdminGroups,
 } from "../../../store/admin";
 import { useNavigate, useParams } from "react-router-dom";
 import UserConfirmModal from "./UserConfirmModal";
@@ -33,8 +35,9 @@ import UserConfirmModal from "./UserConfirmModal";
 const PROFILE = ["bio", "room"];
 
 function UserSinglePanel() {
-  const { storeUser } = useSelector((state) => ({
+  const { storeUser, groups } = useSelector((state) => ({
     storeUser: state.admin.user,
+    groups: state.admin.groups,
   }));
   const params = useParams();
 
@@ -48,6 +51,7 @@ function UserSinglePanel() {
 
   useEffect(() => {
     dispatch(fetchAdminUser(params.userId));
+    dispatch(fetchAdminGroups());
   }, []);
 
   useEffect(() => {
@@ -72,6 +76,10 @@ function UserSinglePanel() {
         ...user,
         profile: { ...user.profile, [event.target.name]: event.target.value },
       });
+      return;
+    }
+    if (event.target.name.indexOf("group-check-") == 0) {
+      setUser({ ...user, [event.target.name]: event.target.checked });
       return;
     }
     setUser({ ...user, [event.target.name]: event.target.value });
@@ -300,6 +308,44 @@ function UserSinglePanel() {
                         value={user.tokens}
                         onChange={handleChange}
                       />
+                    </MDBCardText>
+                  </MDBCol>
+                </MDBRow>
+              </MDBCardBody>
+            </MDBCard>
+
+            <MDBCard className="mb-4">
+              <MDBCardBody>
+                <MDBRow>
+                  <MDBCol sm="12">
+                    <MDBCardText>
+                      <strong>Dokuwiki user settings</strong>
+                    </MDBCardText>
+                  </MDBCol>
+                </MDBRow>
+                <hr />
+                <MDBRow>
+                  <MDBCol sm="3">
+                    <MDBCardText>User Groups</MDBCardText>
+                  </MDBCol>
+                  <MDBCol sm="9">
+                    <MDBCardText className="text-muted">
+                      {groups.map((group) => {
+                        return (
+                          <MDBRow>
+                            <MDBCol sm="6">{group.description}</MDBCol>
+                            <MDBCol sm="6">
+                              <MDBCheckbox
+                                name={`group-check-${group.id}`}
+                                label={group.groupName}
+                                key={group.id}
+                                onChange={handleChange}
+                                checked={!!user[`group-check-${group.id}`]}
+                              />
+                            </MDBCol>
+                          </MDBRow>
+                        );
+                      })}
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>

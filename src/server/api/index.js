@@ -22,7 +22,7 @@ function attachServices(apiRouter) {
   const { builtInServices, moduleServices } = require("../../services");
   const allServices = [...builtInServices, ...moduleServices];
 
-  // TODO: possiby differientate between Express and Api in the future
+  // TODO: possibly differientate between Express and Api in the future
 
   let count = 0;
   allServices.forEach((service) => {
@@ -40,11 +40,11 @@ function attachServices(apiRouter) {
     }
   });
   console.log(`Attached ${count} service api Route(s)\n`);
-  // console.log(apiRouter.stack);
 }
 
 router.use("/users", require("./users"));
 router.use("/affiliations", require("./affiliations"));
+router.use("/groups", require("./groups"));
 // TODO: router.use("/bot", require("./bot"));
 attachServices(router);
 
