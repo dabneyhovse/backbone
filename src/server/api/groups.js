@@ -8,9 +8,9 @@ module.exports = router;
 /**
  * get groups for the current user
  *
- * GET /api/groups
+ * GET /api/groups/user
  */
-router.get("/", isLoggedIn, async (req, res, next) => {
+router.get("/user", isLoggedIn, async (req, res, next) => {
   try {
     const user = await User.findByPk(req.user.id, {
       include: [{ model: Group }],
@@ -26,7 +26,7 @@ router.get("/", isLoggedIn, async (req, res, next) => {
  *
  * GET /api/groups/:userId
  */
-router.get("/:userId", isLoggedIn, async (req, res, next) => {
+router.get("/user/:userId", isAdmin, async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.userId, {
       include: [{ model: Group }],
@@ -45,16 +45,96 @@ router.get("/:userId", isLoggedIn, async (req, res, next) => {
  * req.body.groupIds
  *  the list of group ids
  *
- * POST /api/groups/:userId
+ * POST /api/groups/user
  */
-router.post("/:userId", isAdmin, async (req, res, next) => {
+router.post("/user", isAdmin, async (req, res, next) => {
   try {
-    req.params.userId;
     for (let i = 0; i < req.body.groupIds.length; i++) {
       await UserGroup.findOrCreate({
-        where: { userId: req.params.userId, groupId: req.body.groupIds[i] },
+        where: { userId: req.body.userId, groupId: req.body.groupIds[i] },
       });
     }
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * get a json list of all groups
+ *
+ * GET /api/groups/
+ */
+router.get("/", isAdmin, async (req, res, next) => {
+  try {
+    const group = Group.findAll();
+    res.status(200).json(group);
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * edit a group and return the edit
+ *
+ * req.body.groupId
+ *    the id off the group to change
+ * req.body.name
+ *    new name of the group
+ * req.body.description
+ *    new description of the group
+ *
+ * PUT /api/groups/
+ */
+router.put("/", isAdmin, async (req, res, next) => {
+  try {
+    const group = Group.findByPk(req.body.groupId);
+    await group.update({
+      name: req.body.name,
+      description: req.body.description,
+    });
+    res.status(200).json(group);
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * create a new group
+ *
+ * req.body.name
+ *    name of the group
+ * req.body.description
+ *    description of the group
+ *
+ * POST /api/groups/
+ */
+router.post("/", isAdmin, async (req, res, next) => {
+  try {
+    const group = await Group.create({
+      where: {
+        name: req.body.name,
+        description: req.body.description,
+      },
+    });
+    res.status(201).json(group);
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * delete a group
+ *
+ * req.body.groupId
+ *    the id of the group to delete
+ *
+ * DELETE /api/groups/
+ */
+router.delete("/", isAdmin, async (req, res, next) => {
+  try {
+    const group = Group.findByPk(req.body.groupId);
+    await group.destroy();
+    res.send(200);
   } catch (error) {
     next(error);
   }

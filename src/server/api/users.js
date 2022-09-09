@@ -143,7 +143,11 @@ router.get("/", isAdmin, async (req, res, next) => {
 router.get("/admin/:userId", isAdmin, async (req, res, next) => {
   try {
     let user = await User.findByPk(req.params.userId, {
-      include: [{ model: Affiliation }, { model: Verification }],
+      include: [
+        { model: Affiliation },
+        { model: Verification },
+        { model: Group },
+      ],
     });
     res.json(user);
   } catch (err) {
