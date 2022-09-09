@@ -17,6 +17,7 @@ export const GOT_ADMIN_USERS = "GOT_ADMIN_USERS";
 export const GOT_ADMIN_USER = "GOT_ADMIN_USER";
 export const ADMIN_USERS_SET_PAGE = "ADMIN_USERS_SET_PAGE";
 export const CLEAR_ADMIN_STORE = "CLEAR_ADMIN_STORE";
+export const GOT_ADMIN_GROUPS = "GOT_ADMIN_GROUPS";
 
 // Action Creators
 export const gotAdminUsers = (users) => ({
@@ -33,6 +34,10 @@ export const adminUsersSetPage = (page) => ({
 });
 export const clearAdminStore = () => ({
   type: CLEAR_ADMIN_STORE,
+});
+export const gotAdminGroups = (groups) => ({
+  type: GOT_ADMIN_GROUPS,
+  groups,
 });
 
 export const fetchAdminUsers = (search) => {
@@ -93,12 +98,22 @@ export const promoteAdminUser = (userId) => async (dispatch) => {
   }
 };
 
+export const fetchAdminGroups = () => async (dispatch) => {
+  try {
+    const res = await Axios.get("/api/groups");
+    dispatch(gotAdminGroups(res.data));
+  } catch (error) {
+    toast.error("There was an error fetching the groups");
+  }
+};
+
 // Reducer
 const init = {
   users: [],
   user: {},
   page: 1,
   count: 1,
+  groups: [],
 };
 
 const reducer = (state = init, action) => {
@@ -114,6 +129,9 @@ const reducer = (state = init, action) => {
     }
     case CLEAR_ADMIN_STORE: {
       return init;
+    }
+    case GOT_ADMIN_GROUPS: {
+      return { ...state, groups: action.groups };
     }
     default:
       return state;

@@ -64,7 +64,7 @@ router.post("/user", isAdmin, async (req, res, next) => {
  */
 router.get("/", isAdmin, async (req, res, next) => {
   try {
-    const group = Group.findAll();
+    const group = await Group.findAll();
     res.status(200).json(group);
   } catch (error) {
     next(error);
@@ -85,7 +85,7 @@ router.get("/", isAdmin, async (req, res, next) => {
  */
 router.put("/", isAdmin, async (req, res, next) => {
   try {
-    const group = Group.findByPk(req.body.groupId);
+    const group = await Group.findByPk(req.body.groupId);
     await group.update({
       name: req.body.name,
       description: req.body.description,
@@ -130,7 +130,7 @@ router.post("/", isAdmin, async (req, res, next) => {
  */
 router.delete("/", isAdmin, async (req, res, next) => {
   try {
-    const group = Group.findByPk(req.body.groupId);
+    const group = await Group.findByPk(req.body.groupId);
     await group.destroy();
     res.send(200);
   } catch (error) {
