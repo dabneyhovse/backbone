@@ -9,6 +9,8 @@
  *  send index html
  *  endware for error handling
  */
+// register env vars first
+require("dotenv").config();
 
 const path = require("path");
 const express = require("express");
@@ -24,7 +26,6 @@ const app = express();
 const socketio = require("socket.io");
 module.exports = app;
 
-require("dotenv").config();
 
 if (process.env.NODE_ENV === "test") {
   after("close the session store", () => sessionStore.stopExpiringSessions());
