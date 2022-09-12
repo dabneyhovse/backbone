@@ -3,8 +3,11 @@ const Sequelize = require("sequelize");
 const databaseName = "DabneyBackbone";
 
 const db = new Sequelize(
-  process.env.DATABASE_URL || `postgres://localhost:5432/${databaseName}`,
+  databaseName,
+  process.env.POSTGRES_USERNAME,
+  process.env.POSTGRES_PASSWORD,
   {
+    dialect: "postgres",
     logging: false,
   }
 );
