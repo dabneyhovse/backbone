@@ -20,7 +20,7 @@ import { toast } from "react-toastify";
  *
  * TODO put this in a config file somewhere
  */
-const AFFILATION_OPTIONS = {
+export const AFFILATION_OPTIONS = {
   "Dabney Social": { house: "dabney", status: "social" },
   "Dabney Full": { house: "dabney", status: "full" },
 
