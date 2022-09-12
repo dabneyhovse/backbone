@@ -31,6 +31,7 @@ import {
 } from "../../../store/admin";
 import { useNavigate, useParams } from "react-router-dom";
 import UserConfirmModal from "./UserConfirmModal";
+import { AFFILATION_OPTIONS } from "../../../store/affiliation";
 
 const PROFILE = ["bio", "room"];
 
@@ -80,6 +81,10 @@ function UserSinglePanel() {
     }
     if (event.target.name.indexOf("group-check-") == 0) {
       setUser({ ...user, [event.target.name]: event.target.checked });
+      return;
+    }
+    if (event.aff) {
+      setUser({ ...user, [event.target.name]: JSON.parse(event.target.value) });
       return;
     }
     setUser({ ...user, [event.target.name]: event.target.value });
@@ -319,6 +324,59 @@ function UserSinglePanel() {
                 <MDBRow>
                   <MDBCol sm="12">
                     <MDBCardText>
+                      <strong>House Membership</strong>
+                    </MDBCardText>
+                  </MDBCol>
+                </MDBRow>
+                <hr />
+                <MDBRow>
+                  <MDBCol sm="3">
+                    <MDBCardText>Memberships</MDBCardText>
+                  </MDBCol>
+                  <MDBCol sm="9">
+                    <MDBRow>
+                      <MDBCol sm="6">House Membership</MDBCol>
+                      <MDBCol sm="3">Verification Status</MDBCol>
+                    </MDBRow>
+                    <MDBCardText className="text-muted">
+                      {Object.keys(AFFILATION_OPTIONS).map((key) => {
+                        const userKey = `verification-key-${AFFILATION_OPTIONS[key].house}-${AFFILATION_OPTIONS[key].status}`;
+                        if (!user[userKey]) {
+                          return <MDBRow key={userKey}>{key}</MDBRow>;
+                        }
+                        return (
+                          <MDBRow key={userKey}>
+                            <MDBCol sm="6">{key}</MDBCol>
+                            <MDBCol sm="3">
+                              <MDBCheckbox
+                                name={userKey}
+                                label={key}
+                                key={userKey}
+                                onChange={(event) => {
+                                  event.target.value = JSON.stringify({
+                                    ...user[userKey],
+                                    verified: event.target.checked,
+                                  });
+                                  event.aff = true;
+                                  handleChange(event);
+                                }}
+                                checked={user[userKey].verified}
+                              />
+                            </MDBCol>
+                          </MDBRow>
+                        );
+                      })}
+                    </MDBCardText>
+                  </MDBCol>
+                </MDBRow>
+              </MDBCardBody>
+            </MDBCard>
+
+            <MDBCard className="mb-4">
+              <MDBCardBody>
+                <MDBRow>
+                  <MDBCol sm="12">
+                    <MDBCardText>
                       <strong>Dokuwiki user settings</strong>
                     </MDBCardText>
                   </MDBCol>
@@ -332,7 +390,7 @@ function UserSinglePanel() {
                     <MDBCardText className="text-muted">
                       {groups.map((group) => {
                         return (
-                          <MDBRow>
+                          <MDBRow key={group.id}>
                             <MDBCol sm="6">{group.description}</MDBCol>
                             <MDBCol sm="6">
                               <MDBCheckbox
@@ -351,7 +409,6 @@ function UserSinglePanel() {
                 </MDBRow>
               </MDBCardBody>
             </MDBCard>
-
             <MDBCard className="mb-4">
               <MDBCardBody>
                 <MDBRow>

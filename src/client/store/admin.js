@@ -60,6 +60,11 @@ export const fetchAdminUser = (id) => {
       data.groups.forEach((group) => {
         data[`group-check-${group.id}`] = true;
       });
+      data.affiliations.map((affiliation) => {
+        data[`verification-key-${affiliation.house}-${affiliation.status}`] = {
+          ...affiliation,
+        };
+      });
       dispatch(gotAdminUser(data));
     } catch (error) {
       toast.error("There was an error fetching the users");

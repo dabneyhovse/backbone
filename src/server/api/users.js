@@ -199,9 +199,23 @@ router.put(
   async (req, res, next) => {
     try {
       const changeGroups = [];
+      const changeMember = [];
       const cleaned = Object.keys(req.body).filter((key) => {
         if (key.indexOf("group-check-") == 0) {
           changeGroups.push([key.replace("group-check-", ""), req.body[key]]);
+          return false;
+        } else if (key.indexOf("verification-key-") == 0) {
+          if (key.indexOf("verified") !== -1) {
+            house_status_split = key
+              .replace("verification-key-", "")
+              .replace(".verified", "")
+              .split("-");
+            changeMember.push([
+              key,
+              ...house_status_split,
+              req.body[key] == "true",
+            ]);
+          }
           return false;
         }
         // TODO filter the real params
@@ -212,7 +226,6 @@ router.put(
       cleaned.forEach((key) => {
         cleanBody[key] = req.body[key];
       });
-      console.log(cleanBody);
 
       /**
        * edit dokuwiki groups
@@ -235,6 +248,23 @@ router.put(
           if (toRemove) {
             await toRemove.destroy();
           }
+        }
+      }
+
+      /**
+       * update aany membership verifications
+       */
+
+      for (let i = 0; i < changeMember.length; i++) {
+        const aff = await Affiliation.findOne({
+          where: {
+            userId: req.params.userId,
+            house: changeMember[i][1],
+            status: changeMember[i][2],
+          },
+        });
+        if (changeMember[i][3] !== aff.verified) {
+          await aff.update({ verified: changeMember[i][3] });
         }
       }
 
