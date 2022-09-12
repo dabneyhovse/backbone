@@ -47,7 +47,7 @@
     "express-session": "^1.17.3",
     "history": "^5.3.0",
     "mdb-react-ui-kit": "^4.2.0",
-    "module-dabney-email": "file:../Modules/DabneyEmailModule",
+    "module-dabney-email": "file:../Modules/module-dabney-email",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.7.8",
@@ -71,7 +71,7 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.4.1",
     "sequelize": "^6.21.4",
-    "service-example": "file:../Services/ExampleService",
+    "service-example": "file:../Services/service-example",
     "socket.io": "^4.5.1"
   }
 }
