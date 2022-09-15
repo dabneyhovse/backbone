@@ -11,7 +11,7 @@
  * though.
  */
 
-const moduleServiceNames = ["service-example"];
+const moduleServiceNames = ["service-example", "service-frotator"];
 const builtInServiceNames = [
   "social-calendar",
   "about-services",

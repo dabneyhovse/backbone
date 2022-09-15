@@ -72,6 +72,7 @@
     "redux-thunk": "^2.4.1",
     "sequelize": "^6.21.4",
     "service-example": "file:../Services/service-example",
+    "service-frotator": "file:../Services/service-frotator",
     "socket.io": "^4.5.1"
   }
 }
