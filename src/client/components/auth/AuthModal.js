@@ -159,40 +159,21 @@ function AuthModal() {
           />
         </div>
         <div className="Auth-form-content">
-          <h3 className="Auth-form-title">
-            Sign {authMode == "signin" ? "In" : "Up"}
-          </h3>
-          <div className="text-center">
-            {authMode == "signin"
-              ? "Not registered yet?"
-              : "Already registered?"}{" "}
-            <span
-              className="link-primary"
-              onClick={() => {
-                changeAuthMode();
-                setFormError({});
-              }}
-            >
-              Sign {authMode == "signin" ? "Up" : "In"}
-            </span>
-          </div>
-          <div className="form-group mt-3">
-            <label>Username</label>
-            <input
-              type="username"
-              className="form-control mt-1"
-              placeholder="Enter username"
-              onChange={(event) => {
-                setUsername(event.target.value);
-                clearError("username");
-              }}
-              value={username}
-            />
-            <small className="Auth-error">{formError.username}</small>
-          </div>
-
-          {authMode == "signin" ? null : (
+          {authMode == "forgot" ? (
             <React.Fragment>
+              <h3 className="Auth-form-title">Forgot Password</h3>
+              <div className="text-center">
+                Remember your password?{" "}
+                <span
+                  className="link-primary"
+                  onClick={() => {
+                    setAuthMode("signin");
+                    setFormError({});
+                  }}
+                >
+                  Sign In
+                </span>
+              </div>
               <div className="form-group mt-3">
                 <label>Personal Email</label>
                 <input
@@ -206,71 +187,158 @@ function AuthModal() {
                   value={personalEmail}
                 />
                 <small className="Auth-error">{formError.personalEmail}</small>
+                <br />
+                <small>
+                  We will send you an email that will let you reset your
+                  password. (contact the comptrollers because I haven't
+                  programmed this in yet cause lazy)
+                </small>
               </div>
 
-              <div className="form-group mt-3">
-                <label>Caltech Email</label>
-                <input
-                  type="email"
-                  className="form-control mt-1"
-                  placeholder="Enter email"
-                  onChange={(event) => {
-                    setCaltechEmail(event.target.value);
-                    clearError("caltechEmail");
-                  }}
-                  value={caltechEmail}
-                />
-                <small className="Auth-error">{formError.caltechEmail}</small>
+              <div className="d-grid gap-2 mt-3">
+                <small className="Auth-error">{error}</small>
+
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  onSubmit={handleSubmit}
+                  onClick={handleSubmit}
+                >
+                  Submit
+                </button>
               </div>
             </React.Fragment>
+          ) : (
+            <React.Fragment>
+              <h3 className="Auth-form-title">
+                Sign {authMode == "signin" ? "In" : "Up"}
+              </h3>
+              <div className="text-center">
+                {authMode == "signin"
+                  ? "Not registered yet?"
+                  : "Already registered?"}{" "}
+                <span
+                  className="link-primary"
+                  onClick={() => {
+                    changeAuthMode();
+                    setFormError({});
+                  }}
+                >
+                  Sign {authMode == "signin" ? "Up" : "In"}
+                </span>
+              </div>
+              <div className="form-group mt-3">
+                <label>Username</label>
+                <input
+                  type="username"
+                  className="form-control mt-1"
+                  placeholder="Enter username"
+                  onChange={(event) => {
+                    setUsername(event.target.value);
+                    clearError("username");
+                  }}
+                  value={username}
+                />
+                <small className="Auth-error">{formError.username}</small>
+              </div>
+
+              {authMode == "signin" ? null : (
+                <React.Fragment>
+                  <div className="form-group mt-3">
+                    <label>Personal Email</label>
+                    <input
+                      type="email"
+                      className="form-control mt-1"
+                      placeholder="Enter email"
+                      onChange={(event) => {
+                        setPersonalEmail(event.target.value);
+                        clearError("personalEmail");
+                      }}
+                      value={personalEmail}
+                    />
+                    <small className="Auth-error">
+                      {formError.personalEmail}
+                    </small>
+                  </div>
+
+                  <div className="form-group mt-3">
+                    <label>Caltech Email</label>
+                    <input
+                      type="email"
+                      className="form-control mt-1"
+                      placeholder="Enter email"
+                      onChange={(event) => {
+                        setCaltechEmail(event.target.value);
+                        clearError("caltechEmail");
+                      }}
+                      value={caltechEmail}
+                    />
+                    <small className="Auth-error">
+                      {formError.caltechEmail}
+                    </small>
+                  </div>
+                </React.Fragment>
+              )}
+
+              <div className="form-group mt-3">
+                <label>Password</label>
+                <input
+                  type="password"
+                  className="form-control mt-1"
+                  placeholder="Enter password"
+                  onChange={(event) => {
+                    setPassword(event.target.value);
+                    clearError("password");
+                  }}
+                  value={password}
+                />
+                <small className="Auth-error">{formError.password}</small>
+              </div>
+              {authMode == "signin" ? null : (
+                <div className="form-group mt-3">
+                  <label>Confirm Password</label>
+                  <input
+                    type="password"
+                    className="form-control mt-1"
+                    placeholder="Enter password"
+                    onChange={(event) => {
+                      setPasswordConfirm(event.target.value);
+                      clearError("passwordConfirm");
+                    }}
+                    value={passwordConfirm}
+                  />
+                  <small className="Auth-error">
+                    {formError.passwordConfirm}
+                  </small>
+                </div>
+              )}
+
+              <div className="d-grid gap-2 mt-3">
+                <small className="Auth-error">{error}</small>
+
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  onSubmit={handleSubmit}
+                  onClick={handleSubmit}
+                >
+                  Submit
+                </button>
+              </div>
+              <p className="text-center mt-2">
+                Forgot{" "}
+                <span
+                  className="link-primary"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setAuthMode("forgot");
+                  }}
+                >
+                  password?
+                </span>
+              </p>
+            </React.Fragment>
           )}
-
-          <div className="form-group mt-3">
-            <label>Password</label>
-            <input
-              type="password"
-              className="form-control mt-1"
-              placeholder="Enter password"
-              onChange={(event) => {
-                setPassword(event.target.value);
-                clearError("password");
-              }}
-              value={password}
-            />
-            <small className="Auth-error">{formError.password}</small>
-          </div>
-          {authMode == "signin" ? null : (
-            <div className="form-group mt-3">
-              <label>Confirm Password</label>
-              <input
-                type="password"
-                className="form-control mt-1"
-                placeholder="Enter password"
-                onChange={(event) => {
-                  setPasswordConfirm(event.target.value);
-                  clearError("passwordConfirm");
-                }}
-                value={passwordConfirm}
-              />
-              <small className="Auth-error">{formError.passwordConfirm}</small>
-            </div>
-          )}
-
-          <div className="d-grid gap-2 mt-3">
-            <small className="Auth-error">{error}</small>
-
-            <button
-              type="submit"
-              className="btn btn-primary"
-              onSubmit={handleSubmit}
-              onClick={handleSubmit}
-            >
-              Submit
-            </button>
-          </div>
-          <p className="text-center mt-2">
-            Forgot <a href="#">password?</a>
-          </p>
         </div>
       </form>
     </div>

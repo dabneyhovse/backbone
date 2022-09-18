@@ -132,7 +132,6 @@ async function syncServiceDbs() {
         );
 
         count++;
-        console;
       } else {
         console.log(`\t[${allServices[i].name}]:\tdoes not have a database`);
       }
