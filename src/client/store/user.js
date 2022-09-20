@@ -119,6 +119,24 @@ export const auth = (
   };
 };
 
+export const passwordReset = (personalEmail) => async (dispatch, getState) => {
+  try {
+    const res = await axios.post("/auth/password-reset", {
+      personalEmail,
+    });
+    toast.success(
+      "Your password reset requested was approved, please check your email"
+    );
+    // hide modal on success
+    dispatch(updateModalVisibility(true));
+  } catch (error) {
+    dispatch(getUser({ error: error }));
+    toast.error(
+      "There was an issue requesting a password reset, please try again later."
+    );
+  }
+};
+
 export const updateUser = (userData) => async (dispatch, getState) => {
   try {
     /**

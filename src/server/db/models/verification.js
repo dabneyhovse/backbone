@@ -16,7 +16,7 @@ const Verification = db.define("verification", {
     type: Sequelize.STRING,
   },
   emailType: {
-    type: Sequelize.ENUM(["personal", "caltech"]),
+    type: Sequelize.ENUM(["personal", "caltech", "password"]),
   },
   email: {
     type: Sequelize.STRING,
@@ -39,7 +39,17 @@ const createHash = async (ver, options) => {
     });
     notUnique = duplicates.length > 0;
   }
+
   ver.hash = hash;
+
+  if (ver.emailType == "password") {
+    const res = await sendEmail(
+      ver.email,
+      "Dabney Hovse Password Reset",
+      `Hello, <br>A password reset has been requested for your account on dabney.caltech.edu. <br> If this was not you or a mistake, please just ignore this email. <br>If it was not a mistake click this link to request a new password: <a href = "https://dabney.caltech.edu/verify#${hash}">https://dabney.caltech.edu/verify#${hash}</a>.`
+    );
+    return;
+  }
 
   // TODO report error sending email
   const res = await sendEmail(

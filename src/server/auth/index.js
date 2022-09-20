@@ -2,6 +2,8 @@ const router = require("express").Router();
 const { default: validate } = require("deep-email-validator");
 const { Verification, Affiliation } = require("../db/models");
 const User = require("../db/models/user");
+const sendEmail = require("module-dabney-email");
+
 module.exports = router;
 
 router.post("/login", async (req, res, next) => {
@@ -128,11 +130,70 @@ router.post("/verify", async (req, res) => {
     if (ver) {
       email = ver.email;
       emailType = ver.emailType;
+      if (emailType == "password") {
+        const user = await User.findByPk(ver.userId);
+
+        hash = crypto
+          .createHmac("sha256", process.env.HASH_SECRET)
+          .update(`${Math.random()}`)
+          .digest("hex");
+        await user.update({ password: hash });
+
+        // TODO handle email errors
+        await sendEmail(
+          ver.email,
+          "Dabney Hovse Password Reset",
+          `Hello, ${user.username} your new password is ${hash}`
+        );
+
+        await ver.destroy();
+        return;
+      }
       await ver.destroy();
       res.status(200).json({ email, emailType });
-    } else res.sendStatus(202);
+    } else {
+      res.sendStatus(404);
+    }
+
+    res.sendStatus(202);
   } catch (error) {
     next(err);
+  }
+});
+
+router.post("/password-reset", async (req, res, next) => {
+  console.log(req.body);
+  console.log("password reset");
+  try {
+    const user = await User.findOne({
+      where: { personalEmail: req.body.personalEmail },
+    });
+    if (user) {
+      // catch old password resets
+      let ver = await Verification.findOne({
+        where: {
+          emailType: "password",
+          userId: user.id,
+          email: req.body.personalEmail,
+        },
+      });
+      if (ver) {
+        await ver.destroy();
+      }
+
+      // create a new one, emails are sent in the create hook
+      ver = await Verification.create({
+        where: {
+          emailType: "password",
+          userId: user.id,
+          email: req.body.personalEmail,
+        },
+      });
+    } else {
+      throw new Error("The provided personal email was not found.");
+    }
+  } catch (error) {
+    next(error);
   }
 });
 

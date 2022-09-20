@@ -13,7 +13,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import { IoMdArrowRoundBack } from "react-icons/io";
 
-import { auth, clearUserError } from "../../store/user";
+import { auth, clearUserError, passwordReset } from "../../store/user";
 import { updateModalVisibility } from "../../store/authModal";
 
 import "./AuthModal.css";
@@ -89,6 +89,11 @@ function AuthModal() {
     }
 
     dispatch(auth(username, password, authMode, personalEmail, caltechEmail));
+  };
+
+  const handlePasswordReset = (event) => {
+    event.preventDefault();
+    dispatch(passwordReset(personalEmail));
   };
 
   /**
@@ -201,8 +206,8 @@ function AuthModal() {
                 <button
                   type="submit"
                   className="btn btn-primary"
-                  onSubmit={handleSubmit}
-                  onClick={handleSubmit}
+                  onSubmit={handlePasswordReset}
+                  onClick={handlePasswordReset}
                 >
                   Submit
                 </button>
