@@ -40,7 +40,7 @@ async function dynamicRoutes() {
     let { default: CurrModule } = await moduleImports[curr.moduleName].react;
     out.push({
       exact: false,
-      path: curr.route,
+      path: `${curr.route}/*`,
       requiredAuth: curr.requiredAuth,
       element: <CurrModule />,
     });

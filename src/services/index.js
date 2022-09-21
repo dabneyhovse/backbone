@@ -23,7 +23,8 @@ let moduleImports = {};
 if (typeof window !== "undefined" && typeof window.document !== "undefined") {
   // only does this in browser, webpack is mean and cant do dynamic imports with the names maping rn
   let service_example_config = require("service-example");
-  moduleServices = [service_example_config];
+  let service_frotator_config = require("service-frotator");
+  moduleServices = [service_example_config, service_frotator_config];
   moduleImports = {
     "service-example": {
       config: require("service-example"),
@@ -43,9 +44,26 @@ if (typeof window !== "undefined" && typeof window.document !== "undefined") {
           }
         : {}),
     },
-  };
 
-  import("service-example/React");
+    "service-frotator": {
+      config: require("service-frotator"),
+      ...(service_frotator_config.importReact
+        ? {
+            react: import("service-frotator/React"),
+          }
+        : {}),
+      ...(service_frotator_config.importAdmin
+        ? {
+            admin: import("service-frotator/Admin"),
+          }
+        : {}),
+      ...(service_frotator_config.importRedux
+        ? {
+            redux: import("service-frotator/Redux"),
+          }
+        : {}),
+    },
+  };
 } else {
   moduleServices = moduleServiceNames.map((name) => require(`${name}`));
 }
