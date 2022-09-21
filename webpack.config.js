@@ -20,6 +20,7 @@ isDev = true;
 const path = require("path");
 
 module.exports = {
+  cache: false,
   stats: {
     assets: false,
     builtAt: true,
@@ -43,6 +44,15 @@ module.exports = {
       react: path.resolve(__dirname, "node_modules/react"),
       redux: path.resolve(__dirname, "node_modules/redux"),
       "react-redux": path.resolve(__dirname, "node_modules/react-redux"),
+      "react-router-dom": path.resolve(
+        __dirname,
+        "node_modules/react-router-dom"
+      ),
+      "react-toastify": path.resolve(__dirname, "node_modules/react-toastify"),
+      "react-bootstrap": path.resolve(
+        __dirname,
+        "node_modules/react-bootstrap"
+      ),
     },
   },
   watchOptions: {
@@ -65,6 +75,17 @@ module.exports = {
       {
         test: /\.css$/i,
         use: ["style-loader", "css-loader"],
+      },
+      {
+        test: /\.scss$/i,
+        use: [
+          // Creates `style` nodes from JS strings
+          "style-loader",
+          // Translates CSS into CommonJS
+          "css-loader",
+          // Compiles Sass to CSS
+          "sass-loader",
+        ],
       },
     ],
   },
