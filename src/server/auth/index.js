@@ -3,6 +3,7 @@ const { default: validate } = require("deep-email-validator");
 const { Verification, Affiliation } = require("../db/models");
 const User = require("../db/models/user");
 const sendEmail = require("module-dabney-email");
+const crypto = require("crypto");
 
 module.exports = router;
 
@@ -124,7 +125,7 @@ router.post("/logout", (req, res) => {
   }
 });
 
-router.post("/verify", async (req, res) => {
+router.post("/verify", async (req, res, next) => {
   try {
     let ver = await Verification.findOne({ where: { hash: req.body.hash } });
     if (ver) {
@@ -147,6 +148,7 @@ router.post("/verify", async (req, res) => {
         );
 
         await ver.destroy();
+        res.sendStatus(201);
         return;
       }
       await ver.destroy();
@@ -157,13 +159,11 @@ router.post("/verify", async (req, res) => {
 
     res.sendStatus(202);
   } catch (error) {
-    next(err);
+    next(error);
   }
 });
 
 router.post("/password-reset", async (req, res, next) => {
-  console.log(req.body);
-  console.log("password reset");
   try {
     const user = await User.findOne({
       where: { personalEmail: req.body.personalEmail },
@@ -183,12 +183,12 @@ router.post("/password-reset", async (req, res, next) => {
 
       // create a new one, emails are sent in the create hook
       ver = await Verification.create({
-        where: {
-          emailType: "password",
-          userId: user.id,
-          email: req.body.personalEmail,
-        },
+        emailType: "password",
+        userId: user.id,
+        email: req.body.personalEmail,
       });
+      res.sendStatus(200);
+      return;
     } else {
       throw new Error("The provided personal email was not found.");
     }

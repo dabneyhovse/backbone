@@ -195,8 +195,7 @@ function AuthModal() {
                 <br />
                 <small>
                   We will send you an email that will let you reset your
-                  password. (contact the comptrollers because I haven't
-                  programmed this in yet cause lazy)
+                  password.
                 </small>
               </div>
 

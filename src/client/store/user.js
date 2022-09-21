@@ -205,6 +205,9 @@ export const verifyUser = (hash) => async (dispatch, getState) => {
           "Successfully verifed your email, this page will redirect you in a moment"
         );
         goHome(dispatch);
+      } else if (res.status == 201) {
+        toast.success("Your password was reset, please check your email.");
+        goHome(dispatch);
       } else {
         throw "Verification code not found, perhaps you already verified.";
       }
