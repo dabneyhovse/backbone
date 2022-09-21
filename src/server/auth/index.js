@@ -2,6 +2,9 @@ const router = require("express").Router();
 const { default: validate } = require("deep-email-validator");
 const { Verification, Affiliation } = require("../db/models");
 const User = require("../db/models/user");
+const sendEmail = require("module-dabney-email");
+const crypto = require("crypto");
+
 module.exports = router;
 
 router.post("/login", async (req, res, next) => {
@@ -31,17 +34,17 @@ router.post("/signup", async (req, res, next) => {
     /**
      * checks regex, if email is disposable, MX records and SMTP records
      */
-    let caltechRes = await validate(caltechEmail);
-    let personalRes = await validate(personalEmail);
+    // let caltechRes = await validate(caltechEmail);
+    // let personalRes = await validate(personalEmail);
 
-    if (!caltechRes.valid) {
-      res.status(403).send("The provided Caltech Email is not valid.");
-      return;
-    }
-    if (!personalRes.valid) {
-      res.status(403).send("The provided Personal Email is not valid.");
-      return;
-    }
+    // if (!caltechRes.valid) {
+    //   res.status(403).send("The provided Caltech Email is not valid.");
+    //   return;
+    // }
+    // if (!personalRes.valid) {
+    //   res.status(403).send("The provided Personal Email is not valid.");
+    //   return;
+    // }
 
     /**
      * email is valid, check if it is in use already
@@ -122,17 +125,75 @@ router.post("/logout", (req, res) => {
   }
 });
 
-router.post("/verify", async (req, res) => {
+router.post("/verify", async (req, res, next) => {
   try {
     let ver = await Verification.findOne({ where: { hash: req.body.hash } });
     if (ver) {
       email = ver.email;
       emailType = ver.emailType;
+      if (emailType == "password") {
+        const user = await User.findByPk(ver.userId);
+
+        hash = crypto
+          .createHmac("sha256", process.env.HASH_SECRET)
+          .update(`${Math.random()}`)
+          .digest("hex");
+        await user.update({ password: hash });
+
+        // TODO handle email errors
+        await sendEmail(
+          ver.email,
+          "Dabney Hovse Password Reset",
+          `Hello, ${user.username} your new password is ${hash}`
+        );
+
+        await ver.destroy();
+        res.sendStatus(201);
+        return;
+      }
       await ver.destroy();
       res.status(200).json({ email, emailType });
-    } else res.sendStatus(202);
+    } else {
+      res.sendStatus(404);
+    }
+
+    res.sendStatus(202);
   } catch (error) {
-    next(err);
+    next(error);
+  }
+});
+
+router.post("/password-reset", async (req, res, next) => {
+  try {
+    const user = await User.findOne({
+      where: { personalEmail: req.body.personalEmail },
+    });
+    if (user) {
+      // catch old password resets
+      let ver = await Verification.findOne({
+        where: {
+          emailType: "password",
+          userId: user.id,
+          email: req.body.personalEmail,
+        },
+      });
+      if (ver) {
+        await ver.destroy();
+      }
+
+      // create a new one, emails are sent in the create hook
+      ver = await Verification.create({
+        emailType: "password",
+        userId: user.id,
+        email: req.body.personalEmail,
+      });
+      res.sendStatus(200);
+      return;
+    } else {
+      throw new Error("The provided personal email was not found.");
+    }
+  } catch (error) {
+    next(error);
   }
 });
 

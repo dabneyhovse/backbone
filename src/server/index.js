@@ -26,7 +26,6 @@ const app = express();
 const socketio = require("socket.io");
 module.exports = app;
 
-
 if (process.env.NODE_ENV === "test") {
   after("close the session store", () => sessionStore.stopExpiringSessions());
 }
@@ -132,7 +131,6 @@ async function syncServiceDbs() {
         );
 
         count++;
-        console;
       } else {
         console.log(`\t[${allServices[i].name}]:\tdoes not have a database`);
       }
