@@ -33,17 +33,17 @@ router.post("/signup", async (req, res, next) => {
     /**
      * checks regex, if email is disposable, MX records and SMTP records
      */
-    let caltechRes = await validate(caltechEmail);
-    let personalRes = await validate(personalEmail);
+    // let caltechRes = await validate(caltechEmail);
+    // let personalRes = await validate(personalEmail);
 
-    if (!caltechRes.valid) {
-      res.status(403).send("The provided Caltech Email is not valid.");
-      return;
-    }
-    if (!personalRes.valid) {
-      res.status(403).send("The provided Personal Email is not valid.");
-      return;
-    }
+    // if (!caltechRes.valid) {
+    //   res.status(403).send("The provided Caltech Email is not valid.");
+    //   return;
+    // }
+    // if (!personalRes.valid) {
+    //   res.status(403).send("The provided Personal Email is not valid.");
+    //   return;
+    // }
 
     /**
      * email is valid, check if it is in use already
