@@ -127,6 +127,14 @@ router.get("/", isAdmin, async (req, res, next) => {
       order: sortMap[search.sort],
       where,
       include,
+      attributes: [
+        "username",
+        "firstName",
+        "lastName",
+        "caltechEmail",
+        "personalEmail",
+        "id",
+      ],
     };
     let allUsers = await User.findAndCountAll(query);
 
