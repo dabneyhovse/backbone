@@ -226,16 +226,30 @@ async function calculateAuthLevel(user) {
     if (ver.length > 0) {
       return 0.5;
     }
-    const affiliation = await Affiliation.findOne({
-      where: { house: "dabney", userId: user.id },
+    const full = await Affiliation.findOne({
+      where: {
+        house: "dabney",
+        userId: user.id,
+        status: "full",
+        verified: true,
+      },
     });
-    if (affiliation == null) {
+    const social = await Affiliation.findOne({
+      where: {
+        house: "dabney",
+        userId: user.id,
+        status: "social",
+        verified: true,
+      },
+    });
+
+    if (social == null && full == null) {
       return 1;
     }
-    if (affiliation.status == "social") {
+    if (social !== null && full == null) {
       return 2;
     }
-    if (affiliation.status == "full") {
+    if (full !== null) {
       return 3;
     }
   }
