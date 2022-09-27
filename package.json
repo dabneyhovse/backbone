@@ -75,6 +75,7 @@
     "sequelize": "^6.21.4",
     "service-example": "file:../Services/service-example",
     "service-frotator": "file:../Services/service-frotator",
-    "socket.io": "^4.5.1"
+    "socket.io": "^4.5.2",
+    "socket.io-client": "^4.5.2"
   }
 }
