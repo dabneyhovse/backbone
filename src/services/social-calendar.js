@@ -94,7 +94,7 @@ module.exports = {
    *  I'm not sure why someone would want the 5-7 settings but i'm including it
    *  just so every config is possible.
    */
-  requiredAuth: 0,
+  requiredAuth: 2,
 
   /**
    * Similar to before, but simply restricts to current students only.
