@@ -2,6 +2,7 @@ const router = require("express").Router();
 const { Op } = require("sequelize");
 const { User, Affiliation, Verification, Group } = require("../db/models");
 const { isAdmin, isLoggedIn, upload } = require("./middleware");
+const fs = require("fs");
 module.exports = router;
 
 const USERS_PER_PAGE = 20;
@@ -341,8 +342,25 @@ router.put(
         })
       );
 
+      if (filtered["profile.photo"]) {
+        const file = `/resources/images/pfp/${req.user.id}.png`;
+        // write to the currently used public folder, and the resources folder for the next build
+        fs.writeFileSync(
+          "." + file,
+          Buffer.from(filtered["profile.photo"], "base64")
+        );
+        fs.writeFileSync(
+          "./public" + file,
+          Buffer.from(filtered["profile.photo"], "base64")
+        );
+        filtered["profile.photo"] = file;
+      }
+
       if (filtered.profile) {
-        filtered.profile = { ...oldUser.profile.toJSON(), ...filtered.profile };
+        filtered.profile = {
+          ...oldUser.profile.toJSON(),
+          ...filtered.profile,
+        };
       }
 
       await oldUser.update(filtered);
