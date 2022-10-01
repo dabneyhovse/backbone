@@ -98,6 +98,7 @@ const User = db.define("user", {
   uuid: {
     type: Sequelize.INTEGER,
     defaultValue: 42069,
+    allowNull: true,
   },
   profile: {
     type: Sequelize.JSON,
