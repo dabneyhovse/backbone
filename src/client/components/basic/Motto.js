@@ -13,8 +13,8 @@ function Motto() {
     <div className="motto-bar">
       <h2> Welcome to Dabney Hovse!</h2>
       <div>
-        Our current motto is: {" "}
-        <span className={"redacted motto"}>oiwenfeoianfo ienfioenne</span>
+        Our current motto is:{" "}
+        <span className={"redacted motto"}>made you look</span>
       </div>
     </div>
   );
