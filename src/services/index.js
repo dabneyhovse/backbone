@@ -14,7 +14,7 @@
 const moduleServiceNames = ["service-example", "service-frotator"];
 const builtInServiceNames = [
   "social-calendar",
-  "about-services",
+  // "about-services",
   "wiki-service",
 ];
 
