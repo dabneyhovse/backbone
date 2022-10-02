@@ -76,6 +76,9 @@ export const updateAffiliations = (affiliations) => async (dispatch) => {
     });
     if (res.status == 201) {
       dispatch(gotAffiliations(affiliations));
+      toast.success(
+        "Your affiliations were updated. Please await verification."
+      );
     }
   } catch (err) {
     toast.error(`There was an error updating your house affiliations.`, {});
