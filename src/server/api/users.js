@@ -343,11 +343,13 @@ router.put(
         })
       );
 
-      if (filtered["profile.photo"]) {
+      if (
+        filtered["profile.photo"] &&
+        !filtered["profile.photo"].indexOf("/resources/images/pfp/") == 0
+      ) {
         const file = `/resources/images/pfp/${req.user.id}.png`;
         // write to the currently used public folder, and the resources folder for the next build
         const image = imageDataURI.decode(filtered["profile.photo"]);
-        console.log(image.imageType);
 
         fs.writeFileSync("." + file, image.dataBuffer);
         fs.writeFileSync("./public" + file, image.dataBuffer);
