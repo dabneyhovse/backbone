@@ -62,6 +62,7 @@ function navItemToReact(item, authLevel, dropdown = false) {
   if (item.type == "href") {
     out = dropdown ? (
       <NavDropdown.Item
+        pullRight={false}
         key={item.name}
         href={item.href ? item.href : item.route}
       >
@@ -76,7 +77,7 @@ function navItemToReact(item, authLevel, dropdown = false) {
     out = (
       <LinkContainer key={item.name} to={item.route}>
         {dropdown ? (
-          <NavDropdown.Item>{item.name}</NavDropdown.Item>
+          <NavDropdown.Item pullRight={false}>{item.name}</NavDropdown.Item>
         ) : (
           <Nav.Link>{item.name}</Nav.Link>
         )}
@@ -85,9 +86,11 @@ function navItemToReact(item, authLevel, dropdown = false) {
   } else if (item.type == "dropdown") {
     out = (
       <NavDropdown
+        className="dropLeft"
         key={item.name}
         title={item.name}
         id="collasible-nav-dropdown"
+        drop="start"
       >
         {item.links.map((link) =>
           navItemToReact(link, authLevel, (dropdown = true))
@@ -182,12 +185,14 @@ function Navdarb() {
             <Nav className="transparent">
               {navItemToReact(navbar.links, user.authLevel)}
               <NavDropdown
+                drop = "start"
                 className="icon"
                 title={<FaUserCircle size="1.5em" />}
                 id="collasible-nav-dropdown"
               >
                 {user.id == undefined ? (
                   <NavDropdown.Item
+                    pullRight={false}
                     onClick={() => {
                       dispatch(updateModalVisibility(true));
                     }}
@@ -197,18 +202,22 @@ function Navdarb() {
                 ) : (
                   <React.Fragment>
                     <LinkContainer to="/profile">
-                      <NavDropdown.Item href>Profile</NavDropdown.Item>
+                      <NavDropdown.Item pullRight={false} href>
+                        Profile
+                      </NavDropdown.Item>
                     </LinkContainer>
                     {user.authLevel > 3 ? (
                       <LinkContainer to="/adminpanel">
-                        <NavDropdown.Item href>Admin</NavDropdown.Item>
+                        <NavDropdown.Item pullRight={false} href>
+                          Admin
+                        </NavDropdown.Item>
                       </LinkContainer>
                     ) : (
                       ""
                     )}
                     <NavDropdown.Divider />
 
-                    <NavDropdown.Item onClick={handleLogout}>
+                    <NavDropdown.Item pullRight={false} onClick={handleLogout}>
                       Logout
                     </NavDropdown.Item>
                   </React.Fragment>
