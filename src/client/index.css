@@ -106,3 +106,17 @@ h1 {
 .tooltip-profile {
   margin-left: 5px;
 }
+
+.dropdown-toggle::after {
+  display: none;
+}
+
+.dropstart .dropdown-toggle::before {
+  vertical-align: 0;
+  display: none !important;
+  right: 0 !important;
+}
+.dropdown-menu.show {
+  top: 100% !important;
+  right: 0 !important;
+}
