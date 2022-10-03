@@ -80,7 +80,7 @@ function UserSearchPanel() {
                   <Form.Select onChange={onChange} name="verification_status">
                     <option value="1">Any</option>
                     <option value="2">Verified</option>
-                    <option value="2">Unverified</option>
+                    <option value="3">Unverified</option>
                   </Form.Select>
                 </Form.Group>
 

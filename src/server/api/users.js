@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { Op } = require("sequelize");
+const { Op, Sequelize } = require("sequelize");
 const { User, Affiliation, Verification, Group } = require("../db/models");
 const { isAdmin, isLoggedIn, upload } = require("./middleware");
 const fs = require("fs");
@@ -18,9 +18,12 @@ const paginate = (page) => {
 };
 
 const sortMap = {
-  ["1"]: [["updatedAt", "ASC"]],
-  ["2"]: [["id", "ASC"]],
-  ["3"]: [["id", "DESC"]],
+  ["1"]: [
+    [Sequelize.col("updatedAt"), "ASC"],
+    ["id", "DESC"],
+  ],
+  ["2"]: [["id", "DESC"]],
+  ["3"]: [["id", "ASC"]],
 };
 const houseMembershipMap = {
   ["0"]: "any",
@@ -46,7 +49,10 @@ const UserGroup = require("../db/models/userGroup");
  */
 router.get("/", isAdmin, async (req, res, next) => {
   try {
+
+
     const search = req.query.search ? JSON.parse(req.query.search) : {};
+    console.log(verificationStatusMap[search.verification_status])
 
     let where = {};
     let include = [];
@@ -138,7 +144,17 @@ router.get("/", isAdmin, async (req, res, next) => {
         "id",
       ],
     };
-    let allUsers = await User.findAndCountAll(query);
+    const util = require("util");
+
+    console.log(
+      util.inspect(query, { showHidden: false, depth: null, colors: true })
+    );
+    let allUsers;
+    try {
+      allUsers = await User.findAndCountAll(query);
+    } catch (error) {
+      console.error(error);
+    }
 
     allUsers.count = Math.ceil(allUsers.count / USERS_PER_PAGE);
 
@@ -345,7 +361,7 @@ router.put(
 
       if (
         filtered["profile.photo"] &&
-        !filtered["profile.photo"].indexOf("/resources/images/pfp/") == 0
+        !filtered["profile.photo"].indexOf("/resources/images/") == 0
       ) {
         const file = `/resources/images/pfp/${req.user.id}.png`;
         // write to the currently used public folder, and the resources folder for the next build
