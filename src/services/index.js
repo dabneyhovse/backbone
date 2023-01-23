@@ -16,6 +16,7 @@ const builtInServiceNames = [
   "social-calendar",
   // "about-services",
   "wiki-service",
+  "dmail-service"
 ];
 
 let moduleServices = [];

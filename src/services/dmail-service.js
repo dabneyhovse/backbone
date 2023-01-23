@@ -2,36 +2,33 @@
  * Author:	Nick Jasinski
  * Date:		2022-08-23
  *
- * config file for the built in "service" "social-calendar"
- *
- * this doesnt really count as  service im just staying with this
- * config file to setup the format in the future...
+ * config file for the built in service "about-services"
  */
 
 module.exports = {
   /**
    * The name of the service, this is what you will see on the navbar dropdown of the main dabney website
    */
-  name: "Social Calendar",
+  name: "Dmail",
 
   /**
    * A description of the service that will be given along with the name (above) on the services page
    */
-  description:
-    "The Dabney Hovse social calendar. Is updated by the current Soc Vps",
+  description: "Dabney Hovse's email service",
 
   /**
    * the route you want your service to occupy ie "example" gives the service dabney.caltech.edu/example/*
-   * simply use your own react router to get vaired routes from the base ie
+   * simply use your own routes to get varried routes from the base ie
    * dabney.caltech.edu/example/about and dabney.caltech.edu/example/home
    * would be two different routes
    *
    * if your route overlaps with an existing one the serivce that has been up longer will recieve the route,
    * and the other will not be connected
    *
-   * do not request a route if your service is external or built in (leave route as null)
+   * do not request a route if your service is external (no react) or built in (leave route as null)
    */
-  route: "socialcalender",
+  route: "",
+  href: "https://mail.dabney.caltech.edu/",
 
   /**
    * If backbone should add the route about to the router
@@ -54,7 +51,7 @@ module.exports = {
    *
    * href will be a normal link while react will use a link container
    */
-  routeType: "react-router",
+  routeType: "href",
 
   /**
    * if the service should be displayed in the navbar
@@ -70,13 +67,13 @@ module.exports = {
    * "m" => middle
    * "t" => top
    */
-  dropdownItemPosition: "m",
+  dropdownItemPosition: "t",
 
   /**
    * Tool tip to display when hovering over the link in the services dropdown
    * try to keep the text short
    */
-  tooltip: "The current Dabney Social Calendar",
+  tooltip: "Dabney Email Service",
 
   /**
    *  Amount of authorization that the user needs to view the service
@@ -115,4 +112,6 @@ module.exports = {
   importDb: false,
   importReact: false,
   importExpress: false,
+  importAdmin: false,
+  importRedux: false,
 };
