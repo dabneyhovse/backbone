@@ -27,7 +27,7 @@ const membershipToNickname = (memberships) => {
     fleming: "Flem",
     ricketts: "Scurve",
     page: "Pageboy",
-    venerable: "Venn",
+    venerable: "Ven",
     lloyd: "Lloydie",
     avery: "Averite",
   };
