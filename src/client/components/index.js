@@ -7,10 +7,12 @@
  * and passed as args to nav
  */
 
-export * from "./admin";
-export * from "./auth";
-export * from "./nav";
-export * from "./layout";
-export * from "./user";
-export * from "./basic";
-export * from "./nav";
+// note that these are now commented out for code splitting purposes
+
+// export * from "./admin";
+// export * from "./auth";
+// export * from "./nav";
+// export * from "./layout";
+// export * from "./user";
+// export * from "./basic";
+// export * from "./nav";

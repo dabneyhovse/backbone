@@ -34,7 +34,8 @@ module.exports = {
   entry: ["./src/client/index.js"],
   output: {
     path: path.resolve(__dirname, "public"),
-    filename: "./bundle.js",
+    filename: "./[name].js",
+    chunkFilename: './[name].bundle.js',
     assetModuleFilename: "[path][name].[ext]",
     clean: true,
   },
@@ -63,7 +64,15 @@ module.exports = {
     rules: [
       {
         test: /\.jsx?$/,
-        exclude: /node_modules/,
+        exclude: {
+          and: [/node_modules/], // Exclude libraries in node_modules ...
+          not: [
+            // Except for the local services 
+            /service-example/,
+            /service-frotator/,
+          ]
+        },
+        // include: "/node_modules/service-example/",
         use: {
           loader: "babel-loader",
           options: {
@@ -109,4 +118,8 @@ module.exports = {
   experiments: {
     topLevelAwait: true,
   },
+
+  // optimization: {
+  //   minimize: false,
+  // },
 };

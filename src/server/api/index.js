@@ -11,6 +11,7 @@ const router = require("express").Router();
 
 /**
  * attaches all services apis to the router
+ *
  * @param {express router} apiRouter
  */
 function attachServices(apiRouter) {
@@ -18,9 +19,11 @@ function attachServices(apiRouter) {
   /**
    * only need these json files loaded while
    * loading this so seems prudent to do this
+   *
+   * kinda cursed but i dont want to fix it yet srry
    */
-  const { builtInServices, moduleServices } = require("../../services");
-  const allServices = [...builtInServices, ...moduleServices];
+  const { serviceConfigs} = require("../../services");
+  const allServices = serviceConfigs;
 
   // TODO: possibly differientate between Express and Api in the future
 
@@ -42,10 +45,13 @@ function attachServices(apiRouter) {
   console.log(`Attached ${count} service api Route(s)\n`);
 }
 
+// attach base backbone routes
 router.use("/users", require("./users"));
 router.use("/affiliations", require("./affiliations"));
 router.use("/groups", require("./groups"));
 // TODO: router.use("/bot", require("./bot"));
+
+// attach routes for services
 attachServices(router);
 
 router.use((req, res, next) => {

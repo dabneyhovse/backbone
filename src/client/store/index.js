@@ -6,7 +6,7 @@
  * //TODO: dynamic import of services redux?
  */
 
-import { combineReducers, applyMiddleware } from "redux";
+import { applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { createLogger } from "redux-logger";
 import thunk from "redux-thunk";
@@ -18,27 +18,29 @@ import admin from "./admin";
 import navbar from "./navbar";
 import affiliation from "./affiliation";
 
-import { builtInServices, moduleImports, moduleServices } from "../../services";
-const allServices = [...builtInServices, ...moduleServices];
-const serviceReducers = {};
-for (let i = 0; i < allServices.length; i++) {
-  const curr = allServices[i];
-  if (curr.importRedux) {
-    const { default: reducer } = await moduleImports[curr.moduleName].redux;
-    serviceReducers[curr.route] = reducer;
-  }
-}
+import { createReducerManager } from "./manager";
 
-const reducerList = {
+// TODO change to dynamic importing and restructure tree.
+
+//      ie dont want full available tree loaded, just what is needed.
+// import { builtInServices, moduleImports, moduleServices } from "../../services";
+// const allServices = [...builtInServices, ...moduleServices];
+// const serviceReducers = {};
+// for (let i = 0; i < allServices.length; i++) {
+//   const curr = allServices[i];
+//   if (curr.importRedux) {
+//     const { default: reducer } = await moduleImports[curr.moduleName].redux;
+//     serviceReducers[curr.route] = reducer;
+//   }
+// }
+
+const staticReducers = {
   user,
   auth,
   admin,
   navbar,
   affiliation,
-  ...serviceReducers,
 };
-
-const reducer = combineReducers(reducerList);
 
 let log = [];
 if (process.env.NODE_ENV === "development") {
@@ -47,5 +49,10 @@ if (process.env.NODE_ENV === "development") {
 
 const middleware = composeWithDevTools(applyMiddleware(thunk, ...log));
 
-const store = configureStore({ reducer });
+const reducerManager = createReducerManager(staticReducers);
+
+// Create a store with the root reducer function being the one exposed by the manager.
+const store = configureStore({ reducer: reducerManager.reduce });
+// put the reducer manager on the store so it is easily accessible
+store.reducerManager = reducerManager;
 export default store;

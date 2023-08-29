@@ -115,8 +115,8 @@ const startListening = () => {
 };
 
 async function syncServiceDbs() {
-  const { builtInServices, moduleServices } = require("../services");
-  const allServices = [...builtInServices, ...moduleServices];
+  const { serviceConfigs } = require("../services");
+  const allServices = serviceConfigs;
 
   console.log("Syncing service databases...");
   let count = 0;
@@ -140,7 +140,7 @@ async function syncServiceDbs() {
       );
     }
   }
-  console.log(`Synced ${count} serivce database(s)\n`);
+  console.log(`Synced ${count} service database(s)\n`);
 }
 
 const syncDb = () => db.sync();

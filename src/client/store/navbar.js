@@ -13,7 +13,8 @@ export const UPDATE_NAV_VISIBILITY = "UPDATE_NAV_VISIBILITY";
 export const ADD_HIDDEN_NAV_ROUTE = "ADD_HIDDEN_NAV_ROUTE";
 export const ADD_TRANSPARENT_NAV_ROUTES = "ADD_TRANSPARENT_NAV_ROUTES";
 
-import { moduleServices, builtInServices } from "../../services";
+// TODO restructure to serviceConfigs
+import { serviceConfigs } from "../../services";
 
 // Action Creators
 export const updateNav = (nav) => {
@@ -40,9 +41,9 @@ export const defaultNav = () => {
   return update_nav(init);
 };
 
-// load services from the /services/json
+// load service info from /services json files
 const loadServices = () => {
-  let allServices = [...moduleServices, ...builtInServices];
+  let allServices = serviceConfigs
 
   allServices.sort((a, b) =>
     a.dropdownItemPosition < b.dropdownItemPosition ? 1 : -1
