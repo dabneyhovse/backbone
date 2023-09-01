@@ -42,7 +42,7 @@ function LazyAuth({ lazyElement, requiredAuth, authLevel, managerContainer }) {
   if (authLevel >= requiredAuth) {
     return (
       <Suspense fallback={<Loading />}>
-        {managerContainer == null ? <></> : managerContainer}
+        {/* {managerContainer == null ? <></> : managerContainer} */}
         {lazyElement}
       </Suspense>
     );
