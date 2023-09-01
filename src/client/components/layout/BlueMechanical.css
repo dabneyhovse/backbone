@@ -1,0 +1,27 @@
+.blue-mechanical {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url("/resources/images/blue_mechanical_background.jpeg");
+  background-repeat: repeat;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.blue-mechanical .alert {
+  position: relative;
+  box-shadow: rgba(0, 0, 0, 0.5) 5px 5px 10px;
+  cursor: pointer;
+  transition-property: top, left;
+  transition-duration: 1s;
+}
+
+
+.blue-mechanical .alert:hover {
+  box-shadow: rgba(0, 0, 0, 1) 5px 5px 10px;
+  left: -100vw;
+}

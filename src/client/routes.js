@@ -19,6 +19,9 @@ import ManagerContainer from "./components/layout/ManagerContainer";
 
 // lazy load in the components
 const Home = React.lazy(() => import("./components/basic/Home"));
+const BlueMechanical = React.lazy(() =>
+  import("./components/layout/BlueMechanical")
+);
 const Gallery = React.lazy(() => import("./components/basic/DarbGallery"));
 const Calender = React.lazy(() => import("./components/basic/Calender"));
 const AuthModal = React.lazy(() => import("./components/auth/AuthModal"));
@@ -31,8 +34,8 @@ const Example = React.lazy(() => import("service-example/React"));
 const Frotator = React.lazy(() => import("service-frotator/React"));
 
 // SERVICES NOTE: add services redux here:
-import exampleReducer from "service-example/Redux"
-import frotatorReducer from "service-frotator/Redux"
+import exampleReducer from "service-example/Redux";
+import frotatorReducer from "service-frotator/Redux";
 
 /**
  * quick wrapper comoponent for suspense & attach redux manager
@@ -64,6 +67,8 @@ function SiteRoutes() {
   const { authLevel } = useSelector((state) => ({
     authLevel: state.user.data.authLevel ? state.user.data.authLevel : 0,
   }));
+
+  console.log("oof");
 
   return (
     <SlideRoutes>
@@ -199,6 +204,17 @@ function SiteRoutes() {
             requiredAuth={4}
             authLevel={authLevel}
             lazyElement={<Frotator />}
+          />
+        }
+      />
+      <Route
+        path={"*"}
+        exact={false}
+        element={
+          <LazyAuth
+            requiredAuth={0}
+            authLevel={authLevel}
+            lazyElement={<BlueMechanical />}
           />
         }
       />
