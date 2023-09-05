@@ -7,6 +7,8 @@
  */
 const prompt = require("prompt");
 
+require("dotenv").config();
+
 if (module === require.main) {
   console.log("Updating Users");
   prompt.start();
