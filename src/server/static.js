@@ -16,7 +16,6 @@ module.exports = router;
 // static file-serving middleware
 router.use(express.static(path.join(__dirname, "../..", "public")));
 
-
 // TODO for whatever reason this restricts what normal pages people can access, iim too lazy to look into it rn'
 
 // router.use(

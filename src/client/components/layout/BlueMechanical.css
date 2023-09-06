@@ -20,7 +20,6 @@
   transition-duration: 1s;
 }
 
-
 .blue-mechanical .alert:hover {
   box-shadow: rgba(0, 0, 0, 1) 5px 5px 10px;
   left: -100vw;

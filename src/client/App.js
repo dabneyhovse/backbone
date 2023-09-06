@@ -12,7 +12,7 @@ import Routes from "./routes";
 // import { AuthModal, Loading, Navdarb } from "./components";
 import AuthModal from "./components/auth/AuthModal";
 import Loading from "./components/layout/Loading";
-import Navdarb from "./components/nav/Navdarb"
+import Navdarb from "./components/nav/Navdarb";
 
 import { me } from "./store/user";
 

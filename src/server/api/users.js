@@ -49,10 +49,8 @@ const UserGroup = require("../db/models/userGroup");
  */
 router.get("/", isAdmin, async (req, res, next) => {
   try {
-
-
     const search = req.query.search ? JSON.parse(req.query.search) : {};
-    console.log(verificationStatusMap[search.verification_status])
+    console.log(verificationStatusMap[search.verification_status]);
 
     let where = {};
     let include = [];

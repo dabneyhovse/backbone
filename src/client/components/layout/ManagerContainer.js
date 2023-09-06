@@ -4,17 +4,17 @@ import store from "../../store";
 function ManagerContainer({ reducer, serviceKey }) {
   useEffect(() => {
     // load in the reducer when component loads
-    console.log("adding", serviceKey)
+    console.log("adding", serviceKey);
     store.reducerManager.add(serviceKey, reducer);
     return () => {
-      console.log("removing", serviceKey)
+      console.log("removing", serviceKey);
       // unload the reducer
       store.reducerManager.remove(serviceKey);
     };
   }, []);
 
   // nothing to render, this is just for logic
-  return <></>
+  return <></>;
 
   // debug
   // return <div>{serviceKey} manager</div>;

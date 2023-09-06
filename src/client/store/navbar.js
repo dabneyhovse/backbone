@@ -43,7 +43,7 @@ export const defaultNav = () => {
 
 // load service info from /services json files
 const loadServices = () => {
-  let allServices = serviceConfigs
+  let allServices = serviceConfigs;
 
   allServices.sort((a, b) =>
     a.dropdownItemPosition < b.dropdownItemPosition ? 1 : -1

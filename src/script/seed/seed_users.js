@@ -27,9 +27,9 @@ async function load_and_run() {
   async function seed_users() {
     console.log("Seeding User 1");
     await User.create({
-      firstName: "Nick",
-      lastName: "Jasinski",
-      username: "njasi",
+      firstName: "Test",
+      lastName: "User",
+      username: "testuser",
       telegram_id: "569239019",
       isAdmin: true,
       password: "password",

@@ -185,7 +185,7 @@ function Navdarb() {
             <Nav className="transparent">
               {navItemToReact(navbar.links, user.authLevel)}
               <NavDropdown
-                drop = "start"
+                drop="start"
                 className="icon"
                 title={<FaUserCircle size="1.5em" />}
                 id="collasible-nav-dropdown"

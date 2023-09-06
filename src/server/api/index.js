@@ -22,7 +22,7 @@ function attachServices(apiRouter) {
    *
    * kinda cursed but i dont want to fix it yet srry
    */
-  const { serviceConfigs} = require("../../services");
+  const { serviceConfigs } = require("../../services");
   const allServices = serviceConfigs;
 
   // TODO: possibly differientate between Express and Api in the future
