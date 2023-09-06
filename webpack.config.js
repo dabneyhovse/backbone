@@ -70,6 +70,7 @@ module.exports = {
             // Except for the local services 
             /service-example/,
             /service-frotator/,
+            /service-gallery/,
           ]
         },
         // include: "/node_modules/service-example/",
