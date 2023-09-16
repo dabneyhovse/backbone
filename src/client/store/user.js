@@ -167,6 +167,7 @@ export const updateUser = (userData) => async (dispatch, getState) => {
 export const logout = () => async (dispatch) => {
   try {
     await axios.post("/auth/logout");
+    history.push("/");
     dispatch(removeUser());
   } catch (err) {
     toast.error("There was an error logging out", {
