@@ -32,7 +32,7 @@ import DarbAvatarEditor from "./DarbAvatarEditor";
 import Affiliation from "./Affiliation";
 import { updateUser } from "../../store/user";
 
-const EDITABLE = ["firstName", "lastName", "uuid", "phone", "room", "bio"];
+const EDITABLE = ["username", "firstName", "lastName", "uuid", "phone", "room", "bio"];
 const PROFILE = ["bio", "room"];
 
 const renderTooltip = (text) => (props) =>
@@ -180,6 +180,22 @@ function ProfileWall() {
                       <MDBCardText>
                         <strong>Public Information</strong> <br /> (other users
                         will be able to see the below information)
+                      </MDBCardText>
+                    </MDBCol>
+                  </MDBRow>
+                  <hr />
+                  <MDBRow>
+                    <MDBCol sm="3">
+                      <MDBCardText>Username</MDBCardText>
+                    </MDBCol>
+                    <MDBCol sm="9">
+                      <MDBCardText className="text-muted">
+                        <MDBInput
+                          type="text"
+                          name="username"
+                          value={user.username}
+                          onChange={handleChange}
+                        />
                       </MDBCardText>
                     </MDBCol>
                   </MDBRow>
