@@ -1,5 +1,100 @@
 [
   {
+    "src": "./resources/images/carousel/darb_lizard.jpg",
+    "thumbnail": "./resources/images/carousel/darb_lizard.jpg",
+    "caption": "House Y"
+  },
+  {
+    "src": "./resources/images/carousel/drag_show.jpg",
+    "thumbnail": "./resources/images/carousel/drag_show.jpg",
+    "caption": ""
+  },
+  {
+    "src": "./resources/images/carousel/grilling.jpg",
+    "thumbnail": "./resources/images/carousel/grilling.jpg",
+    "caption": "grilling"
+  },
+  {
+    "src": "./resources/images/carousel/inflatables.jpg",
+    "thumbnail": "./resources/images/carousel/inflatables.jpg",
+    "caption": ""
+  },
+  {
+    "src": "./resources/images/carousel/interhouse_2.jpg",
+    "thumbnail": "./resources/images/carousel/interhouse_2.jpg",
+    "caption": "We made a jellyfish."
+  },
+  {
+    "src": "./resources/images/carousel/interhouse_jellyfish1.jpg",
+    "thumbnail": "./resources/images/carousel/interhouse_jellyfish1.jpg",
+    "caption": "We are very proud of it."
+  },
+  {
+    "src": "./resources/images/carousel/interhouse_jellyfish2.jpg",
+    "thumbnail": "./resources/images/carousel/interhouse_jellyfish2.jpg",
+    "caption": "very"
+  },
+  {
+    "src": "./resources/images/carousel/interhouse_jellyfish3.jpg",
+    "thumbnail": "./resources/images/carousel/interhouse_jellyfish3.jpg",
+    "caption": "proud"
+  },
+  {
+    "src": "./resources/images/carousel/jtree.jpg",
+    "thumbnail": "./resources/images/carousel/jtree.jpg",
+    "caption": "Hiking is a tripping hazard."
+  },
+  {
+    "src": "./resources/images/carousel/miniature_painting.jpg",
+    "thumbnail": "./resources/images/carousel/miniature_painting.jpg",
+    "caption": "I bet you missed the amogus"
+  },
+  {
+    "src": "./resources/images/carousel/mudhuts.jpg",
+    "thumbnail": "./resources/images/carousel/mudhuts.jpg",
+    "caption": "MUD HUTS!!!"
+  },
+  {
+    "src": "./resources/images/carousel/nixon.jpg",
+    "thumbnail": "./resources/images/carousel/nixon.jpg",
+    "caption": "His middle name is 'Milhous'."
+  },
+  {
+    "src": "./resources/images/carousel/ppt_karaoke_cat.jpg",
+    "thumbnail": "./resources/images/carousel/ppt_karaoke_cat.jpg",
+    "caption": "nyah"
+  },
+  {
+    "src": "./resources/images/carousel/renaissance.jpg",
+    "thumbnail": "./resources/images/carousel/renaissance.jpg",
+    "caption": "There was ONE rule!"
+  },
+  {
+    "src": "./resources/images/carousel/space_attorney.jpg",
+    "thumbnail": "./resources/images/carousel/space_attorney.jpg",
+    "caption": ""
+  },
+  {
+    "src": "./resources/images/carousel/sus_egg.jpg",
+    "thumbnail": "./resources/images/carousel/sus_egg.jpg",
+    "caption": "(it survived)"
+  },
+  {
+    "src": "./resources/images/carousel/sus_tiles.jpg",
+    "thumbnail": "./resources/images/carousel/sus_tiles.jpg",
+    "caption": "I wonder who's in there"
+  },
+  {
+    "src": "./resources/images/carousel/tomas_fish.jpg",
+    "thumbnail": "./resources/images/carousel/tomas_fish.jpg",
+    "caption": "he will be missed"
+  },
+  {
+    "src": "./resources/images/carousel/woodworking.jpg",
+    "thumbnail": "./resources/images/carousel/woodworking.jpg",
+    "caption": "Darbs should not be trusted near power tools."
+  },
+  {
     "src": "./resources/images/carousel/bean_bag.jpg",
     "thumbnail": "./resources/images/carousel/bean_bag.jpg",
     "caption": "Forbidden cheese is stored in the Bean Bag."
