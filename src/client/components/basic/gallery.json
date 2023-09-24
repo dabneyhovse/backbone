@@ -20,8 +20,8 @@
     "caption": ""
   },
   {
-    "src": "./resources/images/carousel/interhouse_2.jpg",
-    "thumbnail": "./resources/images/carousel/interhouse_2.jpg",
+    "src": "./resources/images/carousel/interhouse_2.JPG",
+    "thumbnail": "./resources/images/carousel/interhouse_2.JPG",
     "caption": "We made a jellyfish."
   },
   {
@@ -35,8 +35,8 @@
     "caption": "very"
   },
   {
-    "src": "./resources/images/carousel/interhouse_jellyfish3.jpg",
-    "thumbnail": "./resources/images/carousel/interhouse_jellyfish3.jpg",
+    "src": "./resources/images/carousel/interhouse_jellyfish3.JPG",
+    "thumbnail": "./resources/images/carousel/interhouse_jellyfish3.JPG",
     "caption": "proud"
   },
   {
@@ -68,11 +68,6 @@
     "src": "./resources/images/carousel/renaissance.jpg",
     "thumbnail": "./resources/images/carousel/renaissance.jpg",
     "caption": "There was ONE rule!"
-  },
-  {
-    "src": "./resources/images/carousel/space_attorney.jpg",
-    "thumbnail": "./resources/images/carousel/space_attorney.jpg",
-    "caption": ""
   },
   {
     "src": "./resources/images/carousel/sus_egg.jpg",
