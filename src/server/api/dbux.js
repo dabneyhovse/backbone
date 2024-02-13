@@ -24,7 +24,6 @@ router.get("/", hasApiKey("dbux-get"), async (req, res, next) => {
     // get user either with uid or telegram id
     if (!!req.query.user_id) {
       user_id = parseInt(req.query.user_id);
-      console.log(user_id);
       user = await User.findByPk(user_id);
     } else if (!!req.query.telegram_id) {
       user = null;
@@ -113,7 +112,7 @@ router.put("/remove", hasApiKey("dbux-remove"), async (req, res, next) => {
 });
 
 /**
- * PUT /api/dbux/update
+ * PUT /api/dbux
  * update dbux in a user account
  *
  * takes user_id or telegram_id and updates the amount of
@@ -136,7 +135,7 @@ router.put("/remove", hasApiKey("dbux-remove"), async (req, res, next) => {
  *  500 if insufficient dbux or other error
  *  200 on success & returns new user bal
  */
-router.put("/update", hasApiKey("dbux-update"), async (req, res, next) => {
+router.put("/", hasApiKey("dbux-update"), async (req, res, next) => {
   try {
     let user;
 
