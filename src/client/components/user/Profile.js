@@ -164,7 +164,8 @@ function ProfileWall() {
                   <hr />
                   <MDBRow className="d-flex justify-content-between align-items-center p-3 pt-0">
                     <MDBCardText>
-                      {user.telegram_id == undefined ? (
+                      {user.telegram_id == undefined ||
+                      user.telegram_id == "" ? (
                         <MDBRow>
                           <MDBCol sm="12">
                             <MDBCardText>
