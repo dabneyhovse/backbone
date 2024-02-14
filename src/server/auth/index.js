@@ -131,6 +131,17 @@ router.post("/verify", async (req, res, next) => {
     if (ver) {
       email = ver.email;
       emailType = ver.emailType;
+
+      // if we are verifying a telegram id
+      if (emailType == "telegram"){
+        // email maps to telegram userid in this case lol
+        // TODO generalize the verification names
+        telegram_id = ver.email
+        userId = req.body.userId
+
+      }
+
+      // if we're doing a password reset
       if (emailType == "password") {
         const user = await User.findByPk(ver.userId);
 

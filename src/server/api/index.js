@@ -4,7 +4,6 @@
  *
  * Api index file
  *
- * // TODO: implement telegram bot for verification
  */
 
 const router = require("express").Router();
@@ -49,6 +48,7 @@ function attachServices(apiRouter) {
 router.use("/users", require("./users"));
 router.use("/affiliations", require("./affiliations"));
 router.use("/groups", require("./groups"));
+router.use("/telegram", require("./telegram"));
 // TODO: router.use("/bot", require("./bot"));
 
 // attach routes for services

@@ -131,21 +131,35 @@ function ProfileWall() {
               </MDBCard>
 
               <MDBCard className="mb-4">
-                <MDBCardBody className="p-0">
-                  <MDBRow className="d-flex justify-content-between align-items-center p-3">
-                    <MDBCol sm="3">
+                <MDBCardBody>
+                  <MDBRow className="d-flex justify-content-between align-items-left">
+                    <MDBCol sm="1">
                       <MDBIcon
                         fab
                         icon="telegram"
-                        style={{ color: "#3b5998" }}
-                        size="lg"
+                        style={{ color: "#3b5998", height: "100%" }}
+                        size="2x"
                       />
                     </MDBCol>
-                    <MDBCol sm="9">
+
+                    <MDBCol sm="11">
                       <MDBCardText>
-                        Telegram Integration Ooming "Soon"™
+                        <strong>Telegram Integration</strong> <br /> (for
+                        integration with telegram bots)
                       </MDBCardText>
                     </MDBCol>
+                  </MDBRow>
+                  <hr />
+                  <MDBRow className="d-flex justify-content-between align-items-center p-3 pt-0">
+                    <MDBCardText>
+                      {user.telegram_id == undefined ? (
+                        <a href="https://t.me/DabneyHouseBot">
+                          Link your telegram account
+                        </a>
+                      ) : (
+                        "Account already linked!"
+                      )}
+                    </MDBCardText>
                   </MDBRow>
                 </MDBCardBody>
               </MDBCard>
