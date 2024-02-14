@@ -4,18 +4,31 @@
 // TODO overall rate limit?
 
 const { Telegraf } = require("telegraf");
-const { Verification } = require("../../db/models");
+const { Verification, User } = require("../../db/models");
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_KEY);
 module.exports = bot;
 
 // Placeholder start command
-bot.command("start", (ctx) =>
+bot.command("start", async (ctx) => {
   // TODO: check if user already exists?
+  userId = ctx.from.id;
+  user = await User.findOne({
+    where: {
+      telegram_id: `${userId}`,
+    },
+  });
+
+  if (!!user) {
+    ctx.reply(
+      "This telegram account is already linked to a Dabney account... This bot doesnt do anything else right now lol."
+    );
+    return;
+  }
   ctx.reply(
     "Hello there, to link your telegram account to your Dabney™ account please use /link."
-  )
-);
+  );
+});
 
 // Link telegram_id into the user
 bot.command("link", async (ctx) => {
@@ -36,7 +49,19 @@ bot.command("link", async (ctx) => {
     );
   }
 
-  // TODO check if user is already verified
+  // check to see if already linked
+  user = await User.findOne({
+    where: {
+      telegram_id: `${userId}`,
+    },
+  });
+
+  if (!!user) {
+    ctx.reply("This telegram account is already linked to a Dabney account.");
+    return;
+  }
+
+  // check if there is aready a ver
   ver = await Verification.findOne({
     where: {
       emailType: "telegram",
@@ -47,7 +72,6 @@ bot.command("link", async (ctx) => {
   // basic rate limit
   if (ver) {
     wait = Date.now() - ver.createdAt;
-    console.log(wait);
     // ms -> seconds for a full min
     if (wait < 60 * 1000) {
       ctx.reply(
