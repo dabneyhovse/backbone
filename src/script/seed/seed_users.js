@@ -34,6 +34,14 @@ async function load_and_run() {
       isAdmin: true,
       password: "password",
     });
+    console.log("Seeding User 2");
+    await User.create({
+      firstName: "Test2",
+      lastName: "User2",
+      username: "testuser2",
+      isAdmin: false,
+      password: "password",
+    });
   }
   await seed_users();
 }

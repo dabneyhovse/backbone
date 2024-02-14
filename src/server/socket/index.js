@@ -4,8 +4,8 @@ module.exports = (io) => {
 
     socket.on("disconnect", () => {});
 
-    socket.on("norman", (msg) => {
-      socket.broadcast.emit("serverNorman", msg);
+    socket.on("spam", (msg) => {
+      socket.broadcast.emit("serverSpam", msg);
     });
   });
 };

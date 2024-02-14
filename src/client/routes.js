@@ -201,7 +201,7 @@ function SiteRoutes() {
                 serviceKey={"frotator"}
               />
             }
-            requiredAuth={4}
+            requiredAuth={3}
             authLevel={authLevel}
             lazyElement={<Frotator />}
           />
