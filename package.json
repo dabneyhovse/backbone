@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.5",
-    "@sendgrid/mail": "^7.7.0",
+    "@sendgrid/mail": "^8.1.0",
     "axios": "^0.27.2",
     "bootstrap": "^5.2.0",
     "compression": "^1.7.4",
@@ -80,6 +80,7 @@
     "redux-thunk": "^2.4.1",
     "sequelize": "^6.21.4",
     "socket.io": "^4.5.2",
-    "socket.io-client": "^4.5.2"
+    "socket.io-client": "^4.5.2",
+    "telegraf": "^4.15.3"
   }
 }

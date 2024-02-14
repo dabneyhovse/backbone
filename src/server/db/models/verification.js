@@ -16,7 +16,7 @@ const Verification = db.define("verification", {
     type: Sequelize.STRING,
   },
   emailType: {
-    type: Sequelize.ENUM(["personal", "caltech", "password"]),
+    type: Sequelize.ENUM(["personal", "caltech", "password", "telegram"]),
   },
   email: {
     type: Sequelize.STRING,
@@ -41,12 +41,17 @@ const createHash = async (ver, options) => {
   }
 
   ver.hash = hash;
+  if (ver.emailType == "telegram") {
+    // chop it down for telegram only
+    ver.hash = ver.hash.substring(0, 6);
+    return;
+  }
 
   if (ver.emailType == "password") {
     const res = await sendEmail(
       ver.email,
       "Dabney Hovse Password Reset",
-      `Hello, <br>A password reset has been requested for your account on dabney.caltech.edu. <br> If this was not you or a mistake, please just ignore this email. <br>If it was not a mistake click this link to request a new password: <a href = "https://dabney.caltech.edu/verify#${hash}">https://dabney.caltech.edu/verify#${hash}</a>.`
+      `Hello, <br>A password reset has been requested for your account on dabney.caltech.edu. <br> If this was not you or was a mistake, please just ignore this email. <br>If it was not a mistake click this link to request a new password: <a href = "https://dabney.caltech.edu/verify#${hash}">https://dabney.caltech.edu/verify#${hash}</a>.`
     );
     return;
   }

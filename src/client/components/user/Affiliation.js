@@ -81,10 +81,10 @@ function Affiliation() {
   });
 
   return (
-    <Accordion className="mt-3">
-      <Accordion.Item eventKey="0">
+    <Accordion defaultActiveKey="1" className="mt-3">
+      <Accordion.Item>
         <Accordion.Header>Select House Membership</Accordion.Header>
-        <Accordion.Body eventKey="0">
+        <Accordion.Body>
           <Card.Body>
             {Object.keys(labeledAffOptions).map((name) => {
               const labelVer =
