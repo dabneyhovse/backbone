@@ -238,14 +238,12 @@ function ProfileWall() {
                       <MDBCardText>First Name</MDBCardText>
                     </MDBCol>
                     <MDBCol sm="9">
-                      <MDBCardText className="text-muted">
-                        <MDBInput
-                          type="text"
-                          name="firstName"
-                          value={user.firstName}
-                          onChange={handleChange}
-                        />
-                      </MDBCardText>
+                      <MDBInput
+                        type="text"
+                        name="firstName"
+                        value={user.firstName}
+                        onChange={handleChange}
+                      />
                     </MDBCol>
                   </MDBRow>
                   <hr />
@@ -254,14 +252,12 @@ function ProfileWall() {
                       <MDBCardText>Last Name</MDBCardText>
                     </MDBCol>
                     <MDBCol sm="9">
-                      <MDBCardText className="text-muted">
-                        <MDBInput
-                          type="text"
-                          name="lastName"
-                          value={user.lastName}
-                          onChange={handleChange}
-                        />
-                      </MDBCardText>
+                      <MDBInput
+                        type="text"
+                        name="lastName"
+                        value={user.lastName}
+                        onChange={handleChange}
+                      />
                     </MDBCol>
                   </MDBRow>
                   <hr />
@@ -270,15 +266,13 @@ function ProfileWall() {
                       <MDBCardText>Bio</MDBCardText>
                     </MDBCol>
                     <MDBCol sm="9">
-                      <MDBCardText className="text-muted">
-                        <MDBTextArea
-                          rows={4}
-                          type="text"
-                          name="bio"
-                          value={user.profile.bio}
-                          onChange={handleChange}
-                        />
-                      </MDBCardText>
+                      <MDBTextArea
+                        rows={4}
+                        type="text"
+                        name="bio"
+                        value={user.profile.bio}
+                        onChange={handleChange}
+                      />
                     </MDBCol>
                   </MDBRow>
                   <hr />
@@ -287,19 +281,16 @@ function ProfileWall() {
                       <MDBCardText>Room No.</MDBCardText>
                     </MDBCol>
                     <MDBCol sm="9">
-                      <MDBCardText className="text-muted">
-                        <MDBInput
-                          type="text"
-                          name="room"
-                          value={user.profile.room}
-                          onChange={handleChange}
-                        />
-                      </MDBCardText>
+                      <MDBInput
+                        type="text"
+                        name="room"
+                        value={user.profile.room}
+                        onChange={handleChange}
+                      />
                     </MDBCol>
                   </MDBRow>
                 </MDBCardBody>
               </MDBCard>
-
               <MDBCard className="mb-4">
                 <MDBCardBody>
                   <MDBRow>
@@ -351,14 +342,12 @@ function ProfileWall() {
                       </MDBCardText>
                     </MDBCol>
                     <MDBCol sm="9">
-                      <MDBCardText className="text-muted">
-                        <MDBInput
-                          type="text"
-                          name="uuid"
-                          value={user.uuid}
-                          onChange={handleChange}
-                        />
-                      </MDBCardText>
+                      <MDBInput
+                        type="text"
+                        name="uuid"
+                        value={user.uuid}
+                        onChange={handleChange}
+                      />
                     </MDBCol>
                   </MDBRow>
                   <hr />
@@ -380,14 +369,12 @@ function ProfileWall() {
                       </MDBCardText>
                     </MDBCol>
                     <MDBCol sm="9">
-                      <MDBCardText className="text-muted">
-                        <MDBInput
-                          type="text"
-                          name="phone"
-                          value={user.phone}
-                          onChange={handleChange}
-                        />
-                      </MDBCardText>
+                      <MDBInput
+                        type="text"
+                        name="phone"
+                        value={user.phone}
+                        onChange={handleChange}
+                      />
                     </MDBCol>
                   </MDBRow>
                 </MDBCardBody>
