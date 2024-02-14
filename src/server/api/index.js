@@ -48,6 +48,7 @@ function attachServices(apiRouter) {
 router.use("/users", require("./users"));
 router.use("/affiliations", require("./affiliations"));
 router.use("/groups", require("./groups"));
+router.use("/dbux", require("./dbux"));
 router.use("/telegram", require("./telegram"));
 
 // attach routes for services
