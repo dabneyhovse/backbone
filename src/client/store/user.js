@@ -119,6 +119,34 @@ export const auth = (
   };
 };
 
+export const linkTelegram = (hash) => async (dispatch, getState) => {
+  try {
+    if (hash.length !== 6) {
+      throw "Improper verification code, it must be 6 characters long.";
+    }
+    let res;
+    try {
+      res = await axios.post("/auth/verify", {
+        hash,
+      });
+    } catch (error) {
+      throw error.response.data;
+    }
+
+    if (res.status == 201) {
+      // grab new user
+      dispatch(me());
+      toast.success("Successfully verifed your telegram account.");
+    } else {
+      throw "There was an error linking your telegram account, please make sure the code is correct";
+    }
+  } catch (err) {
+    toast.error(err, {
+      autoClose: AUTH_ERR_TOAST_TIME,
+    });
+  }
+};
+
 export const passwordReset = (personalEmail) => async (dispatch, getState) => {
   try {
     const res = await axios.post("/auth/password-reset", {

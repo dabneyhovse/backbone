@@ -133,16 +133,26 @@ router.post("/verify", async (req, res, next) => {
       emailType = ver.emailType;
 
       // if we are verifying a telegram id
-      if (emailType == "telegram"){
+      if (emailType == "telegram") {
+        // gotta be logged in to link telegram
+        if (!req.user) {
+          res.sendStatus(403);
+          return;
+        }
+
         // email maps to telegram userid in this case lol
         // TODO generalize the verification names
-        telegram_id = ver.email
-        userId = req.body.userId
+        telegram_id = ver.email;
 
-      }
+        const user = await User.findByPk(req.user.id);
+        user.telegram_id = telegram_id;
+        await user.save();
+        await ver.destroy();
 
-      // if we're doing a password reset
-      if (emailType == "password") {
+        res.sendStatus(201);
+        return;
+      } else if (emailType == "password") {
+        // if we're doing a password reset
         const user = await User.findByPk(ver.userId);
 
         hash = crypto
@@ -165,7 +175,9 @@ router.post("/verify", async (req, res, next) => {
       await ver.destroy();
       res.status(200).json({ email, emailType });
     } else {
-      res.sendStatus(404);
+      err = new Error("Verification code not found.");
+      err.status = 500;
+      throw err;
     }
 
     res.sendStatus(202);

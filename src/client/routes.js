@@ -68,8 +68,6 @@ function SiteRoutes() {
     authLevel: state.user.data.authLevel ? state.user.data.authLevel : 0,
   }));
 
-  console.log("oof");
-
   return (
     <SlideRoutes>
       <Route

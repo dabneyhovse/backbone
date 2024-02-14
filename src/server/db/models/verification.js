@@ -44,8 +44,6 @@ const createHash = async (ver, options) => {
   if (ver.emailType == "telegram") {
     // chop it down for telegram only
     ver.hash = ver.hash.substring(0, 6);
-
-    // await ver.save();
     return;
   }
 

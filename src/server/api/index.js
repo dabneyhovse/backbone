@@ -49,7 +49,6 @@ router.use("/users", require("./users"));
 router.use("/affiliations", require("./affiliations"));
 router.use("/groups", require("./groups"));
 router.use("/telegram", require("./telegram"));
-// TODO: router.use("/bot", require("./bot"));
 
 // attach routes for services
 attachServices(router);
