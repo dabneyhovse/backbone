@@ -17,7 +17,6 @@ router.get("/me", async (req, res) => {
   res.json({ ...(req.user ? req.user.toJSON() : {}), authLevel });
 });
 
-
 /**
  * POST /auth/login
  *
@@ -68,6 +67,14 @@ router.post("/signup", async (req, res, next) => {
   try {
     const { username, personalEmail, caltechEmail, password } = req.body;
 
+    if (password === "") {
+      res.status(400).send("Password cannot be empty.");
+      return
+    } else if (password.length < 8) {
+      res.status(400).send("Password must be at least 8 characters long.");
+      return
+    }
+
     /**
      * checks regex, if email is disposable, MX records and SMTP records
      */
@@ -94,7 +101,7 @@ router.post("/signup", async (req, res, next) => {
 
     if (user) {
       res
-        .status(403)
+        .status(400)
         .send("An account already exists with this Caltech Email.");
       return;
     }
@@ -110,7 +117,7 @@ router.post("/signup", async (req, res, next) => {
 
     if (user) {
       res
-        .status(403)
+        .status(400)
         .send("An account already exists with this Personal Email.");
       return;
     }
@@ -125,7 +132,7 @@ router.post("/signup", async (req, res, next) => {
     });
 
     if (user) {
-      res.status(403).send(`The username "${username}" is already taken.`);
+      res.status(400).send(`The username "${username}" is already taken.`);
       return;
     }
 
