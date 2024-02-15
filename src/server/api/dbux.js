@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { User } = require("../db/models");
-const { hasApiKey } = require("./middleware");
+const { hasApiScope } = require("module-middleware");
 module.exports = router;
 
 /**
@@ -17,7 +17,7 @@ module.exports = router;
  *  404 if no user is found
  *  200 on success & returns user bal
  */
-router.get("/", hasApiKey("dbux-get"), async (req, res, next) => {
+router.get("/", hasApiScope("dbux-get"), async (req, res, next) => {
   try {
     let user;
 
@@ -71,7 +71,7 @@ router.get("/", hasApiKey("dbux-get"), async (req, res, next) => {
  *  500 if insufficient dbux or other error
  *  200 on success & returns new user bal
  */
-router.put("/remove", hasApiKey("dbux-remove"), async (req, res, next) => {
+router.put("/remove", hasApiScope("dbux-remove"), async (req, res, next) => {
   try {
     let user;
 
@@ -143,7 +143,7 @@ router.put("/remove", hasApiKey("dbux-remove"), async (req, res, next) => {
  *  500 if insufficient dbux or other error
  *  200 on success & returns new user bal
  */
-router.put("/", hasApiKey("dbux-update"), async (req, res, next) => {
+router.put("/", hasApiScope("dbux-update"), async (req, res, next) => {
   try {
     let user;
 

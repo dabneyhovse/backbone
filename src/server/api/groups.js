@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { User, Affiliation, UserGroup, Group } = require("../db/models");
-const { isLoggedIn, isAdmin } = require("./middleware");
+const { isLoggedIn, isAdmin } = require("module-middleware");
 module.exports = router;
 
 /**

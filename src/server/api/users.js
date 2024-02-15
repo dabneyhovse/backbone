@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { Op, Sequelize } = require("sequelize");
 const { User, Affiliation, Verification, Group } = require("../db/models");
-const { isAdmin, isLoggedIn, upload } = require("./middleware");
+const { isAdmin, isLoggedIn, upload, LOGIC } = require("module-middleware");
 const fs = require("fs");
 const imageDataURI = require("image-data-uri");
 module.exports = router;
@@ -44,6 +44,7 @@ const verificationStatusMap = {
 // TODO remove
 const util = require("util");
 const UserGroup = require("../db/models/userGroup");
+
 /**
  *  GET all users (api/users)
  */
@@ -183,34 +184,24 @@ router.get("/admin/:userId", isAdmin, async (req, res, next) => {
 /**
  * just a filtered version of the above
  */
-router.get("/:userId", isLoggedIn, async (req, res, next) => {
-  try {
-    let user = await User.findByPk(req.params.userId, {
-      attributes: ["username", "firstName", "lastName", "profile"],
-      include: [
-        { model: Affiliation, attributes: ["house", "status", "verified"] },
-      ],
-    });
-    res.json(user);
-  } catch (err) {
-    next(err);
-  }
-});
 
-/**
- * GET user from telegram_id
- */
-router.get("/telegram/:telegramId", async (req, res, next) => {
-  try {
-    const user = User.findOne({
-      attributes: ["username"],
-      where: { telegram_id: req.params.telegramId },
-    });
-    res.json(user).sendStatus(200);
-  } catch (e) {
-    next(e);
+router.get(
+  "/:userId",
+  LOGIC.combineOr(LOGIC.isLoggedIn, LOGIC.isLocalRequest),
+  async (req, res, next) => {
+    try {
+      let user = await User.findByPk(req.params.userId, {
+        attributes: ["username", "firstName", "lastName", "profile"],
+        include: [
+          { model: Affiliation, attributes: ["house", "status", "verified"] },
+        ],
+      });
+      res.json(user);
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
 
 /**
  *  PUT single user (api/users/:id)

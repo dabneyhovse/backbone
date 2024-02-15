@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { User, Scope, Key } = require("../db/models");
-const { isAdmin } = require("./middleware");
+const { isAdmin } = require("module-middleware");
 module.exports = router;
 
 /**
@@ -35,7 +35,7 @@ router.get("/", isAdmin, async (req, res, next) => {
  *    description of the key
  * req.body.scopes
  *    array of scope ids
- * 
+ *
  */
 
 router.post("/", isAdmin, async (req, res, next) => {
