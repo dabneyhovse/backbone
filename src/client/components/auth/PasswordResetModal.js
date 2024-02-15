@@ -9,3 +9,9 @@
 
 // post the password to a new endpoint to reset password /auth/reset or smth
 // validate the password client and server side
+
+
+// other things to have on the form:
+// checkbox where people have to say they'll use a password manager
+// checkbox consenting to spending x dbux for the password reset lol
+//   - show dbux balance

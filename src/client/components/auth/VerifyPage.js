@@ -22,9 +22,12 @@ function VerifyPage() {
     dispatch(verifyUser(location.hash));
   }, []);
 
+  // TODO: include your password reset modal component below
+  // trigger the popup (make a new store or add onto one) after checking the hash in src/client/store/user.js
+
   /**
    * yeah i kinda stole the classes from the other thing
-   * this is still "Auth" to so i dont feel too bad abt it
+   * this is still "Auth" too so I dont feel too bad abt it
    */
   return (
     <div className="Auth-form-container dark">

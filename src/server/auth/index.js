@@ -295,7 +295,8 @@ router.post("/password-reset", async (req, res, next) => {
   }
 });
 
-// TODO make new route for posting the password reset itself 
+// TODO make new route for posting the password reset itself
+// charge the dbux here, and if they dont have enough return an error without resetting password
 
 /**
  *  requiredAuth values:
