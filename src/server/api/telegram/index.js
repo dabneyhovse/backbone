@@ -59,10 +59,10 @@ router.get("/user", hasApiKey("telegram-user"), async (req, res, next) => {
     });
     if (user == null) {
       err = new Error("User not found");
-      err.status = 404
-      throw err
+      err.status = 404;
+      throw err;
     }
-    res.json();
+    res.json(user).status(200);
   } catch (error) {
     next(error);
   }
