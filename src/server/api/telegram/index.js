@@ -53,7 +53,7 @@ launchBot();
  */
 router.get("/user", hasApiKey("telegram-user"), async (req, res, next) => {
   try {
-    const user = await User.find({
+    const user = await User.findOne({
       where: { telegram_id: req.query.telegram_id },
       include: ["id", "firstName", "lastName", "username", "profile"],
     });
