@@ -14,7 +14,7 @@ const Scope = db.define("scope", {
   /**
    * name of the scope
    */
-  service: {
+  name: {
     type: Sequelize.STRING,
     unique: true,
     allowNull: false,

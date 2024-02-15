@@ -4,6 +4,11 @@ const Verification = require("./verification");
 const Affiliation = require("./affiliation");
 const Group = require("./group");
 const UserGroup = require("./userGroup");
+const Key = require("./key");
+const Scope = require("./scope");
+
+Key.belongsToMany(Scope, { through: "key-scopes" });
+Scope.belongsToMany(Key, { through: "key-scopes" });
 
 User.hasMany(Affiliation);
 Affiliation.belongsTo(User);

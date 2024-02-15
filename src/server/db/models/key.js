@@ -15,7 +15,7 @@ const Key = db.define("key", {
   /**
    * name of the service using the key
    */
-  service: {
+  name: {
     type: Sequelize.STRING,
     unique: true,
     allowNull: false,
@@ -51,7 +51,7 @@ const Key = db.define("key", {
 });
 
 Key.prototype.correctKey = function (candidateKey) {
-  return User.encryptKey(candidateKey, this.salt()) === this.key();
+  return Key.encryptKey(candidateKey, this.salt()) === this.value();
 };
 
 Key.generateSalt = function () {
@@ -69,7 +69,7 @@ Key.encryptKey = function (plainText, salt) {
 const setSaltAndKey = (key) => {
   if (key.changed("value")) {
     key.salt = Key.generateSalt();
-    key.password = Key.encryptPassword(key.password(), key.salt());
+    key.value = Key.encryptKey(key.value(), key.salt());
   }
 };
 
