@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const bot = require("./bot");
-const { User } = require("../db/models");
+const { User } = require("../../db/models");
 const { hasApiKey } = require("../middleware");
 module.exports = router;
 
