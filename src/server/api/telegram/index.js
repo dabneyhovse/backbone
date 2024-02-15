@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const bot = require("./bot");
 // const { User } = require("../db/models");
+const { hasApiKey } = require("../middleware");
 module.exports = router;
 
 /**
@@ -29,23 +30,40 @@ async function launchBot() {
 launchBot();
 
 /**
- * check if telegram id is darb
- *
- * TODO: add api key check func
- *
- *
  * GET /api/telegram/user?telegram_id={}
+ *
+ * get basic darb info by their telegram_id
+ *
+ *
+ * req.query.telegram_id
+ *  the telegram id
+ *
+ * req.query.api_key
+ *  the api key of the user
+ *
+ * returns json
+ * {
+ *   id
+ *   firstName,
+ *   lastName,
+ *   username,
+ *   profile : { photo, room, bio }
+ * }
+ *
  */
-// router.get("/user", async (req, res, next) => {
-//   try {
-//     const user = await User.find({
-//       where: { telegram_id: req.query.telegram_id },
-//     });
-//     if( user == null){
-//       err = new Error("User not found")
-//     }
-//     res.status(200).json();
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+router.get("/user", hasApiKey("telegram-user"), async (req, res, next) => {
+  try {
+    const user = await User.findOne({
+      where: { telegram_id: req.query.telegram_id },
+      include: ["id", "firstName", "lastName", "username", "profile"],
+    });
+    if (user == null) {
+      err = new Error("User not found");
+      err.status = 404;
+      throw err;
+    }
+    res.json(user).status(200);
+  } catch (error) {
+    next(error);
+  }
+});
