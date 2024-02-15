@@ -235,6 +235,8 @@ export const verifyUser = (hash) => async (dispatch, getState) => {
         );
         goHome(dispatch);
       } else if (res.status == 201) {
+        // TODO change this so that it launches the user into the PassworResetModal where they can
+        // choose a password (look at how the AuthModal pops up)
         toast.success("Your password was reset, please check your email.");
         goHome(dispatch);
       } else {

@@ -7,6 +7,27 @@ const crypto = require("crypto");
 
 module.exports = router;
 
+/**
+ * GET /auth/me
+ *
+ * returns the currently logged in user
+ */
+router.get("/me", async (req, res) => {
+  const authLevel = await calculateAuthLevel(req.user);
+  res.json({ ...(req.user ? req.user.toJSON() : {}), authLevel });
+});
+
+
+/**
+ * POST /auth/login
+ *
+ * endpoint to allow logins
+ *
+ * req.body.username:
+ *    username of the user logging in
+ * req.body.password:
+ *    password of the user logging in
+ */
 router.post("/login", async (req, res, next) => {
   try {
     const { username, password } = req.body;
@@ -14,7 +35,7 @@ router.post("/login", async (req, res, next) => {
     const user = await User.findOne({ where: { username } });
     if (!user) {
       res.status(401).send("Wrong username and/or password");
-    } else if (!user.correctPassword(req.body.password)) {
+    } else if (!user.correctPassword(password)) {
       res.status(401).send("Wrong username and/or password");
     } else {
       const authLevel = await calculateAuthLevel(user);
@@ -27,6 +48,22 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
+/**
+ * POST /auth/signup
+ *
+ * allow the creation of new users with the given information,
+ * triggers email verification emails in the user create hook (/server/db/models/user.js)
+ *
+ * req.body.username:
+ *    the new username, some people want to restrict it
+ *    to alpha numeric but thats no fun
+ * req.body.personalEmail:
+ *    users personal email
+ * req.body.caltechEmail:
+ *    @caltech.edu email
+ * req.body.password:
+ *    the password the user wants to use
+ */
 router.post("/signup", async (req, res, next) => {
   try {
     const { username, personalEmail, caltechEmail, password } = req.body;
@@ -114,6 +151,11 @@ router.post("/signup", async (req, res, next) => {
   }
 });
 
+/**
+ * POST /auth/logout
+ *
+ * destroys the user passport session and redirects the user home
+ */
 router.post("/logout", (req, res) => {
   try {
     req.logout(() => {
@@ -125,6 +167,10 @@ router.post("/logout", (req, res) => {
   }
 });
 
+/**
+ * POST /auth/verify
+ *
+ */
 router.post("/verify", async (req, res, next) => {
   try {
     let ver = await Verification.findOne({ where: { hash: req.body.hash } });
@@ -153,8 +199,19 @@ router.post("/verify", async (req, res, next) => {
         return;
       } else if (emailType == "password") {
         // if we're doing a password reset
+
+        // TODO allow the user to change their password to smth
+        // is funnier to me if they get punished for it though
+        // anyway make a different endpoint that takes
+        // - the new password
+        // - the verification code (or update some value here so u dont need it)
+        // make this endpoint send something different
+        // so client knows to display reset password modal instead
+        // of redirect to home like the other verification links
+
         const user = await User.findByPk(ver.userId);
 
+        // just generates a hash to use as their password lol
         hash = crypto
           .createHmac("sha256", process.env.HASH_SECRET)
           .update(`${Math.random()}`)
@@ -168,10 +225,14 @@ router.post("/verify", async (req, res, next) => {
           `Hello, ${user.username} your new password is ${hash}`
         );
 
+        // TODO either destroy it here or wait for later
         await ver.destroy();
         res.sendStatus(201);
         return;
       }
+
+      // destroy it, no need to update user as backbone checks for
+      // the verify objects when calculating auth level
       await ver.destroy();
       res.status(200).json({ email, emailType });
     } else {
@@ -186,6 +247,20 @@ router.post("/verify", async (req, res, next) => {
   }
 });
 
+/**
+ * POST /auth/password-reset
+ *
+ * For starting the password reset process,
+ * creates a verification instance in the db,
+ * which sends the user an email with a verification link
+ *
+ * deletes any old password verification entries
+ *
+ * req.body.personalEmail:
+ *    the personal email of the account to send the reset email to
+ *
+ *
+ */
 router.post("/password-reset", async (req, res, next) => {
   try {
     const user = await User.findOne({
@@ -220,6 +295,8 @@ router.post("/password-reset", async (req, res, next) => {
   }
 });
 
+// TODO make new route for posting the password reset itself 
+
 /**
  *  requiredAuth values:
  *    0.5 => need to verify
@@ -241,6 +318,7 @@ async function calculateAuthLevel(user) {
   if (!user) {
     return 0;
   } else {
+    // TODO just put an authlevel col in the user instead of .isAdmin, then comptroller can be a higher level lol
     if (user.isAdmin) {
       return 4;
     }
@@ -277,11 +355,3 @@ async function calculateAuthLevel(user) {
     }
   }
 }
-
-/**
- * returns the currently logged in user
- */
-router.get("/me", async (req, res) => {
-  const authLevel = await calculateAuthLevel(req.user);
-  res.json({ ...(req.user ? req.user.toJSON() : {}), authLevel });
-});
