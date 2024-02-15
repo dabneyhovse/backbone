@@ -11,8 +11,19 @@ const upload = multer({
   limits: { fieldSize: 25 * 1024 * 1024 },
 });
 
+// TODO remove these and use the module
+
+const isLocalRequest = (req, res, next) => {
+  // if local it should have the env var
+  if (req.query.local == process.env.LOCAL) {
+    next();
+  } else {
+    res.sendStatus(403);
+  }
+};
+
 const isLoggedIn = (req, res, next) => {
-  if (req.user || req.query.local == process.env.LOCAL) {
+  if (req.user) {
     next();
   } else {
     res.sendStatus(403);
@@ -34,7 +45,5 @@ const isNotLoggedIn = (req, res, next) => {
     res.sendStatus(403);
   }
 };
-
-
 
 module.exports = { isLoggedIn, isAdmin, isNotLoggedIn, upload };
