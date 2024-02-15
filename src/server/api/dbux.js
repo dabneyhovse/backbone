@@ -26,7 +26,11 @@ router.get("/", hasApiKey("dbux-get"), async (req, res, next) => {
       user_id = parseInt(req.query.user_id);
       user = await User.findByPk(user_id);
     } else if (!!req.query.telegram_id) {
-      user = null;
+      user = await User.findOne({
+        where: {
+          telegram_id: req.query.telegram_id,
+        },
+      });
     }
 
     // no user so 404
@@ -87,7 +91,11 @@ router.put("/remove", hasApiKey("dbux-remove"), async (req, res, next) => {
       user_id = parseInt(req.query.user_id);
       user = await User.findByPk(user_id);
     } else if (!!req.query.telegram_id) {
-      user = null;
+      user = await User.findOne({
+        where: {
+          telegram_id: req.query.telegram_id,
+        },
+      });
     }
 
     // no user so 404
@@ -151,7 +159,7 @@ router.put("/", hasApiKey("dbux-update"), async (req, res, next) => {
       user_id = parseInt(req.query.user_id);
       user = await User.findByPk(user_id);
     } else if (!!req.query.telegram_id) {
-      user = await User.find({
+      user = await User.findOne({
         where: {
           telegram_id: req.query.telegram_id,
         },
