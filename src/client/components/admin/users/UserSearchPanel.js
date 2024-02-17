@@ -102,9 +102,13 @@ function UserSearchPanel() {
                 <Form.Group>
                   <Form.Label>Sort By</Form.Label>
                   <Form.Select onChange={onChange} name="sort">
-                    <option value="1">Recently modified</option>
-                    <option value="2">New Users First</option>
-                    <option value="3">Old Users First</option>
+                    <option value="0">New Users First</option>
+                    <option value="1">Old Users First</option>
+                    <option value="2">Firstname A-Z</option>
+                    <option value="3">Firstname Z-A</option>
+                    <option value="4">Username A-Z</option>
+                    <option value="5">Username Z-A</option>
+                    <option value="6">Recently modified</option>
                   </Form.Select>
                 </Form.Group>
 

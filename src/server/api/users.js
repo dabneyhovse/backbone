@@ -18,13 +18,18 @@ const paginate = (page) => {
 };
 
 const sortMap = {
-  ["1"]: [
+  ["0"]: [["id", "DESC"]],
+  ["1"]: [["id", "ASC"]],
+  ["2"]: [["firstName", "ASC"]],
+  ["3"]: [["firstName", "DESC"]],
+  ["4"]: [["username", "ASC"]],
+  ["5"]: [["username", "DESC"]],
+  ["6"]: [
     [Sequelize.col("updatedAt"), "ASC"],
     ["id", "DESC"],
   ],
-  ["2"]: [["id", "DESC"]],
-  ["3"]: [["id", "ASC"]],
 };
+
 const houseMembershipMap = {
   ["0"]: "any",
   ["1"]: "dabney",
@@ -41,8 +46,7 @@ const verificationStatusMap = {
   ["2"]: true,
   ["3"]: false,
 };
-// TODO remove
-const util = require("util");
+
 const UserGroup = require("../db/models/userGroup");
 /**
  *  GET all users (api/users)
@@ -128,6 +132,11 @@ router.get("/", isAdmin, async (req, res, next) => {
       ];
     }
 
+    // smh there u go melissa
+    if (search.sort == undefined) {
+      search.sort = "0";
+    }
+
     let query = {
       ...paginate(Number(req.query.pageNum || 1)),
       order: sortMap[search.sort],
@@ -144,9 +153,9 @@ router.get("/", isAdmin, async (req, res, next) => {
     };
     const util = require("util");
 
-    console.log(
-      util.inspect(query, { showHidden: false, depth: null, colors: true })
-    );
+    // console.log(
+    //   util.inspect(query, { showHidden: false, depth: null, colors: true })
+    // );
     let allUsers;
     try {
       allUsers = await User.findAndCountAll(query);
