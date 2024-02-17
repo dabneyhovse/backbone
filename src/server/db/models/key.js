@@ -10,6 +10,8 @@
 
 const Sequelize = require("sequelize");
 const db = require("../db");
+const Scope = require("./scope");
+const crypto = require("crypto");
 
 const Key = db.define("key", {
   /**
@@ -32,49 +34,60 @@ const Key = db.define("key", {
   /**
    * the api key (hashed)
    */
-  value: {
+  hash: {
     type: Sequelize.STRING,
     get() {
-      return () => this.getDataValue("value");
+      return () => this.getDataValue("hash");
     },
+    unique: true,
   },
 
   /**
-   * used to decode value
+   * the api key (unhashed), set to null after a few minutes of existing
    */
-  salt: {
+  unhashed: {
     type: Sequelize.STRING,
-    get() {
-      return () => this.getDataValue("salt");
-    },
   },
 });
 
-Key.prototype.correctKey = function (candidateKey) {
-  return Key.encryptKey(candidateKey, this.salt()) === this.value();
+// generate a new api key,
+Key.generateKey = (key) => {
+  const buffer = crypto.randomBytes(32);
+  apikey = buffer.toString("base64");
+
+  key.hash = apikey;
+  key.unhashed = apikey;
 };
 
-Key.generateSalt = function () {
-  return crypto.randomBytes(16).toString("base64");
+// compare key function, probably not used
+Key.prototype.correctKey = (candidateKey) =>
+  Key.encryptKey(candidateKey) === this.hash();
+
+// encrypt function
+Key.encryptKey = (plainText) =>
+  crypto.createHash("RSA-SHA256").update(plainText).digest("hex");
+
+// input the pain key (from request), and find then entry that
+// matches the encrypted version.
+Key.findMatch = async (key) => {
+  hash = Key.encryptKey(key);
+  key = await Key.findOne({ where: { hash }, include: Scope });
+  return key;
 };
 
-Key.encryptKey = function (plainText, salt) {
-  return crypto
-    .createHash("RSA-SHA256")
-    .update(plainText)
-    .update(salt)
-    .digest("hex");
-};
-
-const setSaltAndKey = (key) => {
-  if (key.changed("value")) {
-    key.salt = Key.generateSalt();
-    key.value = Key.encryptKey(key.value(), key.salt());
+// encrypt the key on changes
+const setKeyValue = (key) => {
+  if (key.changed("hash")) {
+    key.hash = Key.encryptKey(key.hash());
   }
 };
 
-Key.beforeCreate(setSaltAndKey);
-Key.beforeUpdate(setSaltAndKey);
+// generate the key value
+Key.beforeCreate(Key.generateKey);
+// then hash it here
+Key.beforeCreate(setKeyValue);
+// and on any other updates
+Key.beforeUpdate(setKeyValue);
 Key.beforeBulkCreate((keys) => {
   keys.forEach(setSaltAndKey);
 });

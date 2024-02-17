@@ -6,9 +6,14 @@ const Group = require("./group");
 const UserGroup = require("./userGroup");
 const Key = require("./key");
 const Scope = require("./scope");
+const KeyScope = require("./keyScope");
 
-Key.belongsToMany(Scope, { through: "key-scopes" });
-Scope.belongsToMany(Key, { through: "key-scopes" });
+// every key belongs to a user who requested it, and there is a
+// many to many relationship between the key and scopes, this
+// allows for easy addition of scopes to backbone
+Key.belongsTo(User);
+Key.belongsToMany(Scope, { through: KeyScope });
+Scope.belongsToMany(Key, { through: KeyScope });
 
 User.hasMany(Affiliation);
 Affiliation.belongsTo(User);
@@ -25,4 +30,7 @@ module.exports = {
   Affiliation,
   Group,
   UserGroup,
+  Key,
+  Scope,
+  KeyScope,
 };

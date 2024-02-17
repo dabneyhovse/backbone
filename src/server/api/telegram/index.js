@@ -25,7 +25,7 @@ async function launchBot() {
     router.use(`/${process.env.TELEGRAM_WEBHOOK_SECRET}`, botListener);
     console.log("Started telegram bot in webhook mode.\n");
   }
-} 
+}
 
 launchBot();
 

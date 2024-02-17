@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { User, Scope, Key } = require("../db/models");
+const { User, Scope, Key, KeyScope } = require("../db/models");
 const { isAdmin } = require("module-middleware");
 module.exports = router;
 
@@ -35,23 +35,47 @@ router.get("/", isAdmin, async (req, res, next) => {
  *    description of the key
  * req.body.scopes
  *    array of scope ids
- *
+ * req.body.owner
+ *    id of the user that requested the key,
+ *    maybe do it by username so the interface is easy
  */
 
-router.post("/", isAdmin, async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
     const key = await Key.create({
-      where: {
-        name: req.body.name,
-        description: req.body.description,
-      },
-      attributes: ["name", "description"],
+      name: req.body.name,
+      description: req.body.description,
     });
-
-    // TODO add scopes
-
     res.status(201).json(key);
+
+    // add in the scopes
+    scopeErrors = "";
+    scopes = req.body.scopes;
+    console.log(scopes);
+    for (let i = 0; i < scopes.length; i++) {
+      let scope = await Scope.findByPk(scopes[i]);
+      if (scope == null) {
+        scopeErrors += `Scope id ${scopes[i]} does not exist`;
+      }
+      await KeyScope.create({ keyId: key.id, scopeId: scopes[i] });
+    }
+
+    // if there were scope errors throw them
+    if (scopeErrors !== "") {
+      let error = new Error(scopeErrors);
+      error.status = 500;
+      throw error;
+    }
   } catch (error) {
+    // sequelize errors
+    if (!!error.error) {
+      console.log("aaaa")
+      next(new Error(error.errors[0].message));
+      return;
+    } else if (!!error.detail) {
+      next(new Error(error.detail));
+      return;
+    }
     next(error);
   }
 });
@@ -103,3 +127,4 @@ router.delete("/", isAdmin, async (req, res, next) => {
     next(error);
   }
 });
+
