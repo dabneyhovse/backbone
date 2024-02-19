@@ -153,14 +153,12 @@ function UserSinglePanel() {
                     <MDBCardText>First Name</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">
-                      <MDBInput
-                        type="text"
-                        name="firstName"
-                        value={user.firstName}
-                        onChange={handleChange}
-                      />
-                    </MDBCardText>
+                    <MDBInput
+                      type="text"
+                      name="firstName"
+                      value={user.firstName}
+                      onChange={handleChange}
+                    />
                   </MDBCol>
                 </MDBRow>
                 <hr />
@@ -169,14 +167,12 @@ function UserSinglePanel() {
                     <MDBCardText>Last Name</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">
-                      <MDBInput
-                        type="text"
-                        name="lastName"
-                        value={user.lastName}
-                        onChange={handleChange}
-                      />
-                    </MDBCardText>
+                    <MDBInput
+                      type="text"
+                      name="lastName"
+                      value={user.lastName}
+                      onChange={handleChange}
+                    />
                   </MDBCol>
                 </MDBRow>
                 <hr />
@@ -185,15 +181,13 @@ function UserSinglePanel() {
                     <MDBCardText>Bio</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">
-                      <MDBTextArea
-                        rows={4}
-                        type="text"
-                        name="bio"
-                        value={user.profile.bio}
-                        onChange={handleChange}
-                      />
-                    </MDBCardText>
+                    <MDBTextArea
+                      rows={4}
+                      type="text"
+                      name="bio"
+                      value={user.profile.bio}
+                      onChange={handleChange}
+                    />
                   </MDBCol>
                 </MDBRow>
                 <hr />
@@ -202,14 +196,12 @@ function UserSinglePanel() {
                     <MDBCardText>Room No.</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">
-                      <MDBInput
-                        type="text"
-                        name="room"
-                        value={user.profile.room}
-                        onChange={handleChange}
-                      />
-                    </MDBCardText>
+                    <MDBInput
+                      type="text"
+                      name="room"
+                      value={user.profile.room}
+                      onChange={handleChange}
+                    />
                   </MDBCol>
                 </MDBRow>
               </MDBCardBody>
@@ -263,14 +255,12 @@ function UserSinglePanel() {
                     <MDBCardText>Caltech UUID</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">
-                      <MDBInput
-                        type="text"
-                        name="uuid"
-                        value={user.uuid}
-                        onChange={handleChange}
-                      />
-                    </MDBCardText>
+                    <MDBInput
+                      type="text"
+                      name="uuid"
+                      value={user.uuid}
+                      onChange={handleChange}
+                    />
                   </MDBCol>
                 </MDBRow>
                 <hr />
@@ -279,14 +269,12 @@ function UserSinglePanel() {
                     <MDBCardText>Phone</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">
-                      <MDBInput
-                        type="text"
-                        name="phone"
-                        value={user.phone}
-                        onChange={handleChange}
-                      />
-                    </MDBCardText>
+                    <MDBInput
+                      type="text"
+                      name="phone"
+                      value={user.phone}
+                      onChange={handleChange}
+                    />
                   </MDBCol>
                 </MDBRow>
               </MDBCardBody>
@@ -298,6 +286,7 @@ function UserSinglePanel() {
                   <MDBCol sm="12">
                     <MDBCardText>
                       <strong>DBUX</strong>
+                      <br /> User dbux balance
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>
@@ -325,6 +314,10 @@ function UserSinglePanel() {
                   <MDBCol sm="12">
                     <MDBCardText>
                       <strong>House Membership</strong>
+                      <br /> House membership controls what people can access
+                      (ie more perms if darb verified). Values with an * are
+                      user requested house memberships. Otherwise it was set by
+                      an admin here.
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>
@@ -338,35 +331,35 @@ function UserSinglePanel() {
                       <MDBCol sm="6">House Membership</MDBCol>
                       <MDBCol sm="3">Verification Status</MDBCol>
                     </MDBRow>
-                    <MDBCardText className="text-muted">
-                      {Object.keys(AFFILATION_OPTIONS).map((key) => {
-                        const userKey = `verification-key-${AFFILATION_OPTIONS[key].house}-${AFFILATION_OPTIONS[key].status}`;
-                        if (!user[userKey]) {
-                          return <MDBRow key={userKey}>{key}</MDBRow>;
-                        }
-                        return (
-                          <MDBRow key={userKey}>
-                            <MDBCol sm="6">{key}</MDBCol>
-                            <MDBCol sm="3">
-                              <MDBCheckbox
-                                name={userKey}
-                                label={key}
-                                key={userKey}
-                                onChange={(event) => {
-                                  event.target.value = JSON.stringify({
-                                    ...user[userKey],
-                                    verified: event.target.checked,
-                                  });
-                                  event.aff = true;
-                                  handleChange(event);
-                                }}
-                                checked={user[userKey].verified}
-                              />
-                            </MDBCol>
-                          </MDBRow>
-                        );
-                      })}
-                    </MDBCardText>
+                    {Object.keys(AFFILATION_OPTIONS).map((key) => {
+                      const userKey = `verification-key-${AFFILATION_OPTIONS[key].house}-${AFFILATION_OPTIONS[key].status}`;
+                      return (
+                        <MDBRow key={userKey}>
+                          <MDBCol sm="6">{key}</MDBCol>
+                          <MDBCol sm="3">
+                            <MDBCheckbox
+                              name={userKey}
+                              label={
+                                /* put an asterisk if they did request it */
+                                `${key}${
+                                  !user[userKey].userRequested ? "" : "*"
+                                }`
+                              }
+                              key={userKey}
+                              onChange={(event) => {
+                                event.target.value = JSON.stringify({
+                                  ...user[userKey],
+                                  verified: event.target.checked,
+                                });
+                                event.aff = true;
+                                handleChange(event);
+                              }}
+                              checked={user[userKey].verified}
+                            />
+                          </MDBCol>
+                        </MDBRow>
+                      );
+                    })}
                   </MDBCol>
                 </MDBRow>
               </MDBCardBody>
@@ -378,6 +371,10 @@ function UserSinglePanel() {
                   <MDBCol sm="12">
                     <MDBCardText>
                       <strong>Dokuwiki user settings</strong>
+                      <br />
+                      Groups are a structure used by doku wiki to determine what
+                      content a user can access. For example a user within the
+                      group "full" can access content meant for full darbs.
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>
@@ -387,24 +384,22 @@ function UserSinglePanel() {
                     <MDBCardText>User Groups</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">
-                      {groups.map((group) => {
-                        return (
-                          <MDBRow key={group.id}>
-                            <MDBCol sm="6">{group.description}</MDBCol>
-                            <MDBCol sm="6">
-                              <MDBCheckbox
-                                name={`group-check-${group.id}`}
-                                label={group.groupName}
-                                key={group.id}
-                                onChange={handleChange}
-                                checked={!!user[`group-check-${group.id}`]}
-                              />
-                            </MDBCol>
-                          </MDBRow>
-                        );
-                      })}
-                    </MDBCardText>
+                    {groups.map((group) => {
+                      return (
+                        <MDBRow key={group.id}>
+                          <MDBCol sm="6">{group.description}</MDBCol>
+                          <MDBCol sm="6">
+                            <MDBCheckbox
+                              name={`group-check-${group.id}`}
+                              label={group.groupName}
+                              key={group.id}
+                              onChange={handleChange}
+                              checked={!!user[`group-check-${group.id}`]}
+                            />
+                          </MDBCol>
+                        </MDBRow>
+                      );
+                    })}
                   </MDBCol>
                 </MDBRow>
               </MDBCardBody>

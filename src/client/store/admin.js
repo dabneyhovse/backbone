@@ -11,6 +11,7 @@ import axios from "axios";
 import Axios from "axios";
 import { toast } from "react-toastify";
 import { unflattenObject } from "./helpers";
+import { AFFILATION_OPTIONS } from "./affiliation";
 
 // Action Types
 export const GOT_ADMIN_USERS = "GOT_ADMIN_USERS";
@@ -65,9 +66,20 @@ export const fetchAdminUser = (id) => {
           ...affiliation,
         };
       });
+
+      Object.keys(AFFILATION_OPTIONS).map((key) => {
+        const userKey = `verification-key-${AFFILATION_OPTIONS[key].house}-${AFFILATION_OPTIONS[key].status}`;
+        if (!data[userKey]) {
+          // make fake filler if needed
+          data[userKey] = {};
+          data[userKey].verified = false;
+          data[userKey].userRequested = false;
+          data[userKey].fake = true;
+        }
+      });
       dispatch(gotAdminUser(data));
     } catch (error) {
-      toast.error("There was an error fetching the users");
+      toast.error("There was an error fetching the user");
     }
   };
 };
