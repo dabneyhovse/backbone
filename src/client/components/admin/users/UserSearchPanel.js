@@ -13,12 +13,14 @@ import { fetchAdminUsers } from "../../../store/admin";
 import UserRow from "./UserRow";
 import UserSearchPagination from "./UserSearchPagination";
 
+const DEFAULT_SEARCH = {
+  verification_status: "1",
+  house_membership: "0",
+  sort: "0",
+};
+
 function UserSearchPanel() {
-  const [search, setSearch] = useState({
-    verification_status: "1",
-    house_membership: "0",
-    sort: "1",
-  });
+  const [search, setSearch] = useState(DEFAULT_SEARCH);
   const dispatch = useDispatch();
   const { users } = useSelector((state) => ({
     users: state.admin.users,
@@ -34,7 +36,7 @@ function UserSearchPanel() {
   };
 
   useEffect(() => {
-    dispatch(fetchAdminUsers({}));
+    dispatch(fetchAdminUsers(DEFAULT_SEARCH));
   }, []);
 
   return (
@@ -88,23 +90,28 @@ function UserSearchPanel() {
                   <Form.Label>House Membership</Form.Label>
                   <Form.Select onChange={onChange} name="house_membership">
                     <option value="0">Any</option>
-                    <option value="1">Dabney</option>
-                    <option value="2">Blacker</option>
-                    <option value="3">Venerable</option>
-                    <option value="4">Avery</option>
-                    <option value="5">Fleming</option>
-                    <option value="6">Ricketts</option>
-                    <option value="7">Page</option>
-                    <option value="8">LLoyd</option>
+                    <option value="1">None</option>
+                    <option value="2">Dabney</option>
+                    <option value="3">Blacker</option>
+                    <option value="4">Venerable</option>
+                    <option value="5">Avery</option>
+                    <option value="6">Fleming</option>
+                    <option value="7">Ricketts</option>
+                    <option value="8">Page</option>
+                    <option value="9">LLoyd</option>
                   </Form.Select>
                 </Form.Group>
 
                 <Form.Group>
                   <Form.Label>Sort By</Form.Label>
                   <Form.Select onChange={onChange} name="sort">
-                    <option value="1">Recently modified</option>
-                    <option value="2">New Users First</option>
-                    <option value="3">Old Users First</option>
+                    <option value="0">New Users First</option>
+                    <option value="1">Old Users First</option>
+                    <option value="2">Firstname A-Z</option>
+                    <option value="3">Firstname Z-A</option>
+                    <option value="4">Username A-Z</option>
+                    <option value="5">Username Z-A</option>
+                    <option value="6">Recently modified</option>
                   </Form.Select>
                 </Form.Group>
 

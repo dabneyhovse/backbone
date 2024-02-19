@@ -18,6 +18,10 @@ const Affiliation = db.define("affiliation", {
     type: Sequelize.BOOLEAN,
     defaultValue: false,
   },
+  userRequested: {
+    type: Sequelize.BOOLEAN,
+    default: true,
+  },
 });
 
 const membershipToNickname = (memberships) => {

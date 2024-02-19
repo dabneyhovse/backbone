@@ -18,31 +18,36 @@ const paginate = (page) => {
 };
 
 const sortMap = {
-  ["1"]: [
+  ["0"]: [["id", "DESC"]],
+  ["1"]: [["id", "ASC"]],
+  ["2"]: [["firstName", "ASC"]],
+  ["3"]: [["firstName", "DESC"]],
+  ["4"]: [["username", "ASC"]],
+  ["5"]: [["username", "DESC"]],
+  ["6"]: [
     [Sequelize.col("updatedAt"), "ASC"],
     ["id", "DESC"],
   ],
-  ["2"]: [["id", "DESC"]],
-  ["3"]: [["id", "ASC"]],
 };
+
 const houseMembershipMap = {
   ["0"]: "any",
-  ["1"]: "dabney",
-  ["2"]: "blacker",
-  ["3"]: "venerable",
-  ["4"]: "avery",
-  ["5"]: "fleming",
-  ["6"]: "ricketts",
-  ["7"]: "page",
-  ["8"]: "lloyd",
+  ["1"]: "none",
+  ["2"]: "dabney",
+  ["3"]: "blacker",
+  ["4"]: "venerable",
+  ["5"]: "avery",
+  ["6"]: "fleming",
+  ["7"]: "ricketts",
+  ["8"]: "page",
+  ["9"]: "lloyd",
 };
 const verificationStatusMap = {
   ["1"]: null,
   ["2"]: true,
   ["3"]: false,
 };
-// TODO remove
-const util = require("util");
+
 const UserGroup = require("../db/models/userGroup");
 
 /**
@@ -51,9 +56,18 @@ const UserGroup = require("../db/models/userGroup");
 router.get("/", isAdmin, async (req, res, next) => {
   try {
     const search = req.query.search ? JSON.parse(req.query.search) : {};
-    console.log(verificationStatusMap[search.verification_status]);
 
+    let extra = {};
     let where = {};
+    let attributes_include = [
+      "username",
+      "firstName",
+      "lastName",
+      "caltechEmail",
+      "personalEmail",
+      "id",
+    ];
+
     let include = [];
     if (search.name) {
       let fl = search.name.split(" ");
@@ -102,20 +116,12 @@ router.get("/", isAdmin, async (req, res, next) => {
       where = {
         ...where,
         username: {
-          [Op.iLike]: "%" + username + "%",
+          [Op.iLike]: "%" + search.username + "%",
         },
       };
     }
-    if (search.house_membership && search.house_membership !== "0") {
-      include = [
-        ...include,
-        {
-          model: Affiliation,
-          required: true,
-          where: { house: houseMembershipMap[search.house_membership] },
-        },
-      ];
-    }
+
+    // just any map to the verification status, not sure why not 0 indexed
     if (search.verification_status && search.verification_status != "1") {
       include = [
         ...include,
@@ -129,30 +135,77 @@ router.get("/", isAdmin, async (req, res, next) => {
       ];
     }
 
+    // add in house membership option, 0 means any so dont add anything
+    // 1 for none, we gotta do a query to do the count and then compare
+    if (search.house_membership == "1") {
+      // query all users with affiliations, so then we can make the next query to ignore all these
+      let memUsers = await User.findAll({
+        include: {
+          model: Affiliation,
+          attributes: ["id"],
+          required: true,
+        },
+        attributes: {
+          include: ["id"],
+        },
+        ...extra,
+      });
+
+      ids = [...memUsers].map((u) => u.id);
+
+      // now compare and take the ids of the ones that are not in memUsers (ie have not association)
+      // I woud rather write a raw query here because the issue is sequelize being
+      // annoying and creating malformed queries so it had to be broken up.
+      where = { ...where, id: { [Op.notIn]: ids } };
+    } else if (search.house_membership && search.house_membership !== "0") {
+      include = [
+        ...include,
+        {
+          model: Affiliation,
+          required: true,
+          where: { house: houseMembershipMap[search.house_membership] },
+        },
+      ];
+    }
+
+    // smh there u go melissa
+    if (search.sort == undefined) {
+      search.sort = "0";
+    }
+
     let query = {
       ...paginate(Number(req.query.pageNum || 1)),
       order: sortMap[search.sort],
       where,
       include,
-      attributes: [
-        "username",
-        "firstName",
-        "lastName",
-        "caltechEmail",
-        "personalEmail",
-        "id",
-      ],
+      attributes: {
+        include: attributes_include,
+      },
+      ...extra,
     };
-    const util = require("util");
 
-    console.log(
-      util.inspect(query, { showHidden: false, depth: null, colors: true })
-    );
     let allUsers;
     try {
       allUsers = await User.findAndCountAll(query);
     } catch (error) {
-      console.error(error);
+      // detailed debug prints
+      // const util = require("util");
+      // console.log(
+      //   "REQUEST:\n",
+      //   util.inspect(req.query, {
+      //     showHidden: false,
+      //     depth: null,
+      //     colors: true,
+      //   })
+      // );
+      // console.log(
+      //   "QUERY OBJECT:\n",
+      //   util.inspect(query, { showHidden: false, depth: null, colors: true })
+      // );
+      // console.log("BAD QUERY:\n", error.sql);
+      // console.error("\n\n\n\n\n", error);
+      next(error);
+      return;
     }
 
     allUsers.count = Math.ceil(allUsers.count / USERS_PER_PAGE);
@@ -177,6 +230,7 @@ router.get("/admin/:userId", isAdmin, async (req, res, next) => {
     });
     res.json(user);
   } catch (err) {
+    console.error(err);
     next(err);
   }
 });
@@ -267,19 +321,37 @@ router.put(
       }
 
       /**
-       * update aany membership verifications
+       * update any membership verifications
        */
 
       for (let i = 0; i < changeMember.length; i++) {
-        const aff = await Affiliation.findOne({
+        let aff = await Affiliation.findOne({
           where: {
             userId: req.params.userId,
             house: changeMember[i][1],
             status: changeMember[i][2],
           },
         });
-        if (changeMember[i][3] !== aff.verified) {
-          await aff.update({ verified: changeMember[i][3] });
+        // doesnt exist so not update,
+        // if true then we should create
+        if (aff == undefined) {
+          if (changeMember[i][3]) {
+            aff = await Affiliation.create({
+              userId: req.params.userId,
+              house: changeMember[i][1],
+              status: changeMember[i][2],
+              verified: true,
+              userRequested: false,
+            });
+          }
+        } else if (changeMember[i][3] !== aff.verified) {
+          if (aff.userRequested) {
+            // if user requested dont delete it, so they user can see they requested
+            await aff.update({ verified: changeMember[i][3] });
+          } else if (!changeMember[i][3]) {
+            // otherwise just delete it if false
+            await aff.destroy();
+          }
         }
       }
 
@@ -297,6 +369,7 @@ router.put(
       });
       res.sendStatus(201);
     } catch (error) {
+      console.error(error);
       next(error);
     }
   }
