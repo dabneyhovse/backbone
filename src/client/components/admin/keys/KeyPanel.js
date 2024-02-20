@@ -6,17 +6,18 @@
 
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Table } from "react-bootstrap";
+import { Button, Table } from "react-bootstrap";
 
 import { fetchAdminKeys } from "../../../store/admin";
 import KeyRow from "./KeyRow";
 import KeyModal from "./KeyModal";
+import KeyForm from "./KeyForm";
 import "./index.css";
 
 function KeyPanel() {
   const dispatch = useDispatch();
   const { keys } = useSelector((state) => ({
-    keys: state.admin.keys,
+    keys: state.admin.keys.list,
   }));
 
   const [changed, setChanged] = useState({});
@@ -31,6 +32,19 @@ function KeyPanel() {
   const triggerPopup = (title, content, buttons) => {
     setShow(true);
     setPopup({ title, content, buttons });
+  };
+
+  const handleNew = () => {
+    triggerPopup(
+      "Create New Api Key",
+      <KeyForm
+        setShow={setShow}
+        data={{ name: "", description: "", scopes: "" }}
+        triggerPopup={triggerPopup}
+        creatingNew={true}
+      ></KeyForm>,
+      []
+    );
   };
 
   useEffect(() => {
@@ -66,6 +80,7 @@ function KeyPanel() {
           ))}
         </tbody>
       </Table>
+      <Button onClick={handleNew}>Create New Api Key</Button>
     </React.Fragment>
   );
 }

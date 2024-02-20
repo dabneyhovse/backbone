@@ -7,7 +7,6 @@
  * #TODO: get all users, remove user edit user etc
  */
 
-import axios from "axios";
 import Axios from "axios";
 import { toast } from "react-toastify";
 import { unflattenObject } from "./helpers";
@@ -20,6 +19,8 @@ export const ADMIN_USERS_SET_PAGE = "ADMIN_USERS_SET_PAGE";
 export const CLEAR_ADMIN_STORE = "CLEAR_ADMIN_STORE";
 export const GOT_ADMIN_GROUPS = "GOT_ADMIN_GROUPS";
 export const GOT_ADMIN_KEYS = "GOT_ADMIN_KEYS";
+export const GOT_ADMIN_NEW_KEY = "GOT_ADMIN_NEW_KEY";
+export const ADD_ADMIN_KEY = "ADD_ADMIN_KEY";
 
 // Action Creators
 export const gotAdminUsers = (users) => ({
@@ -44,6 +45,14 @@ export const gotAdminGroups = (groups) => ({
 export const gotAdminKeys = (keys) => ({
   type: GOT_ADMIN_KEYS,
   keys,
+});
+export const gotAdminNewKey = (key) => ({
+  type: GOT_ADMIN_NEW_KEY,
+  key,
+});
+export const addAdminKey = (key) => ({
+  type: ADD_ADMIN_KEY,
+  key,
 });
 
 export const fetchAdminUsers = (search) => {
@@ -143,11 +152,31 @@ export const fetchAdminKeys = () => async (dispatch) => {
 
 export const updateAdminKey = (data) => async (dispatch) => {
   try {
-    await Axios.put("/api/keys", data);
-    toast.success("Updated key");
-    dispatch(fetchAdminKeys());
+    const result = await Axios.put("/api/keys", data);
+    if (data.regenerate) {
+      toast.success("Generated new key value");
+      dispatch(gotAdminNewKey(result.data.unhashed));
+    } else {
+      toast.success("Updated key");
+      dispatch(fetchAdminKeys());
+    }
   } catch (error) {
-    toast.error("There was an error updating the api key");
+    if (data.regenerate) {
+      toast.error("There was an error generating a new key value");
+    } else {
+      toast.error("There was an error updating the api key");
+    }
+  }
+};
+
+export const createAdminKey = (data) => async (dispatch) => {
+  try {
+    const result = await Axios.post("/api/keys", data);
+    // could do at once but i like reusing
+    dispatch(addAdminKey(result.data));
+    dispatch(gotAdminNewKey(result.data.unhashed));
+  } catch (error) {
+    toast.error("There was an error creating a new key");
   }
 };
 
@@ -170,7 +199,10 @@ const init = {
   page: 1,
   count: 1,
   groups: [],
-  keys: [],
+  keys: {
+    list: [],
+    new_key: undefined,
+  },
 };
 
 const reducer = (state = init, action) => {
@@ -191,7 +223,25 @@ const reducer = (state = init, action) => {
       return { ...state, groups: action.groups };
     }
     case GOT_ADMIN_KEYS: {
-      return { ...state, keys: action.keys };
+      return { ...state, keys: { ...state.keys, list: action.keys } };
+    }
+    case GOT_ADMIN_NEW_KEY: {
+      return {
+        ...state,
+        keys: {
+          ...state.keys,
+          new_key: action.key,
+        },
+      };
+    }
+    case ADD_ADMIN_KEY: {
+      return {
+        ...state,
+        keys: {
+          ...state.keys,
+          list: [...state.keys.list, action.key],
+        },
+      };
     }
     default:
       return state;

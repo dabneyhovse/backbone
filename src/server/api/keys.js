@@ -47,12 +47,11 @@ router.post("/", async (req, res, next) => {
       name: req.body.name,
       description: req.body.description,
     });
-    res.status(201).json(key);
 
-    // add in the scopes
+    // add in the scopes, empty array if none
     scopeErrors = "";
-    scopes = req.body.scopes;
-    console.log(scopes);
+    scopes = req.body.scopes || [];
+
     for (let i = 0; i < scopes.length; i++) {
       let scope = await Scope.findByPk(scopes[i]);
       if (scope == null) {
@@ -67,6 +66,12 @@ router.post("/", async (req, res, next) => {
       error.status = 500;
       throw error;
     }
+
+    res.status(201).json(key);
+
+    // remove the raw unhashed value, only available once
+    key.unhashed = null;
+    await key.save();
   } catch (error) {
     // sequelize errors
     if (!!error.error) {
@@ -100,10 +105,10 @@ router.put("/", isAdmin, async (req, res, next) => {
 
     if (req.body.regenerate === true) {
       // regenerate key, hashed when val is updated,
-      // remove unhashed after n time
       Key.generateKey(key);
     } else {
       // enforce not null reqs, or just let seq error propagate?
+      // dont care enough lol
       key.name = req.body.name;
       key.description = req.body.description;
     }
@@ -112,6 +117,12 @@ router.put("/", isAdmin, async (req, res, next) => {
     // TODO edit scopes
 
     res.status(201).json(key);
+
+    if (req.body.regenerate === true) {
+      // remove the raw unhashed value, only available once
+      key.unhashed = null;
+      await key.save();
+    }
   } catch (error) {
     next(error);
   }
@@ -129,7 +140,7 @@ router.delete("/", isAdmin, async (req, res, next) => {
   try {
     const key = await Key.findByPk(req.body.id);
     await key.destroy();
-    res.send(200);
+    res.sendStatus(204);
   } catch (error) {
     next(error);
   }

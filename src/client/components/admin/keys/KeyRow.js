@@ -11,10 +11,14 @@ function KeyRow(props) {
   const { data } = props;
 
   const handleClick = (event) => {
-    console.log("DATA:\t", data);
     props.triggerPopup(
       `Edit Api Key ${data.id}`,
-      <KeyForm setShow={props.setShow} data={data}></KeyForm>,
+      <KeyForm
+        setShow={props.setShow}
+        data={data}
+        triggerPopup={props.triggerPopup}
+        creatingNew={false}
+      ></KeyForm>,
       []
     );
   };
