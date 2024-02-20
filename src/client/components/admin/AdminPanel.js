@@ -67,6 +67,7 @@ const addSuspense = (lazy) => {
 
 const Frotator = React.lazy(() => import("service-frotator/Admin"));
 const Example = React.lazy(() => import("service-example/Admin"));
+const KeyPanel = React.lazy(() => import("./keys/KeyPanel"));
 
 /**
  * admin panel components which are built into backbone
@@ -85,6 +86,13 @@ const BUILT_IN_ADMIN = [
     moduleName: "groups",
     route: "groups",
     element: <GroupPanel />,
+  },
+  {
+    importAdmin: true,
+    name: "API Keys",
+    moduleName: "apikeys",
+    route: "keys",
+    element: <KeyPanel />,
   },
   {
     importAdmin: true,

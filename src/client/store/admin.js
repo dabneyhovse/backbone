@@ -19,6 +19,7 @@ export const GOT_ADMIN_USER = "GOT_ADMIN_USER";
 export const ADMIN_USERS_SET_PAGE = "ADMIN_USERS_SET_PAGE";
 export const CLEAR_ADMIN_STORE = "CLEAR_ADMIN_STORE";
 export const GOT_ADMIN_GROUPS = "GOT_ADMIN_GROUPS";
+export const GOT_ADMIN_KEYS = "GOT_ADMIN_KEYS";
 
 // Action Creators
 export const gotAdminUsers = (users) => ({
@@ -39,6 +40,10 @@ export const clearAdminStore = () => ({
 export const gotAdminGroups = (groups) => ({
   type: GOT_ADMIN_GROUPS,
   groups,
+});
+export const gotAdminKeys = (keys) => ({
+  type: GOT_ADMIN_KEYS,
+  keys,
 });
 
 export const fetchAdminUsers = (search) => {
@@ -127,6 +132,25 @@ export const fetchAdminGroups = () => async (dispatch) => {
   }
 };
 
+export const fetchAdminKeys = () => async (dispatch) => {
+  try {
+    const res = await Axios.get("/api/keys");
+    dispatch(gotAdminKeys(res.data));
+  } catch (error) {
+    toast.error("There was an error fetching the api keys");
+  }
+};
+
+export const updateAdminKey = (data) => async (dispatch) => {
+  try {
+    const res = await Axios.put("/api/keys", { ...data, keyId: data.id });
+    toast.success("Updated key");
+    dispatch(fetchAdminKeys());
+  } catch (error) {
+    toast.error("There was an error updating the api key");
+  }
+};
+
 // Reducer
 const init = {
   users: [],
@@ -134,6 +158,7 @@ const init = {
   page: 1,
   count: 1,
   groups: [],
+  keys: [],
 };
 
 const reducer = (state = init, action) => {
@@ -152,6 +177,9 @@ const reducer = (state = init, action) => {
     }
     case GOT_ADMIN_GROUPS: {
       return { ...state, groups: action.groups };
+    }
+    case GOT_ADMIN_KEYS: {
+      return { ...state, keys: action.keys };
     }
     default:
       return state;

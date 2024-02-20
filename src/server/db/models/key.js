@@ -47,7 +47,7 @@ const Key = db.define("key", {
    */
   unhashed: {
     type: Sequelize.STRING,
-  },
+  }
 });
 
 // generate a new api key,

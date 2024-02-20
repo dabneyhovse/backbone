@@ -11,8 +11,9 @@ module.exports = router;
 router.get("/", isAdmin, async (req, res, next) => {
   try {
     const keys = await Key.findAll({
-      attributes: ["name", "description"],
+      attributes: ["id", "name", "description"],
       include: Scope,
+      order: [["id", "ASC"]],
     });
     res.status(200).json(keys);
   } catch (error) {
@@ -69,7 +70,6 @@ router.post("/", async (req, res, next) => {
   } catch (error) {
     // sequelize errors
     if (!!error.error) {
-      console.log("aaaa")
       next(new Error(error.errors[0].message));
       return;
     } else if (!!error.detail) {
@@ -85,7 +85,7 @@ router.post("/", async (req, res, next) => {
  *
  * edit a key and return the edit
  *
- * req.body.keyId
+ * req.body.id
  *    the id of the key to change
  * req.body.name
  *    new name of the key
@@ -96,15 +96,17 @@ router.post("/", async (req, res, next) => {
  */
 router.put("/", isAdmin, async (req, res, next) => {
   try {
-    const key = await Group.findByPk(req.body.keyId);
-    await key.update({
-      name: req.body.name,
-      description: req.body.description,
-    });
+    key = await Key.update(
+      {
+        name: req.body.name,
+        description: req.body.description,
+      },
+      { where: { id: req.body.id } }
+    );
 
     // TODO edit scopes
 
-    res.status(200).json(group);
+    res.status(201).json(key);
   } catch (error) {
     next(error);
   }
@@ -127,4 +129,3 @@ router.delete("/", isAdmin, async (req, res, next) => {
     next(error);
   }
 });
-
