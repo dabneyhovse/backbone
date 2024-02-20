@@ -143,11 +143,23 @@ export const fetchAdminKeys = () => async (dispatch) => {
 
 export const updateAdminKey = (data) => async (dispatch) => {
   try {
-    const res = await Axios.put("/api/keys", { ...data, keyId: data.id });
+    await Axios.put("/api/keys", data);
     toast.success("Updated key");
     dispatch(fetchAdminKeys());
   } catch (error) {
     toast.error("There was an error updating the api key");
+  }
+};
+
+export const deleteAdminKey = (data) => async (dispatch) => {
+  try {
+    await Axios.delete("/api/keys", {
+      data: { id: data.id },
+    });
+    toast.success("Deleted key");
+    dispatch(fetchAdminKeys());
+  } catch (error) {
+    toast.error("There was an error deleting the api key");
   }
 };
 

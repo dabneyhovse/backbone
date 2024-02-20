@@ -96,13 +96,18 @@ router.post("/", async (req, res, next) => {
  */
 router.put("/", isAdmin, async (req, res, next) => {
   try {
-    key = await Key.update(
-      {
-        name: req.body.name,
-        description: req.body.description,
-      },
-      { where: { id: req.body.id } }
-    );
+    key = await Key.findOne({ where: { id: req.body.id } });
+
+    if (req.body.regenerate === true) {
+      // regenerate key, hashed when val is updated,
+      // remove unhashed after n time
+      Key.generateKey(key);
+    } else {
+      // enforce not null reqs, or just let seq error propagate?
+      key.name = req.body.name;
+      key.description = req.body.description;
+    }
+    await key.save();
 
     // TODO edit scopes
 
@@ -117,12 +122,12 @@ router.put("/", isAdmin, async (req, res, next) => {
  *
  * delete a key
  *
- * req.body.keyId
+ * req.body.id
  *    the id of the key to delete
  */
 router.delete("/", isAdmin, async (req, res, next) => {
   try {
-    const key = await Key.findByPk(req.body.keyId);
+    const key = await Key.findByPk(req.body.id);
     await key.destroy();
     res.send(200);
   } catch (error) {

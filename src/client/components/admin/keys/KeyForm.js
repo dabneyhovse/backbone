@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
-import { updateAdminKey } from "../../../store/admin";
+import { deleteAdminKey, updateAdminKey } from "../../../store/admin";
 import { useDispatch } from "react-redux";
 
 function KeyForm(props) {
@@ -17,6 +17,16 @@ function KeyForm(props) {
 
   const submitEdits = () => {
     dispatch(updateAdminKey(changed));
+    triggerClose();
+  };
+
+  const submitRegenerate = () => {
+    dispatch(updateAdminKey({ id: props.data.id, regenerate: true }));
+    triggerClose();
+  };
+
+  const submitDelete = () => {
+    dispatch(deleteAdminKey({ id: props.data.id }));
     triggerClose();
   };
 
@@ -69,7 +79,7 @@ function KeyForm(props) {
           className="ms-2"
           variant="danger"
           type="submit"
-          onClick={()=>{console.log("TODO")}}
+          onClick={submitDelete}
         >
           Delete Key
         </Button>
@@ -77,7 +87,7 @@ function KeyForm(props) {
           className="ms-2"
           variant="warning"
           type="submit"
-          onClick={()=>{console.log("TODO")}}
+          onClick={submitRegenerate}
         >
           Regenerate API Key
         </Button>
