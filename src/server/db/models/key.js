@@ -47,7 +47,7 @@ const Key = db.define("key", {
    */
   unhashed: {
     type: Sequelize.STRING,
-  }
+  },
 });
 
 // generate a new api key,
@@ -67,8 +67,13 @@ Key.prototype.correctKey = (candidateKey) =>
 Key.encryptKey = (plainText) =>
   crypto.createHash("RSA-SHA256").update(plainText).digest("hex");
 
-// input the pain key (from request), and find then entry that
-// matches the encrypted version.
+/**
+ *  input the pain key (from request), and find then entry that
+ *  matches the encrypted version.
+ *
+ * @param {*} key
+ * @returns Key instance if matched, undefined if not
+ */
 Key.findMatch = async (key) => {
   hash = Key.encryptKey(key);
   key = await Key.findOne({ where: { hash }, include: Scope });

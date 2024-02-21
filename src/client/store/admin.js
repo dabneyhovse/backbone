@@ -162,7 +162,7 @@ export const fetchAdminKeys = () => async (dispatch) => {
 
 export const updateAdminKey = (data) => async (dispatch) => {
   try {
-    if (data.scopes.length !== 0) {
+    if (data.scopes !== undefined && data.scopes.length !== 0) {
       data.scopes = data.scopes.map((s) => s.id);
     }
     const result = await Axios.put("/api/keys", data);
@@ -176,6 +176,7 @@ export const updateAdminKey = (data) => async (dispatch) => {
     }
   } catch (error) {
     if (data.regenerate) {
+      console.error(error);
       toast.error("There was an error generating a new key value");
     } else {
       toast.error("There was an error updating the api key");

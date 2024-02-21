@@ -10,7 +10,9 @@ module.exports = router;
  */
 router.get("/", isAdmin, async (req, res, next) => {
   try {
-    const scopes = await Scope.findAll({});
+    const scopes = await Scope.findAll({
+      order: [["id", "ASC"]],
+    });
     res.status(200).json(scopes);
   } catch (error) {
     next(error);

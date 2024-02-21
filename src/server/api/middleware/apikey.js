@@ -21,10 +21,40 @@ const { Key, Scope } = require("../../db/models");
  * @param {*} next next
  */
 const populateApiKey = async (req, res, next) => {
-  // TODO
+  // if not in query, then check body. If its neither itll be undefined so we good
+  let { api_key } = req.query.api_key !== undefined ? req.query : req.body;
 
-  Key.find
+  // no key, just move on
+  if (api_key == undefined) {
+    next();
+    return;
+  }
 
+  // check for match with custom method, see key model in db
+  apiKeyMatch = await Key.findMatch(api_key);
+
+  // doesnt match any api key, just ignore
+  // could have this throw an error but meh
+  // the middleware later will error if it needed it
+  if (apiKeyMatch == undefined) {
+    next();
+    return;
+  }
+
+  // attach api_key obj with list of scopes to the req
+  // map the scope to just the name, as thats what
+  // the hasApiScope middleware checks
+  req.api_key = {
+    id: apiKeyMatch.id,
+    name: apiKeyMatch.name,
+    description: apiKeyMatch.description,
+    scopes:
+      apiKeyMatch.scopes == undefined
+        ? []
+        : apiKeyMatch.scopes.map((scope) => scope.name),
+  };
+
+  next();
 };
 
-module.exports = { hasApiKey };
+module.exports = { populateApiKey };

@@ -8,10 +8,8 @@ const Key = require("./key");
 const Scope = require("./scope");
 const KeyScope = require("./keyScope");
 
-// every key belongs to a user who requested it, and there is a
 // many to many relationship between the key and scopes, this
 // allows for easy addition of scopes to backbone
-Key.belongsTo(User);
 Key.belongsToMany(Scope, { through: KeyScope });
 Scope.belongsToMany(Key, { through: KeyScope });
 

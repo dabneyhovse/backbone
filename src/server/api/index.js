@@ -6,6 +6,8 @@
  *
  */
 
+const { populateApiKey } = require("./middleware/apikey");
+
 const router = require("express").Router();
 
 /**
@@ -44,6 +46,7 @@ function attachServices(apiRouter) {
   console.log(`Attached ${count} service api Route(s)\n`);
 }
 
+router.use(populateApiKey);
 // attach base backbone routes
 router.use("/users", require("./users"));
 router.use("/affiliations", require("./affiliations"));
