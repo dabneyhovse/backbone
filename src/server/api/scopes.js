@@ -10,17 +10,15 @@ module.exports = router;
  */
 router.get("/", isAdmin, async (req, res, next) => {
   try {
-    const keys = await Scope.findAll({
-      include: Scope,
-    });
-    res.status(200).json(keys);
+    const scopes = await Scope.findAll({});
+    res.status(200).json(scopes);
   } catch (error) {
     next(error);
   }
 });
 
 /**
- * POST /api/scope/
+ * POST /api/scopes/
  *
  * create a new scope
  *
@@ -34,11 +32,11 @@ router.get("/", isAdmin, async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const key = await Scope.create({
+    const scope = await Scope.create({
       name: req.body.name,
       description: req.body.description,
     });
-    res.status(201).json(key);
+    res.status(201).json(scope);
   } catch (error) {
     // sequelize errors
     if (!!error.error) {
@@ -53,11 +51,11 @@ router.post("/", async (req, res, next) => {
 });
 
 /**
- * PUT /api/scope/
+ * PUT /api/scopes/
  *
  * edit a scope and return the edit
  *
- * req.body.scopeId
+ * req.body.id
  *    the id of the key to change
  * req.body.name
  *    new name of the scope
@@ -66,15 +64,13 @@ router.post("/", async (req, res, next) => {
  */
 router.put("/", isAdmin, async (req, res, next) => {
   try {
-    const scope = await Scope.findByPk(req.body.scopeId);
-    await scope.update({
-      name: req.body.name,
-      description: req.body.description,
-    });
+    const scope = await Scope.findByPk(req.body.id);
+    scope.name = req.body.name;
+    scope.description = req.body.description;
+    await scope.save();
 
-    res.status(200).json(group);
+    res.status(200).json(scope);
   } catch (error) {
-
     // sequelize errors
     if (!!error.error) {
       next(new Error(error.errors[0].message));
@@ -85,7 +81,6 @@ router.put("/", isAdmin, async (req, res, next) => {
     }
     next(error);
   }
-  }
 });
 
 /**
@@ -93,14 +88,14 @@ router.put("/", isAdmin, async (req, res, next) => {
  *
  * delete a key
  *
- * req.body.scopeId
+ * req.body.id
  *    the id of the scope to delete
  */
 router.delete("/", isAdmin, async (req, res, next) => {
   try {
-    const key = await Key.findByPk(req.body.scopeId);
+    const scope = await Scope.findByPk(req.body.id);
     // cascades
-    await key.destroy();
+    await scope.destroy();
     res.send(204);
   } catch (error) {
     next(error);

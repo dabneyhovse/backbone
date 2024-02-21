@@ -8,26 +8,21 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Table } from "react-bootstrap";
 
-import { fetchAdminKeys } from "../../../store/admin";
-import KeyRow from "./KeyRow";
-import KeyModal from "./KeyModal";
-import KeyForm from "./KeyForm";
-import "./index.css";
+import { fetchAdminScopes } from "../../../store/admin";
 
-function KeyPanel() {
+import "./index.css";
+import ScopeRow from "./ScopeRow";
+import ScopeForm from "./ScopeForm";
+import KeyModal from "./KeyModal";
+
+function ScopePanel() {
   const dispatch = useDispatch();
-  const { keys } = useSelector((state) => ({
-    keys: state.admin.keys.list,
+  const { scopes } = useSelector((state) => ({
+    scopes: state.admin.scopes,
   }));
 
-  const [changed, setChanged] = useState({});
   const [show, setShow] = useState(false);
   const [popup, setPopup] = useState({});
-
-  const addToChanged = (id, obj) => {
-    setChanged({ ...changed, [id]: obj });
-    console.log(changed);
-  };
 
   const triggerPopup = (title, content, buttons) => {
     setShow(true);
@@ -37,52 +32,51 @@ function KeyPanel() {
   const handleNew = () => {
     triggerPopup(
       "Create New Api Key",
-      <KeyForm
+      <ScopeForm
         setShow={setShow}
-        data={{ name: "", description: "", scopes: "" }}
+        data={{ name: "", description: "" }}
         triggerPopup={triggerPopup}
         creatingNew={true}
-      ></KeyForm>,
+      ></ScopeForm>,
       []
     );
   };
 
   useEffect(() => {
-    dispatch(fetchAdminKeys());
+    dispatch(fetchAdminScopes());
   }, []);
 
   return (
     <React.Fragment>
       <KeyModal show={show} setShow={setShow} {...popup} />
       <p>
-        API keys give darbs access to various api endpoints in backbone and
-        related services. Which endpoints they can access is controlled by what
-        scopes they have. Click to edit a key.
+        API scopes control what API endpoint an api key is able to be used for.
+        So if you wanted an api key to have access to check a user's dbux balance
+        you woud give it the dbux-get scope. This is a rough setup but I dont
+        want env variable api keys.
       </p>
       <Table striped bordered hover className="p-3">
         <thead>
           <tr>
             <td>ID</td>
-            <td>Key name</td>
+            <td>Scope name</td>
             <td>Description</td>
-            <td>Scopes</td>
           </tr>
         </thead>
         <tbody>
-          {keys.map((key) => (
-            <KeyRow
+          {scopes.map((scope) => (
+            <ScopeRow
               setShow={setShow}
               triggerPopup={triggerPopup}
-              key={key.id}
-              data={key}
-              addToChanged={addToChanged}
+              key={scope.id}
+              data={scope}
             />
           ))}
         </tbody>
       </Table>
-      <Button onClick={handleNew}>Create New Api Key</Button>
+      <Button onClick={handleNew}>Create New Api Scope</Button>
     </React.Fragment>
   );
 }
 
-export default KeyPanel;
+export default ScopePanel;

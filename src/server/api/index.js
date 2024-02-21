@@ -49,6 +49,7 @@ router.use("/users", require("./users"));
 router.use("/affiliations", require("./affiliations"));
 router.use("/groups", require("./groups"));
 router.use("/keys", require("./keys"));
+router.use("/scopes", require("./scopes"));
 router.use("/dbux", require("./dbux"));
 router.use("/telegram", require("./telegram"));
 

@@ -21,6 +21,8 @@ export const GOT_ADMIN_GROUPS = "GOT_ADMIN_GROUPS";
 export const GOT_ADMIN_KEYS = "GOT_ADMIN_KEYS";
 export const GOT_ADMIN_NEW_KEY = "GOT_ADMIN_NEW_KEY";
 export const ADD_ADMIN_KEY = "ADD_ADMIN_KEY";
+export const GOT_ADMIN_SCOPES = "GOT_ADMIN_SCOPES";
+export const ADD_ADMIN_SCOPE = "ADD_ADMIN_SCOPE";
 
 // Action Creators
 export const gotAdminUsers = (users) => ({
@@ -53,6 +55,14 @@ export const gotAdminNewKey = (key) => ({
 export const addAdminKey = (key) => ({
   type: ADD_ADMIN_KEY,
   key,
+});
+export const gotAdminScopes = (scopes) => ({
+  type: GOT_ADMIN_SCOPES,
+  scopes,
+});
+export const addAdminScope = (scope) => ({
+  type: ADD_ADMIN_SCOPE,
+  scope,
 });
 
 export const fetchAdminUsers = (search) => {
@@ -152,7 +162,11 @@ export const fetchAdminKeys = () => async (dispatch) => {
 
 export const updateAdminKey = (data) => async (dispatch) => {
   try {
+    if (data.scopes.length !== 0) {
+      data.scopes = data.scopes.map((s) => s.id);
+    }
     const result = await Axios.put("/api/keys", data);
+
     if (data.regenerate) {
       toast.success("Generated new key value");
       dispatch(gotAdminNewKey(result.data.unhashed));
@@ -171,8 +185,11 @@ export const updateAdminKey = (data) => async (dispatch) => {
 
 export const createAdminKey = (data) => async (dispatch) => {
   try {
+    if (data.scopes.length !== 0) {
+      data.scopes = data.scopes.map((s) => s.id);
+    }
     const result = await Axios.post("/api/keys", data);
-    // could do at once but i like reusing
+    // could do at once but i like reusing (ie lazy)
     dispatch(addAdminKey(result.data));
     dispatch(gotAdminNewKey(result.data.unhashed));
   } catch (error) {
@@ -192,6 +209,46 @@ export const deleteAdminKey = (data) => async (dispatch) => {
   }
 };
 
+export const fetchAdminScopes = () => async (dispatch) => {
+  try {
+    const res = await Axios.get("/api/scopes");
+    dispatch(gotAdminScopes(res.data));
+  } catch (error) {
+    toast.error("There was an error fetching the scopes");
+  }
+};
+
+export const updateAdminScope = (data) => async (dispatch) => {
+  try {
+    const result = await Axios.put("/api/scopes", data);
+    toast.success("Updated scope");
+    dispatch(fetchAdminScopes());
+  } catch (error) {
+    toast.error("There was an error updating the api scope");
+  }
+};
+
+export const createAdminScope = (data) => async (dispatch) => {
+  try {
+    const result = await Axios.post("/api/scopes", data);
+    dispatch(addAdminScope(result.data));
+  } catch (error) {
+    toast.error("There was an error creating a new key");
+  }
+};
+
+export const deleteAdminScope = (data) => async (dispatch) => {
+  try {
+    await Axios.delete("/api/scopes", {
+      data: { id: data.id },
+    });
+    dispatch(fetchAdminScopes());
+    toast.success("Deleted scope");
+  } catch (error) {
+    toast.error("There was an error deleting the api scope");
+  }
+};
+
 // Reducer
 const init = {
   users: [],
@@ -203,6 +260,7 @@ const init = {
     list: [],
     new_key: undefined,
   },
+  scopes: [],
 };
 
 const reducer = (state = init, action) => {
@@ -241,6 +299,18 @@ const reducer = (state = init, action) => {
           ...state.keys,
           list: [...state.keys.list, action.key],
         },
+      };
+    }
+    case GOT_ADMIN_SCOPES: {
+      return {
+        ...state,
+        scopes: action.scopes,
+      };
+    }
+    case ADD_ADMIN_SCOPE: {
+      return {
+        ...state,
+        scopes: [...state.scopes, action.scope],
       };
     }
     default:

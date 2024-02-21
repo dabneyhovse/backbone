@@ -11,16 +11,22 @@ import {
 } from "../../../store/admin";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import ScopeSelector from "./ScopeSelelctor";
 
 function KeyForm(props) {
   const [changed, setChanged] = useState(props.data);
+
   const dispatch = useDispatch();
   const creatingNew = props.creatingNew;
-
   const triggerClose = () => props.setShow(false);
-
   const handleChange = (event) => {
     setChanged({ ...changed, [event.target.name]: event.target.value });
+  };
+
+  // accessor and setter to pass to scope selector
+  const scopes = changed["scopes"] || [];
+  const setScopes = (value) => {
+    setChanged({ ...changed, scopes: value });
   };
 
   const submitEdits = () => {
@@ -56,7 +62,7 @@ function KeyForm(props) {
 
   return (
     <>
-      <Form.Group className="mb-3" controlId="formBasicEmail">
+      <Form.Group className="mb-3">
         <Form.Label>Name</Form.Label>
         <Form.Control
           type="text"
@@ -68,7 +74,7 @@ function KeyForm(props) {
         />
       </Form.Group>
 
-      <Form.Group className="mb-3" controlId="formBasicEmail">
+      <Form.Group className="mb-3">
         <Form.Label>Description</Form.Label>
         <Form.Control
           type="text"
@@ -81,18 +87,7 @@ function KeyForm(props) {
         />
       </Form.Group>
 
-      <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Label>API Key Scopes</Form.Label>
-        <Form.Control
-          type="text"
-          as="textarea"
-          name="scopes"
-          aria-label="API key scopes"
-          placeholder="API key scopes"
-          value={changed.scopes}
-          onChange={handleChange}
-        />
-      </Form.Group>
+      <ScopeSelector value={scopes || ""} setValue={setScopes} />
 
       {creatingNew ? (
         ""

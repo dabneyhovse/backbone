@@ -1,5 +1,6 @@
 const router = require("express").Router();
-const { User, Scope, Key, KeyScope } = require("../db/models");
+const { Op } = require("sequelize");
+const { Scope, Key, KeyScope } = require("../db/models");
 const { isAdmin } = require("module-middleware");
 module.exports = router;
 
@@ -67,7 +68,9 @@ router.post("/", async (req, res, next) => {
       throw error;
     }
 
-    res.status(201).json(key);
+    // return the version with scopes so they r viewable
+    const keyWScopes = await Key.findByPk(key.id, { include: Scope });
+    res.status(201).json(keyWScopes);
 
     // remove the raw unhashed value, only available once
     key.unhashed = null;
@@ -101,7 +104,7 @@ router.post("/", async (req, res, next) => {
  */
 router.put("/", isAdmin, async (req, res, next) => {
   try {
-    key = await Key.findOne({ where: { id: req.body.id } });
+    key = await Key.findOne({ where: { id: req.body.id }, include: Scope });
 
     if (req.body.regenerate === true) {
       // regenerate key, hashed when val is updated,
@@ -114,9 +117,46 @@ router.put("/", isAdmin, async (req, res, next) => {
     }
     await key.save();
 
-    // TODO edit scopes
+    // update the scopes
+    scopes = req.body.scopes;
+    if (req.body.scopes == undefined) {
+      res.json(key);
+      return;
+    }
 
-    res.status(201).json(key);
+    scopeErrors = "";
+    oldScopes = key.scopes.map((s) => s.id);
+    // find difference oldScopes - scopes, so the ones to remove
+    const toRemove = oldScopes.filter((x) => !scopes.includes(x));
+    // find difference scopes - oldscopes, so ones to add
+    const toAdd = scopes.filter((x) => !oldScopes.includes(x));
+
+    // add in new scopes
+    for (let i = 0; i < toAdd.length; i++) {
+      let scope = await Scope.findByPk(toAdd[i]);
+      if (scope == null) {
+        scopeErrors += `Scope id ${toAdd[i]} does not exist`;
+      }
+      await KeyScope.create({ keyId: key.id, scopeId: toAdd[i] });
+    }
+
+    // remove all the ones in toRemove
+    await KeyScope.destroy({
+      where: {
+        scopeId: { [Op.in]: toRemove },
+        keyId: key.id,
+      },
+    });
+
+    // if there were scope errors throw them
+    if (scopeErrors !== "") {
+      let error = new Error(scopeErrors);
+      error.status = 500;
+      throw error;
+    }
+
+    const keyWScopes = await Key.findByPk(key.id, { include: Scope });
+    res.status(201).json(keyWScopes);
 
     if (req.body.regenerate === true) {
       // remove the raw unhashed value, only available once

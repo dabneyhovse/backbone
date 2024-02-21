@@ -5,32 +5,31 @@
  */
 
 import React from "react";
-import KeyForm from "./KeyForm";
+import ScopeForm from "./ScopeForm";
 
-function KeyRow(props) {
+function ScopeRow(props) {
   const { data } = props;
 
-  const handleClick = (event) => {
+  const handleClick = () => {
     props.triggerPopup(
-      `Edit Api Key ${data.id}`,
-      <KeyForm
+      `Edit Api Scope ${data.id}`,
+      <ScopeForm
         setShow={props.setShow}
         data={data}
         triggerPopup={props.triggerPopup}
         creatingNew={false}
-      ></KeyForm>,
+      ></ScopeForm>,
       []
     );
   };
 
   return (
-    <tr onClick={handleClick} className="key-row">
+    <tr onClick={handleClick} className="scope-row">
       <td>{data.id}</td>
       <td>{data.name}</td>
       <td>{data.description}</td>
-      <td>{data.scopes}</td>
     </tr>
   );
 }
 
-export default KeyRow;
+export default ScopeRow;
