@@ -76,7 +76,7 @@ function ScopeForm(props) {
               type="submit"
               onClick={submitDelete}
             >
-              Delete Key
+              Delete Scope
             </Button>
           </div>
         </>
