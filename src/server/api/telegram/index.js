@@ -91,7 +91,7 @@ router.get(
         where: { telegram_id: req.query.telegram_id },
       });
 
-      res.json({ darb: user == null }).status(200);
+      res.json({ darb: user !== null }).status(200);
     } catch (error) {
       next(error);
     }
