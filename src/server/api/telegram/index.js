@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const bot = require("./bot");
 const { User } = require("../../db/models");
-const { hasApiKey } = require("../middleware");
+const { hasApiScope } = require("module-middleware");
 module.exports = router;
 
 /**
@@ -30,40 +30,70 @@ async function launchBot() {
 launchBot();
 
 /**
- * GET /api/telegram/user?telegram_id={}
+ * these are seperate from the user cause they are telegram id based, meant for
+ * bots
+ * */
+
+/**
+ * GET /api/telegram/isdarb
  *
- * get basic darb info by their telegram_id
+ * req.query.telegram_id:
+ *    the telegram id you want to check
  *
- *
- * req.query.telegram_id
- *  the telegram id
- *
- * req.query.api_key
- *  the api key of the user
+ * req.query.api_key:
+ *    api key with scope "telegram-isdarb"
  *
  * returns json
- * {
- *   id
- *   firstName,
- *   lastName,
- *   username,
- *   profile : { photo, room, bio }
- * }
- *
+ *    .id : backbone internal user id
+ *    .firstname : firstname that the user has set in bio
+ *    .lastname : lastname that the user has set in bio
+ *    .username : user's username
+ *    .profile : json object with more details
+ *        { photo, room, bio }
  */
-router.get("/user", hasApiKey("telegram-user"), async (req, res, next) => {
+router.get("/user", hasApiScope("telegram-user"), async (req, res, next) => {
   try {
     const user = await User.findOne({
       where: { telegram_id: req.query.telegram_id },
       attributes: ["id", "firstName", "lastName", "username", "profile"],
     });
+
     if (user == null) {
       err = new Error("User not found");
       err.status = 404;
       throw err;
     }
+
     res.json(user).status(200);
   } catch (error) {
     next(error);
   }
 });
+
+/**
+ * GET /api/telegram/isdarb
+ *
+ * req.query.telegram_id:
+ *    the telegram id you want to check
+ *
+ * req.query.api_key:
+ *    api key with scope "telegram-isdarb"
+ *
+ * returns json
+ *    .darb : true if darb & telegram account linked, false otherwise
+ */
+router.get(
+  "/isdarb",
+  hasApiScope("telegram-isdarb"),
+  async (req, res, next) => {
+    try {
+      const user = await User.findOne({
+        where: { telegram_id: req.query.telegram_id },
+      });
+
+      res.json({ darb: user == null }).status(200);
+    } catch (error) {
+      next(error);
+    }
+  }
+);

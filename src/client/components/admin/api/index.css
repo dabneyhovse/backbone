@@ -1,0 +1,13 @@
+/* TODO update this if key stuff needs it */
+
+.user-row {
+  cursor: pointer;
+}
+
+table {
+  table-layout: fixed;
+  width: 100%;
+  overflow: scroll;
+  word-wrap: break-word;
+  word-break: break-all;
+}

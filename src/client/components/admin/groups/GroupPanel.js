@@ -27,7 +27,8 @@ function GroupPanel(props) {
         Groups are a structure used by doku wiki to determine what content a
         user can access. For example a user within the group "full" can access
         content meant for full darbs. You can add users to a group via the users
-        tab above. Currently you cannot add new groups. //TODO alow adding new
+        tab above. Currently you cannot add new groups (via this interface, just
+        connect to the db on lenin directly to add one). //TODO alow adding new
         groups
       </p>
       <Table striped bordered hover size="sm">
