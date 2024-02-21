@@ -75,9 +75,21 @@ const APIRoutes = React.lazy(() => import("./api/ApiRoutes"));
 const BUILT_IN_ADMIN = [
   {
     importAdmin: true,
+    name: "About",
+    moduleName: "about",
+    route: "",
+    element: (
+      <div>
+        TODO add actual explination text here. Not my job anymore... But
+        basically this area lets admin manage the website and linked services.
+      </div>
+    ),
+  },
+  {
+    importAdmin: true,
     name: "Users",
     moduleName: "users",
-    route: "",
+    route: "users",
     element: <UserPanel />,
   },
   {
