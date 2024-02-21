@@ -6,6 +6,8 @@ import { LinkContainer } from "react-router-bootstrap";
 import KeyPanel from "./KeyPanel";
 import ScopePanel from "./ScopePanel";
 
+import "./index.css";
+
 export default function APIRoutes() {
   return (
     <React.Fragment>

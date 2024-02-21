@@ -1,6 +1,7 @@
 /* TODO update this if key stuff needs it */
 
-.user-row {
+.scope-row,
+.key-row {
   cursor: pointer;
 }
 
