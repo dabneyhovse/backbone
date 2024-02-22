@@ -34,11 +34,11 @@ const NAVWRAP_FIXED = {
 };
 
 const NAVBAR_DEFAULT = {
-  backgroundColor: "#092916",
+  backgroundColor: "#0e3e1a",
 };
 
 const NAVBAR_TRANSPARENT = {
-  backgroundColor: "rgba(9,41,22,0.5) !important",
+  backgroundColor: "rgba(14,62,26,0.5) !important",
 };
 
 const NAVBAR_HIDDEN = {
@@ -159,7 +159,7 @@ function Navdarb() {
     ) {
       ref.current.style.setProperty(
         "background-color",
-        "rgba(9,41,22,0.5)",
+        "rgba(14,62,26,0.5)",
         "important"
       );
     }
