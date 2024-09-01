@@ -41,7 +41,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.5",
     "@sendgrid/mail": "^8.1.0",
-    "axios": "^0.27.2",
+    "axios": "^0.28.1",
     "bootstrap": "^5.2.0",
     "compression": "^1.7.4",
     "connect-session-sequelize": "^7.1.4",
