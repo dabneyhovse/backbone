@@ -19,7 +19,7 @@ module.exports = {
 
   /**
    * the route you want your service to occupy ie "example" gives the service dabney.caltech.edu/example/*
-   * simply use your own routes to get varried routes from the base ie
+   * simply use your own routes to get varied routes from the base ie
    * dabney.caltech.edu/example/about and dabney.caltech.edu/example/home
    * would be two different routes
    *
