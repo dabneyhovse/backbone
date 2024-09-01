@@ -1,5 +1,5 @@
 /**
- * Just another middleware functino, seperated out as it imports
+ * Just another middleware function, seperated out as it imports
  * database stuff
  */
 
@@ -21,7 +21,7 @@ const { Key, Scope } = require("../../db/models");
  * @param {*} next next
  */
 const populateApiKey = async (req, res, next) => {
-  // if not in query, then check body. If its neither itll be undefined so we good
+  // if not in query, then check body. If its neither it'll be undefined so we good
   let { api_key } = req.query.api_key !== undefined ? req.query : req.body;
 
   // no key, just move on
