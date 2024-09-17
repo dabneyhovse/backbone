@@ -6,33 +6,33 @@
  * and showing loaded status
  */
 
-const UPDATE_MODAL_STATUS = "UPDATE_MODAL_STATUS";
+// const UPDATE_MODAL_STATUS = "UPDATE_MODAL_STATUS";
 const LOADED_AUTH = "LOADED_AUTH";
 
-export const updateModalStatus = (status, isLoggedIn) => {
-  if (!isLoggedIn && !status) {
-    return {
-      type: UPDATE_MODAL_STATUS,
-      status: true,
-    };
-  }
-  return {
-    type: UPDATE_MODAL_STATUS,
-    status,
-  };
-};
+// export const updateModalStatus = (status, isLoggedIn) => {
+//   if (!isLoggedIn && !status) {
+//     return {
+//       type: UPDATE_MODAL_STATUS,
+//       status: true,
+//     };
+//   }
+//   return {
+//     type: UPDATE_MODAL_STATUS,
+//     status,
+//   };
+// };
 
-export const updateModalVisibility = (invisible) => {
-  if (invisible) {
-    document.body.style.overflow = "hidden";
-  } else {
-    document.body.style.overflow = "";
-  }
-  return {
-    type: UPDATE_MODAL_STATUS,
-    status: invisible,
-  };
-};
+// export const updateModalVisibility = (invisible) => {
+//   if (invisible) {
+//     document.body.style.overflow = "hidden";
+//   } else {
+//     document.body.style.overflow = "";
+//   }
+//   return {
+//     type: UPDATE_MODAL_STATUS,
+//     status: invisible,
+//   };
+// };
 
 export const loadedAuth = () => {
   return { type: LOADED_AUTH };
@@ -45,8 +45,8 @@ const init = {
 
 export default function (state = init, action) {
   switch (action.type) {
-    case UPDATE_MODAL_STATUS:
-      return { ...state, visible: action.status };
+    // case UPDATE_MODAL_STATUS:
+    //   return { ...state, visible: action.status };
     case LOADED_AUTH:
       return { ...state, loaded: true };
     default: {
