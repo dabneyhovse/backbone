@@ -24,10 +24,9 @@ const BlueMechanical = React.lazy(() =>
 );
 const Gallery = React.lazy(() => import("./components/basic/DarbGallery"));
 const Calender = React.lazy(() => import("./components/basic/Calender"));
-const AuthModal = React.lazy(() => import("./components/auth/AuthModal"));
-const VerifyPage = React.lazy(() => import("./components/auth/VerifyPage"));
-const ProfileWall = React.lazy(() => import("./components/user/Profile"));
 const AdminPanel = React.lazy(() => import("./components/admin/AdminPanel"));
+const PostLogin = React.lazy(() => import("./components/auth/PostLogin"));
+const PostLogout = React.lazy(() => import("./components/auth/PostLogout"));
 
 // SERVICES NOTE: add services lazy load main component here:
 const Example = React.lazy(() => import("service-example/React"));
@@ -41,8 +40,10 @@ import frotatorReducer from "service-frotator/Redux";
  * quick wrapper comoponent for suspense & attach redux manager
  * for the dynamic redux store
  */
-function LazyAuth({ lazyElement, requiredAuth, authLevel, managerContainer }) {
-  if (authLevel >= requiredAuth) {
+function LazyAuth({ lazyElement, requiredClaims, userClaims, managerContainer }) {
+  if (
+    requiredClaims.every((claim) => userClaims.includes(claim))
+  ) {
     return (
       <Suspense fallback={<Loading />}>
         {/* {managerContainer == null ? <></> : managerContainer} */}
@@ -50,22 +51,22 @@ function LazyAuth({ lazyElement, requiredAuth, authLevel, managerContainer }) {
       </Suspense>
     );
   }
-  return <></>;
+  return (
+    <Suspense fallback={<Loading />}>
+        {/* {managerContainer == null ? <></> : managerContainer} */}
+        {<BlueMechanical />}
+    </Suspense>
+  );
+
 }
 
 /**
- *  requiredAuth values:
- *    0.5 => hasnt verified email yet
- *    0 => no login required                      (or 1/2/3/4 reqs)
- *    1 => login required (non darbs can access)  (or 2/3/4 reqs)
- *    2 => login & socialDarb required            (or 3/4 reqs)
- *    3 => login & fullDarb required              (or 4 reqs)
- *    4 => admin status required
+ *  See Keycloak admin console to view and configure roles
  */
 
 function SiteRoutes() {
-  const { authLevel } = useSelector((state) => ({
-    authLevel: state.user.data.authLevel ? state.user.data.authLevel : 0,
+  const { userClaims } = useSelector((state) => ({
+    userClaims: state.userInfo?.backbone_roles ? state.userInfo.backbone_roles : {},
   }));
 
   return (
@@ -75,8 +76,8 @@ function SiteRoutes() {
         path={"/"}
         element={
           <LazyAuth
-            requiredAuth={0}
-            authLevel={authLevel}
+            requiredClaims={[]}
+            userClaims={userClaims}
             lazyElement={<Home />}
           />
         }
@@ -87,8 +88,8 @@ function SiteRoutes() {
         path={"/home"}
         element={
           <LazyAuth
-            requiredAuth={0}
-            authLevel={authLevel}
+            requiredClaims={[]}
+            userClaims={userClaims}
             lazyElement={<Home />}
           />
         }
@@ -99,8 +100,8 @@ function SiteRoutes() {
         path={"/gallery"}
         element={
           <LazyAuth
-            requiredAuth={0}
-            authLevel={authLevel}
+            requiredClaims={[]}
+            userClaims={userClaims}
             lazyElement={<Gallery />}
           />
         }
@@ -111,8 +112,8 @@ function SiteRoutes() {
         path={"/socialcalender"}
         element={
           <LazyAuth
-            requiredAuth={0}
-            authLevel={authLevel}
+            requiredClaims={[]}
+            userClaims={userClaims}
             lazyElement={<Calender />}
           />
         }
@@ -120,36 +121,24 @@ function SiteRoutes() {
 
       <Route
         exact={true}
-        path={"/auth"}
+        path={"/auth/postlogin"}
         element={
           <LazyAuth
-            requiredAuth={0}
-            authLevel={authLevel}
-            lazyElement={<AuthModal />}
-          />
-        }
-      />
-
-      <Route
-        exact={false}
-        path={"/verify"}
-        element={
-          <LazyAuth
-            requiredAuth={0}
-            authLevel={authLevel}
-            lazyElement={<VerifyPage />}
+            requiredClaims={[]}
+            userClaims={userClaims}
+            lazyElement={<PostLogin />}
           />
         }
       />
 
       <Route
         exact={true}
-        path={"/profile"}
+        path={"/auth/postlogout"}
         element={
           <LazyAuth
-            requiredAuth={0.5}
-            authLevel={authLevel}
-            lazyElement={<ProfileWall />}
+            requiredClaims={[]}
+            userClaims={userClaims}
+            lazyElement={<PostLogout />}
           />
         }
       />
@@ -159,8 +148,8 @@ function SiteRoutes() {
         path={"/adminpanel/*"}
         element={
           <LazyAuth
-            requiredAuth={4}
-            authLevel={authLevel}
+            requiredClaims={["backbone-admin"]}
+            userClaims={userClaims}
             lazyElement={<AdminPanel />}
           />
         }
@@ -181,8 +170,8 @@ function SiteRoutes() {
                 serviceKey={"example"}
               />
             }
-            requiredAuth={4}
-            authLevel={authLevel}
+            requiredClaims={["backbone-admin"]}
+            userClaims={userClaims}
             lazyElement={<Example />}
           />
         }
@@ -199,8 +188,8 @@ function SiteRoutes() {
                 serviceKey={"frotator"}
               />
             }
-            requiredAuth={3}
-            authLevel={authLevel}
+            requiredClaims={["frotator-access"]}
+            userClaims={userClaims}
             lazyElement={<Frotator />}
           />
         }
@@ -210,8 +199,8 @@ function SiteRoutes() {
         exact={false}
         element={
           <LazyAuth
-            requiredAuth={0}
-            authLevel={authLevel}
+            requiredClaims={[]}
+            userClaims={userClaims}
             lazyElement={<BlueMechanical />}
           />
         }
