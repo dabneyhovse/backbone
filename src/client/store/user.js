@@ -54,6 +54,7 @@ export const me = () => async (dispatch, getState) => {
     if (res.status == 401) {
       dispatch(loadedAuth());
       dispatch(getUser(defaultUser));
+      return;
     }
     else if (res.data.userInfo.email_verified !== true) {
       toast.warn("Please verify your email", {
