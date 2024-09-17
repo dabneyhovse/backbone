@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { requiresAuth } = require("express-openid-connect");
 // const { Verification, Affiliation } = require("../db/models");
 // const User = require("../db/models/user");
 // const sendEmail = require("module-dabney-email");
@@ -270,7 +271,7 @@ module.exports = router;
 //   res.json({ ...(req.user ? req.user.toJSON() : {}), authLevel });
 // });
 
-router.get("/userinfo", async (req, res) => {
+router.get("/userinfo", requiresAuth(), async (req, res) => {
     const userInfo = await req.oidc.fetchUserInfo();
     res.json(userInfo);
 });
