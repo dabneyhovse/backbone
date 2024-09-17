@@ -67,51 +67,51 @@ export const me = () => async (dispatch, getState) => {
   }
 };
 
-export const auth = () => {
-  return async (dispatch) => {
-    let res;
-    try {
-      if (method === "signup") {
-        res = await axios.post("/auth/signup", {
-          username,
-          password,
-          caltechEmail,
-          personalEmail,
-        });
-        toast.success("Successfully signed up! Welcome to Dabney™.");
-        dispatch(updateModalVisibility(false));
-      } else if (method === "signin") {
-        res = await axios.post("/auth/login", { username, password });
-        toast.success("Successfully logged in");
-        dispatch(updateModalVisibility(false));
-      }
-    } catch (authError) {
-      toast.error(
-        `There was an error ${
-          method == "signin" ? "signing in" : "signing up"
-        }.`,
-        {
-          autoClose: AUTH_ERR_TOAST_TIME,
-        }
-      );
-      return dispatch(getUser({ error: authError }));
-    }
-    try {
-      // TODO: clean this up, not sure why two try catches
-      dispatch(getUser(res.data));
-      history.push("/home");
-    } catch (error) {
-      toast.error(
-        `There was an error ${
-          method == "signin" ? "signing in" : "signing up"
-        }.`,
-        {
-          autoClose: AUTH_ERR_TOAST_TIME,
-        }
-      );
-    }
-  };
-};
+// export const auth = () => {
+//   return async (dispatch) => {
+//     let res;
+//     try {
+//       if (method === "signup") {
+//         res = await axios.post("/auth/signup", {
+//           username,
+//           password,
+//           caltechEmail,
+//           personalEmail,
+//         });
+//         toast.success("Successfully signed up! Welcome to Dabney™.");
+//         dispatch(updateModalVisibility(false));
+//       } else if (method === "signin") {
+//         res = await axios.post("/auth/login", { username, password });
+//         toast.success("Successfully logged in");
+//         dispatch(updateModalVisibility(false));
+//       }
+//     } catch (authError) {
+//       toast.error(
+//         `There was an error ${
+//           method == "signin" ? "signing in" : "signing up"
+//         }.`,
+//         {
+//           autoClose: AUTH_ERR_TOAST_TIME,
+//         }
+//       );
+//       return dispatch(getUser({ error: authError }));
+//     }
+//     try {
+//       // TODO: clean this up, not sure why two try catches
+//       dispatch(getUser(res.data));
+//       history.push("/home");
+//     } catch (error) {
+//       toast.error(
+//         `There was an error ${
+//           method == "signin" ? "signing in" : "signing up"
+//         }.`,
+//         {
+//           autoClose: AUTH_ERR_TOAST_TIME,
+//         }
+//       );
+//     }
+//   };
+// };
 
 // export const linkTelegram = (hash) => async (dispatch, getState) => {
 //   try {
