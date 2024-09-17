@@ -21,8 +21,6 @@ import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { LinkContainer } from "react-router-bootstrap";
 
-import { logout } from "../../store/user";
-import { updateModalVisibility } from "../../store/authModal";
 import { Tooltip, OverlayTrigger } from "react-bootstrap";
 
 const NAVWRAP_DEFAULT = {};
@@ -53,9 +51,9 @@ const NAVBAR_HIDDEN = {
  * @returns
  */
 
-function navItemToReact(item, authLevel, dropdown = false) {
+function navItemToReact(item, userClaims, dropdown = false) {
   let out = null;
-  if (authLevel < item.requiredAuth) {
+  if (requiredClaims.every((claim) => userClaims.includes(claim))) {
     return "";
   }
 
@@ -93,7 +91,7 @@ function navItemToReact(item, authLevel, dropdown = false) {
         drop="start"
       >
         {item.links.map((link) =>
-          navItemToReact(link, authLevel, (dropdown = true))
+          navItemToReact(link, userClaims, (dropdown = true))
         )}
       </NavDropdown>
     );
@@ -101,7 +99,7 @@ function navItemToReact(item, authLevel, dropdown = false) {
     out = (
       <>
         {item.links.map((link) => {
-          return navItemToReact(link, authLevel);
+          return navItemToReact(link, userClaims);
         })}
       </>
     );
@@ -131,13 +129,11 @@ function navItemToReact(item, authLevel, dropdown = false) {
  */
 function Navdarb() {
   // hooks
-  let dispatch = useDispatch();
   let location = useLocation();
 
-  const handleLogout = () => dispatch(logout());
-
-  const { user, navbar } = useSelector((state) => ({
-    user: state.user.data,
+  const { user, userClaims, navbar } = useSelector((state) => ({
+    user: state.userInfo,
+    userClaims: state.userInfo?.backbone_roles ? state.userInfo.backbone_roles : {},
     navbar: state.navbar,
   }));
 
@@ -183,30 +179,27 @@ function Navdarb() {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="transparent">
-              {navItemToReact(navbar.links, user.authLevel)}
+              {navItemToReact(navbar.links, userClaims)}
               <NavDropdown
                 drop="start"
                 className="icon"
                 title={<FaUserCircle size="1.5em" />}
                 id="collasible-nav-dropdown"
               >
-                {user.id == undefined ? (
-                  <NavDropdown.Item
-                    pullRight={false}
-                    onClick={() => {
-                      dispatch(updateModalVisibility(true));
-                    }}
-                  >
-                    Login / Signup
-                  </NavDropdown.Item>
+                {user.default == true ? (
+                  <LinkContainer to="/login">
+                    <NavDropdown.Item pullRight={false} href>
+                      Login
+                    </NavDropdown.Item>
+                  </LinkContainer>
                 ) : (
                   <React.Fragment>
-                    <LinkContainer to="/profile">
+                    <LinkContainer to="https://accounts.dabney.caltech.edu/realms/dabneyhovse/account">
                       <NavDropdown.Item pullRight={false} href>
                         Profile
                       </NavDropdown.Item>
                     </LinkContainer>
-                    {user.authLevel > 3 ? (
+                    {userClaims.includes("backbone-admin") ? (
                       <LinkContainer to="/adminpanel">
                         <NavDropdown.Item pullRight={false} href>
                           Admin
@@ -216,10 +209,11 @@ function Navdarb() {
                       ""
                     )}
                     <NavDropdown.Divider />
-
-                    <NavDropdown.Item pullRight={false} onClick={handleLogout}>
-                      Logout
-                    </NavDropdown.Item>
+                    <LinkContainer to="/logout">
+                      <NavDropdown.Item pullRight={false} href>
+                        Logout
+                      </NavDropdown.Item>
+                    </LinkContainer>
                   </React.Fragment>
                 )}
               </NavDropdown>
