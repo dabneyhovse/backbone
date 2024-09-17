@@ -51,10 +51,12 @@ export const clearUserError = () => ({
 export const me = () => async (dispatch, getState) => {
   try {
     const res = await axios.get("/auth/userinfo");
-    if (res.status == 401) {
+    if (res.status === 401) {
+      toast.warn("Melissa screwed up!", {
+        autoClose: AUTH_ERR_TOAST_TIME,
+      });
       dispatch(loadedAuth());
       dispatch(getUser(defaultUser));
-      return;
     }
     else if (res.data.userInfo.email_verified !== true) {
       toast.warn("Please verify your email", {
@@ -64,10 +66,16 @@ export const me = () => async (dispatch, getState) => {
     dispatch(loadedAuth());
     dispatch(getUser(res.data));
   } catch (err) {
-    dispatch(loadedAuth());
-    toast.error(`There was an error loading your user.`, {
-      autoClose: AUTH_ERR_TOAST_TIME,
-    });
+    if (err.response?.status === 401) {
+      dispatch(loadedAuth());
+      dispatch(getUser(defaultUser));
+    }
+    else {
+      dispatch(loadedAuth());
+      toast.error(`There was an error loading your user.`, {
+        autoClose: AUTH_ERR_TOAST_TIME,
+      });
+    }
   }
 };
 
