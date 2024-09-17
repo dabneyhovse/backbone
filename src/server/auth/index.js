@@ -265,7 +265,12 @@ async function calculateAuthLevel(user) {
 /**
  * returns the currently logged in user
  */
-router.get("/me", async (req, res) => {
-  const authLevel = await calculateAuthLevel(req.user);
-  res.json({ ...(req.user ? req.user.toJSON() : {}), authLevel });
+// router.get("/me", async (req, res) => {
+//   const authLevel = await calculateAuthLevel(req.user);
+//   res.json({ ...(req.user ? req.user.toJSON() : {}), authLevel });
+// });
+
+router.get("/userinfo", async (req, res) => {
+    const userInfo = await req.oidc.fetchUserInfo();
+    res.json(userInfo);
 });
