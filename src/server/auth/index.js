@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const { requiresAuth } = require("express-openid-connect");
+
 // const { Verification, Affiliation } = require("../db/models");
 // const User = require("../db/models/user");
 // const sendEmail = require("module-dabney-email");
