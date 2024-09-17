@@ -69,7 +69,6 @@ const services = loadServices();
 const init = {
   visible: true,
   transparentRoutes: ["/", "/home"],
-  hiddenRoutes: ["/auth", "/verify"],
   links: {
     type: "main",
     links: [
