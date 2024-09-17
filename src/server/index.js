@@ -82,10 +82,12 @@ const createApp = () => {
       authRequired: false,
       idpLogout: true,
       attemptSilentLogin: true,
+      errorOnRequiredAuth: true,
       session: {
         secret: process.env.SESSION_SECRET,
         store: sessionStore,
       },
+      
     })
   );
 
