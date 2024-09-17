@@ -29,7 +29,6 @@ const CLEAR_USER_ERROR = "CLEAR_USER_ERROR";
  */
 const defaultUser = {
   default: true,
-
 };
 
 /**
