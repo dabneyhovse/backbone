@@ -25,6 +25,12 @@ const sessionStore = new SequelizeStore({ db });
 const PORT = process.env.PORT || 8080;
 const app = express();
 const socketio = require("socket.io");
+const { Agent } = require("https");
+const { readFileSync } = require("fs");
+const mTLSAgent = new Agent({
+  key: readFileSync(process.env.CLIENT_KEY_PATH, "utf8"),
+  cert: readFileSync(process.env.CLIENT_CERT_PATH, "utf8"),
+});
 module.exports = app;
 
 if (process.env.NODE_ENV === "test") {
@@ -83,11 +89,14 @@ const createApp = () => {
       idpLogout: true,
       attemptSilentLogin: true,
       errorOnRequiredAuth: true,
+      clientAuthMethod: "tls_client_auth",
       session: {
         secret: process.env.SESSION_SECRET,
         store: sessionStore,
       },
-      
+      httpAgent: {
+        https: mTLSAgent,
+      }
     })
   );
 
