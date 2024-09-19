@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const { default: validate } = require("deep-email-validator");
 const { Verification, Affiliation } = require("../db/models");
 const User = require("../db/models/user");
 const sendEmail = require("module-dabney-email");
