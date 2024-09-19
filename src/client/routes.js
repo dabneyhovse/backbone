@@ -30,11 +30,11 @@ const ProfileWall = React.lazy(() => import("./components/user/Profile"));
 const AdminPanel = React.lazy(() => import("./components/admin/AdminPanel"));
 
 // SERVICES NOTE: add services lazy load main component here:
-const Example = React.lazy(() => import("service-example/React"));
+// const Example = React.lazy(() => import("service-example/React"));
 const Frotator = React.lazy(() => import("service-frotator/React"));
 
 // SERVICES NOTE: add services redux here:
-import exampleReducer from "service-example/Redux";
+// import exampleReducer from "service-example/Redux";
 import frotatorReducer from "service-frotator/Redux";
 
 /**

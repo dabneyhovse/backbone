@@ -113,13 +113,13 @@ const BUILT_IN_ADMIN = [
     route: "frotator",
     element: <Frotator />,
   },
-  {
-    importAdmin: true,
-    name: "Example",
-    moduleName: "service-example",
-    route: "example",
-    element: <Example />,
-  },
+  // {
+  //   importAdmin: true,
+  //   name: "Example",
+  //   moduleName: "service-example",
+  //   route: "example",
+  //   element: <Example />,
+  // },
 ];
 
 /**
