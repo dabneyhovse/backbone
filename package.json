@@ -54,6 +54,7 @@
     "image-data-uri": "^2.0.1",
     "mdb-react-ui-kit": "^4.2.0",
     "module-dabney-email": "file:../Modules/module-dabney-email",
+    "module-keycloak": "file:../Modules/module-keycloak",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.7.8",
