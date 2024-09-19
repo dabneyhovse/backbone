@@ -3,7 +3,7 @@
 // const { User, Affiliation, Verification, Group } = require("../db/models");
 // const { isAdmin, isLoggedIn, upload, LOGIC } = require("module-middleware");
 // const fs = require("fs");
-// const imageDataURI = require("image-data-uri");
+// const parseDataURL = require("data-urls");
 // module.exports = router;
 
 // const USERS_PER_PAGE = 20;
@@ -427,10 +427,9 @@
 //       ) {
 //         const file = `/resources/images/pfp/${req.user.id}.png`;
 //         // write to the currently used public folder, and the resources folder for the next build
-//         const image = imageDataURI.decode(filtered["profile.photo"]);
-
-//         fs.writeFileSync("." + file, image.dataBuffer);
-//         fs.writeFileSync("./public" + file, image.dataBuffer);
+//         const image = parseDataURL(filtered["profile.photo"]);
+//         fs.writeFileSync("." + file, image.body);
+//         fs.writeFileSync("./public" + file, image.body);
 //         filtered["profile.photo"] = file;
 //       }
 
