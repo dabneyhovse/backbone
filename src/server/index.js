@@ -92,7 +92,8 @@ const createApp = () => {
       },
       httpAgent: {
         https: mTLSAgent,
-      }
+      },
+      idTokenSigningAlg: "EdDSA",
     })
   );
 
