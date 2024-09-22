@@ -102,7 +102,7 @@ const createApp = () => {
     })
   );
 
-  // app.use("/auth", require("./auth"));
+  app.use("/auth", require("./auth"));
   // app.use("/api", require("./api"));
   app.use("/", require("./static"));
 
