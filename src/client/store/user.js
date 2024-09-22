@@ -72,6 +72,7 @@ export const me = () => async (dispatch, getState) => {
     }
     else {
       dispatch(loadedAuth());
+      console.error(err);
       toast.error(`There was an error loading your user.`, {
         autoClose: AUTH_ERR_TOAST_TIME,
       });
