@@ -9,10 +9,10 @@
  * // TODO special routes allowing any user to host a personal website
  */
 
-import React, { Component, Suspense, useEffect } from "react";
+import React, { Component, Suspense, useEffect, useLayoutEffect } from "react";
 // import { lazy } from 'react';
 import { connect, useSelector } from "react-redux";
-import { Navigate, Route, useNavigate } from "react-router-dom";
+import { Navigate, Route, useActionData, useBeforeUnload, useFetcher, useNavigate } from "react-router-dom";
 import Loading from "./components/layout/Loading";
 import SlideRoutes from "react-slide-routes";
 import ManagerContainer from "./components/layout/ManagerContainer";
@@ -61,7 +61,7 @@ function LazyAuth({ lazyElement, requiredClaims, userClaims, managerContainer })
 }
 
 function ServerRedirect({to}) {
-  useEffect(() => {
+  useLayoutEffect(() => {
     window.location.href = to;
   });
   //return <Navigate to={to}/>;
