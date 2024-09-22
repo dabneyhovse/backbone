@@ -54,7 +54,7 @@ const NAVBAR_HIDDEN = {
 function navItemToReact(item, userClaims, dropdown = false) {
   let out = null;
   console.dir(item);
-  if (!(item.requiredClaims.every((claim) => userClaims.includes(claim)))) {
+  if (item.requiredClaims && !(item.requiredClaims.every((claim) => userClaims.includes(claim)))) {
     return "";
   }
 
