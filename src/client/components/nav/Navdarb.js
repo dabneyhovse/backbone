@@ -187,14 +187,14 @@ function Navdarb() {
                 id="collasible-nav-dropdown"
               >
                 {user.default == true ? (
-                  <LinkContainer to="/login">
+                  <LinkContainer reloadDocument to="/login">
                     <NavDropdown.Item pullRight={false} href>
                       Login
                     </NavDropdown.Item>
                   </LinkContainer>
                 ) : (
                   <React.Fragment>
-                    <LinkContainer to="https://accounts.dabney.caltech.edu/realms/dabneyhovse/account">
+                    <LinkContainer to={`${process.env.ISSUER_BASE_URL}/account`}>
                       <NavDropdown.Item pullRight={false} href>
                         Profile
                       </NavDropdown.Item>
@@ -209,7 +209,7 @@ function Navdarb() {
                       ""
                     )}
                     <NavDropdown.Divider />
-                    <LinkContainer to="/logout">
+                    <LinkContainer reloadDocument to="/logout">
                       <NavDropdown.Item pullRight={false} href>
                         Logout
                       </NavDropdown.Item>
