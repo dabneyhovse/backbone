@@ -87,7 +87,6 @@ const createApp = () => {
       errorOnRequiredAuth: true,
       clientAuthMethod: "tls_client_auth",
       session: {
-        secret: process.env.SESSION_SECRET,
         store: sessionStore,
       },
       httpAgent: {
