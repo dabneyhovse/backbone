@@ -273,6 +273,5 @@ module.exports = router;
 // });
 
 router.get("/me", requiresAuth(), async (req, res) => {
-    const userInfo = await req.oidc.fetchUserInfo();
-    res.json(userInfo);
+    res.json(req.oidc.user);
 });
