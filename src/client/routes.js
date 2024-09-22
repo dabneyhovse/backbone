@@ -125,7 +125,7 @@ function SiteRoutes() {
           null
         }
       />
-      <Route 
+      {/* <Route 
         exact={true}
         path={"/logout"}
         element={
@@ -133,7 +133,7 @@ function SiteRoutes() {
             window.location.href = "/login";
           })
         }
-      />
+      /> */}
       <Route
         exact={true}
         path={"/auth/postlogin"}
