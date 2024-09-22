@@ -55,13 +55,14 @@ export const me = () => async (dispatch, getState) => {
       toast.warn("Melissa screwed up!", {
         autoClose: AUTH_ERR_TOAST_TIME,
       });
+      console.log("Melissa really screwed up!");
       dispatch(loadedAuth());
       dispatch(getUser(defaultUser));
     }
     console.dir(res.data);
     console.dir(res.headers);
     console.log(res.status);
-    else if (res.data.userInfo.email_verified !== true) {
+    if (res.data.userInfo.email_verified !== true) {
       toast.warn("Please verify your email", {
         autoClose: AUTH_ERR_TOAST_TIME,
       });
