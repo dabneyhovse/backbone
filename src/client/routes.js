@@ -60,7 +60,7 @@ function LazyAuth({ lazyElement, requiredClaims, userClaims, managerContainer })
 
 }
 
-function serverRedirect({to}) {
+function serverRedirect(to) {
   useEffect(() => {
     window.location.href = to;
   });
@@ -129,14 +129,14 @@ function SiteRoutes() {
         exact={true}
         path={"/login"}
         element={
-          <serverRedirect to={"/login"}/>
+          serverRedirect("/login")
         }
       />
       <Route 
         exact={true}
         path={"/logout"}
         element={
-          <serverRedirect to={"/logout"}/>
+          serverRedirect("/logout")
         }
       />
       <Route
