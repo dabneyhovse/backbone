@@ -64,7 +64,8 @@ function ServerRedirect({to}) {
   useEffect(() => {
     window.location.href = to;
   });
-  return <Navigate to={to}/>;
+  //return <Navigate to={to}/>;
+  return <></>;
 }
 
 /**
