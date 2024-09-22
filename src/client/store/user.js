@@ -11,8 +11,8 @@ import { toast } from "react-toastify";
 import history from "../history";
 
 import { loadedAuth, updateModalVisibility } from "./authModal";
-import { unflattenObject } from "./helpers";
-import { TRUE } from "sass";
+// import { unflattenObject } from "./helpers";
+// import { TRUE } from "sass";
 
 const AUTH_ERR_TOAST_TIME = 3000;
 
