@@ -12,7 +12,7 @@
 import React, { Component, Suspense } from "react";
 // import { lazy } from 'react';
 import { connect, useSelector } from "react-redux";
-import { Route } from "react-router-dom";
+import { Navigate, Route } from "react-router-dom";
 import Loading from "./components/layout/Loading";
 import SlideRoutes from "react-slide-routes";
 import ManagerContainer from "./components/layout/ManagerContainer";
@@ -122,22 +122,14 @@ function SiteRoutes() {
         exact={true}
         path={"/login"}
         element={
-          <LazyAuth
-            requiredClaims={[]}
-            userClaims={userClaims}
-            lazyElement={<a href="/login"></a>}
-          />
+          <Navigate to="/login"/>
         }
       />
       <Route 
         exact={true}
         path={"/logout"}
         element={
-          <LazyAuth
-            requiredClaims={[]}
-            userClaims={userClaims}
-            lazyElement={<a href="/logout"></a>}
-          />
+          <Navigate to="/logout"/>
         }
       />
       <Route
