@@ -192,11 +192,9 @@ function Navdarb() {
                   </NavDropdown.Item>
                 ) : (
                   <React.Fragment>
-                    <LinkContainer to={`${process.env.ISSUER_BASE_URL}/account`}>
-                      <NavDropdown.Item pullRight={false} href>
+                    <NavDropdown.Item pullRight={false} href={`${process.env.ISSUER_BASE_URL}/account`}>
                         Profile
-                      </NavDropdown.Item>
-                    </LinkContainer>
+                    </NavDropdown.Item>
                     {userClaims.includes("backbone-admin") ? (
                       <LinkContainer to="/adminpanel">
                         <NavDropdown.Item pullRight={false} href>
