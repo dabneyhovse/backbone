@@ -187,11 +187,9 @@ function Navdarb() {
                 id="collasible-nav-dropdown"
               >
                 {user.default == true ? (
-                  <LinkContainer reloadDocument to="/login">
-                    <NavDropdown.Item pullRight={false} href>
+                  <NavDropdown.Item pullRight={false} href="/login">
                       Login
-                    </NavDropdown.Item>
-                  </LinkContainer>
+                  </NavDropdown.Item>
                 ) : (
                   <React.Fragment>
                     <LinkContainer to={`${process.env.ISSUER_BASE_URL}/account`}>
