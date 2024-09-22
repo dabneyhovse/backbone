@@ -85,7 +85,7 @@ const createApp = () => {
       idpLogout: true,
       attemptSilentLogin: true,
       errorOnRequiredAuth: true,
-      clientAuthMethod: "tls_client_auth",
+      clientAuthMethod: "none",
       session: {
         store: sessionStore,
       },
@@ -93,6 +93,12 @@ const createApp = () => {
         https: mTLSAgent,
       },
       idTokenSigningAlg: "EdDSA",
+      authorizationParams: {
+        response_type: 'id_token',
+        response_mode: 'form_post',
+        scope: 'openid profile email',
+        client_id: process.env.CLIENT_ID
+      }
     })
   );
 
