@@ -26,6 +26,7 @@ const sessionStore = new SequelizeStore({ db });
 const PORT = process.env.PORT || 8080;
 const app = express();
 const socketio = require("socket.io");
+const { URLSearchParams } = require("url");
 
 module.exports = app;
 
@@ -100,9 +101,16 @@ const createApp = () => {
         client_id: process.env.CLIENT_ID
       },
       routes: {
-        login: "/login",
+        login: false,
         logout: "/logout",
+        postLogoutRedirect: "/auth/postlogout"
       }
+    })
+  );
+
+  app.get('/login', (req, res) =>
+    res.oidc.login({
+      returnTo: `/auth/postlogin?redirect=${encodeURIComponent(req.originalUrl)}`,
     })
   );
 

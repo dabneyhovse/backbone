@@ -9,15 +9,19 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 import { me } from "../../store/user";
 
 function PostLogin() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  let [searchParams, setSearchParams] = useSearchParams();
+
+  const redirectURL = decodeURIComponent(searchParams.get('redirect'))
 
   useEffect(() => {
-    navigate('/home', { replace: true });
+    navigate(redirectURL || '/', { replace: true });
     dispatch(me());
   });
 
