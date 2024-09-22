@@ -62,7 +62,7 @@ function LazyAuth({ lazyElement, requiredClaims, userClaims, managerContainer })
 
 function ServerRedirect({to}) {
   useEffect(() => {
-    window.location.reload();
+    window.location.href = to;
   });
   return <Navigate to={to}/>;
 }
