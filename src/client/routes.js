@@ -65,7 +65,7 @@ function ServerRedirect({to}) {
     window.location.href = to;
   });
   //return <Navigate to={to}/>;
-  return <></>;
+  return null;
 }
 
 /**
