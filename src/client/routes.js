@@ -60,12 +60,18 @@ function LazyAuth({ lazyElement, requiredClaims, userClaims, managerContainer })
 
 }
 
+function serverRedirect({to}) {
+  useEffect(() => {
+    window.location.href = to;
+  });
+  return <></>;
+}
+
 /**
  *  See Keycloak admin console to view and configure roles
  */
 
 function SiteRoutes() {
-  const navigate = useNavigate();
   const { userClaims } = useSelector((state) => ({
     userClaims: state.user?.backbone_roles ? state.user.backbone_roles : [],
   }));
@@ -123,17 +129,14 @@ function SiteRoutes() {
         exact={true}
         path={"/login"}
         element={
-          useEffect(() => {
-            navigate("/login");
-            return null;
-          })
+          <serverRedirect to={"/login"}/>
         }
       />
       <Route 
         exact={true}
         path={"/logout"}
         element={
-          null
+          <serverRedirect to={"/logout"}/>
         }
       />
       <Route
