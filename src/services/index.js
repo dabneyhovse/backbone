@@ -26,7 +26,7 @@ const builtInServiceNames = [
 // all config information that toplevel backbone structure needs
 let serviceConfigs = [
   ...builtInServiceNames.map((name) => require(`./${name}.js`)),
-  require("service-example/Config"),
+  // require("service-example/Config"),
   require("service-frotator/Config"),
 ];
 

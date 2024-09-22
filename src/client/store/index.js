@@ -35,7 +35,7 @@ import { createReducerManager } from "./manager";
 // }
 
 // SERVICES NOTE: add services redux here:
-import exampleReducer from "service-example/Redux";
+// import exampleReducer from "service-example/Redux";
 import frotatorReducer from "service-frotator/Redux";
 
 const staticReducers = {
@@ -44,7 +44,7 @@ const staticReducers = {
   // admin,
   navbar,
   // affiliation,
-  example: exampleReducer,
+  // example: exampleReducer,
   frotator: frotatorReducer,
 };
 

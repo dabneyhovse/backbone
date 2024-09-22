@@ -66,7 +66,7 @@ const addSuspense = (lazy) => {
 };
 
 const Frotator = React.lazy(() => import("service-frotator/Admin"));
-const Example = React.lazy(() => import("service-example/Admin"));
+// const Example = React.lazy(() => import("service-example/Admin"));
 // const APIRoutes = React.lazy(() => import("./api/ApiRoutes"));
 
 /**
@@ -112,13 +112,13 @@ const BUILT_IN_ADMIN = [
     route: "frotator",
     element: <Frotator />,
   },
-  {
-    importAdmin: true,
-    name: "Example",
-    moduleName: "service-example",
-    route: "example",
-    element: <Example />,
-  },
+  // {
+  //   importAdmin: true,
+  //   name: "Example",
+  //   moduleName: "service-example",
+  //   route: "example",
+  //   element: <Example />,
+  // },
 ];
 
 /**
