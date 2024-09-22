@@ -65,15 +65,6 @@ function LazyAuth({ lazyElement, requiredClaims, userClaims, managerContainer })
  */
 
 function SiteRoutes() {
-
-  const location = useLocation();
-  const excludedPaths = ['/login', '/logout'];
-
-  if (excludedPaths.includes(location.pathname)) {
-    window.location.href = location.pathname;
-    return null;
-  }
-
   const { userClaims } = useSelector((state) => ({
     userClaims: state.user?.backbone_roles ? state.user.backbone_roles : [],
   }));
