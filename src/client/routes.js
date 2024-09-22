@@ -9,7 +9,7 @@
  * // TODO special routes allowing any user to host a personal website
  */
 
-import React, { Component, Suspense } from "react";
+import React, { Component, Suspense, useEffect } from "react";
 // import { lazy } from 'react';
 import { connect, useSelector } from "react-redux";
 import { Navigate, Route, useLocation } from "react-router-dom";
@@ -131,14 +131,16 @@ function SiteRoutes() {
         exact={true}
         path={"/login"}
         element={
-          <Navigate to="/login"/>
+          null
         }
       />
       <Route 
         exact={true}
         path={"/logout"}
         element={
-          <Navigate to="/logout"/> 
+          useEffect(() => {
+            window.location.href = "/login";
+          })
         }
       />
       <Route
