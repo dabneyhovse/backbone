@@ -70,6 +70,7 @@ function SiteRoutes() {
   const excludedPaths = ['/login', '/logout'];
 
   if (excludedPaths.includes(location.pathname)) {
+    window.location.href = location.pathname;
     return null;
   }
 
