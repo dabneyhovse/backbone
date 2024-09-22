@@ -118,7 +118,28 @@ function SiteRoutes() {
           />
         }
       />
-
+      <Route 
+        exact={true}
+        path={"/login"}
+        element={
+          <LazyAuth
+            requiredClaims={[]}
+            userClaims={userClaims}
+            lazyElement={<a href="/login"></a>}
+          />
+        }
+      />
+      <Route 
+        exact={true}
+        path={"/logout"}
+        element={
+          <LazyAuth
+            requiredClaims={[]}
+            userClaims={userClaims}
+            lazyElement={<a href="/logout"></a>}
+          />
+        }
+      />
       <Route
         exact={true}
         path={"/auth/postlogin"}
