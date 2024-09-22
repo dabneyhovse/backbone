@@ -119,14 +119,12 @@ function SiteRoutes() {
         }
       />
       <Route 
-        exact={true}
         path={"/login"}
         element={
           <Navigate to="/login"/>
         }
       />
       <Route 
-        exact={true}
         path={"/logout"}
         element={
           <Navigate to="/logout"/>
