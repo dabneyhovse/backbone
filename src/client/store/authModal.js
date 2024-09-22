@@ -39,7 +39,7 @@ export const loadedAuth = () => {
 };
 
 const init = {
-  visible: false,
+  // visible: false,
   loaded: false,
 };
 

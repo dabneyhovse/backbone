@@ -66,7 +66,7 @@ function LazyAuth({ lazyElement, requiredClaims, userClaims, managerContainer })
 
 function SiteRoutes() {
   const { userClaims } = useSelector((state) => ({
-    userClaims: state.userInfo?.backbone_roles ? state.userInfo.backbone_roles : [],
+    userClaims: state.user?.backbone_roles ? state.user.backbone_roles : [],
   }));
 
   return (
