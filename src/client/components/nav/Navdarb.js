@@ -207,11 +207,9 @@ function Navdarb() {
                       ""
                     )}
                     <NavDropdown.Divider />
-                    <LinkContainer reloadDocument to="/logout">
-                      <NavDropdown.Item pullRight={false} href>
+                    <NavDropdown.Item pullRight={false} href="/logout">
                         Logout
-                      </NavDropdown.Item>
-                    </LinkContainer>
+                    </NavDropdown.Item>
                   </React.Fragment>
                 )}
               </NavDropdown>
