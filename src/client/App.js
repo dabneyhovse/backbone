@@ -29,7 +29,7 @@ function App() {
       {loaded ? (
         <>
           <Navdarb />
-          <AuthModal />
+          {/* <AuthModal /> */}
           <Routes />
         </>
       ) : (
