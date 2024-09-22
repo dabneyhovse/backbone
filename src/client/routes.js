@@ -12,7 +12,7 @@
 import React, { Component, Suspense } from "react";
 // import { lazy } from 'react';
 import { connect, useSelector } from "react-redux";
-import { Navigate, Route } from "react-router-dom";
+import { Navigate, Route, useLocation } from "react-router-dom";
 import Loading from "./components/layout/Loading";
 import SlideRoutes from "react-slide-routes";
 import ManagerContainer from "./components/layout/ManagerContainer";
@@ -65,6 +65,14 @@ function LazyAuth({ lazyElement, requiredClaims, userClaims, managerContainer })
  */
 
 function SiteRoutes() {
+
+  const location = useLocation();
+  const excludedPaths = ['/login', '/logout'];
+
+  if (excludedPaths.includes(location.pathname)) {
+    return null;
+  }
+
   const { userClaims } = useSelector((state) => ({
     userClaims: state.user?.backbone_roles ? state.user.backbone_roles : [],
   }));
@@ -129,7 +137,7 @@ function SiteRoutes() {
         exact={true}
         path={"/logout"}
         element={
-          <Navigate to="/logout"/>
+          <Navigate to="/logout"/> 
         }
       />
       <Route
