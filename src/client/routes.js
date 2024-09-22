@@ -122,14 +122,22 @@ function SiteRoutes() {
         exact={true}
         path={"/login"}
         element={
-          <Navigate to="/login"/>
+          <LazyAuth
+            requiredClaims={[]}
+            userClaims={userClaims}
+            lazyElement={React.lazy(<Navigate to="/login"/>)}
+          />
         }
       />
       <Route 
         exact={true}
         path={"/logout"}
         element={
-          <Navigate to="/logout"/>
+          <LazyAuth
+            requiredClaims={[]}
+            userClaims={userClaims}
+            lazyElement={React.lazy(<Navigate to="/logout"/>)}
+          />
         }
       />
       <Route
