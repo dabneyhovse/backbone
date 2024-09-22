@@ -272,7 +272,7 @@ module.exports = router;
 //   res.json({ ...(req.user ? req.user.toJSON() : {}), authLevel });
 // });
 
-router.get("/userinfo", requiresAuth(), async (req, res) => {
+router.get("/me", requiresAuth(), async (req, res) => {
     const userInfo = await req.oidc.fetchUserInfo();
     res.json(userInfo);
 });
