@@ -98,6 +98,10 @@ const createApp = () => {
         response_mode: 'form_post',
         scope: 'openid profile email',
         client_id: process.env.CLIENT_ID
+      },
+      routes: {
+        login: "/login",
+        logout: "/logout",
       }
     })
   );
