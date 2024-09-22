@@ -118,7 +118,7 @@ function SiteRoutes() {
           />
         }
       />
-      {/* <Route 
+      <Route 
         exact={true}
         path={"/login"}
         element={
@@ -131,7 +131,7 @@ function SiteRoutes() {
         element={
           <Navigate to="/logout"/>
         }
-      /> */}
+      />
       <Route
         exact={true}
         path={"/auth/postlogin"}
