@@ -12,7 +12,7 @@
 import React, { Component, Suspense, useEffect } from "react";
 // import { lazy } from 'react';
 import { connect, useSelector } from "react-redux";
-import { Route, useNavigate } from "react-router-dom";
+import { Navigate, Route, useNavigate } from "react-router-dom";
 import Loading from "./components/layout/Loading";
 import SlideRoutes from "react-slide-routes";
 import ManagerContainer from "./components/layout/ManagerContainer";
@@ -60,11 +60,11 @@ function LazyAuth({ lazyElement, requiredClaims, userClaims, managerContainer })
 
 }
 
-function serverRedirect(to) {
+function ServerRedirect({to}) {
   useEffect(() => {
-    window.location.href = to;
+    window.location.reload();
   });
-  return <></>;
+  return <Navigate to={to}/>;
 }
 
 /**
@@ -129,14 +129,14 @@ function SiteRoutes() {
         exact={true}
         path={"/login"}
         element={
-          serverRedirect("/login")
+          <ServerRedirect to={"/login"}/>
         }
       />
       <Route 
         exact={true}
         path={"/logout"}
         element={
-          serverRedirect("/logout")
+          <ServerRedirect to={"/logout"}/>
         }
       />
       <Route
