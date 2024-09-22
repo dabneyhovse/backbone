@@ -58,7 +58,7 @@ export const me = () => async (dispatch, getState) => {
       dispatch(loadedAuth());
       dispatch(getUser(defaultUser));
     }
-    if (res.data.userInfo.email_verified !== true) {
+    if (res.data.email_verified !== true) {
       toast.warn("Please verify your email", {
         autoClose: AUTH_ERR_TOAST_TIME,
       });
