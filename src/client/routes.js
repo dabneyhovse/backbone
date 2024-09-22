@@ -122,18 +122,19 @@ function SiteRoutes() {
         exact={true}
         path={"/login"}
         element={
-          null
+          useEffect(() => {
+            window.location.href = "/login";
+            return null;
+          })
         }
       />
-      {/* <Route 
+      <Route 
         exact={true}
         path={"/logout"}
         element={
-          useEffect(() => {
-            window.location.href = "/login";
-          })
+          null
         }
-      /> */}
+      />
       <Route
         exact={true}
         path={"/auth/postlogin"}
