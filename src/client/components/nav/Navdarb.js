@@ -134,7 +134,7 @@ function Navdarb() {
 
   const { user, userClaims, navbar } = useSelector((state) => ({
     user: state.userInfo,
-    userClaims: state.userInfo?.backbone_roles ? state.userInfo.backbone_roles : {},
+    userClaims: state.userInfo?.backbone_roles ? state.userInfo.backbone_roles : [],
     navbar: state.navbar,
   }));
 
