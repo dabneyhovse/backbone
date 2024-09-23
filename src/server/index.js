@@ -21,7 +21,7 @@ const session = require("express-session");
 const { auth } = require("express-openid-connect");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const db = require("./db");
-import mTLSAgent from "module-keycloak/mTLSAgent";
+const { default: mTLSAgent } = await import("module-keycloak/mTLSAgent");
 const sessionStore = new SequelizeStore({ db });
 const PORT = process.env.PORT || 8080;
 const app = express();
