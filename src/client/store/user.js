@@ -34,7 +34,7 @@ const defaultUser = {
 /**
  * ACTION CREATORS
  */
-const getUser = (userInfo) => ({ type: GET_USER, userInfo });
+const getUser = (user) => ({ type: GET_USER, user });
 const removeUser = () => ({ type: REMOVE_USER });
 // const verifiedUser = (email, attempt) => ({
 //   type: VERIFIED_USER,
@@ -261,7 +261,7 @@ export const logout = () => async (dispatch) => {
 export default function (state = defaultUser, action) {
   switch (action.type) {
     case GET_USER:
-      return { ...state, data: action.userInfo };
+      return { ...state, data: action.user };
     case REMOVE_USER:
       return defaultUser;
     // case VERIFIED_USER: {
