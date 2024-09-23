@@ -108,13 +108,6 @@ const createApp = () => {
     })
   );
 
-  // app.get('/login', (req, res) =>
-  //   res.oidc.login({
-  //     // returnTo: `/auth/postlogin?redirect=${encodeURIComponent(req.originalUrl)}`,
-  //     returnTo: '/',
-  //   })
-  // );
-
   app.use("/auth", require("./auth"));
   // app.use("/api", require("./api"));
   app.use("/", require("./static"));

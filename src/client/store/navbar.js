@@ -69,7 +69,7 @@ const services = loadServices();
 const init = {
   visible: true,
   transparentRoutes: ["/", "/home"],
-  hiddenRoutes: ["/auth/postlogin", "/auth/postlogout"],
+  hiddenRoutes: ["/auth/postlogout"],
   links: {
     type: "main",
     links: [
