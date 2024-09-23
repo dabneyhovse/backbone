@@ -25,7 +25,7 @@ const BlueMechanical = React.lazy(() =>
 const Gallery = React.lazy(() => import("./components/basic/DarbGallery"));
 const Calender = React.lazy(() => import("./components/basic/Calender"));
 const AdminPanel = React.lazy(() => import("./components/admin/AdminPanel"));
-const PostLogin = import("./components/auth/PostLogin");
+import PostLogin from "./components/auth/PostLogin";
 const PostLogout = React.lazy(() => import("./components/auth/PostLogout"));
 
 // SERVICES NOTE: add services lazy load main component here:
