@@ -18,7 +18,7 @@ function PostLogin() {
   const dispatch = useDispatch();
   let [searchParams, setSearchParams] = useSearchParams();
 
-  const redirectURL = decodeURIComponent(searchParams.get('redirect'))
+  const redirectURL = searchParams.get('redirect') ? decodeURIComponent(searchParams.get('redirect')) : null;
 
   useEffect(() => {
     navigate(redirectURL || '/', { replace: true });
