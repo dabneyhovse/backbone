@@ -25,7 +25,7 @@ const BlueMechanical = React.lazy(() =>
 const Gallery = React.lazy(() => import("./components/basic/DarbGallery"));
 const Calender = React.lazy(() => import("./components/basic/Calender"));
 const AdminPanel = React.lazy(() => import("./components/admin/AdminPanel"));
-const PostLogin = React.lazy(() => import("./components/auth/PostLogin"));
+const PostLogin = React.memo(() => import("./components/auth/PostLogin"));
 const PostLogout = React.lazy(() => import("./components/auth/PostLogout"));
 
 // SERVICES NOTE: add services lazy load main component here:
@@ -67,6 +67,8 @@ function ServerRedirect({to}) {
   //return <Navigate to={to}/>;
   return null;
 }
+
+PostLogin />
 
 /**
  *  See Keycloak admin console to view and configure roles
@@ -144,14 +146,9 @@ function SiteRoutes() {
         exact={true}
         path={"/auth/postlogin"}
         element={
-          <LazyAuth
-            requiredClaims={[]}
-            userClaims={userClaims}
-            lazyElement={<PostLogin />}
-          />
+          <PostLogin />
         }
       />
-
       <Route
         exact={true}
         path={"/auth/postlogout"}
