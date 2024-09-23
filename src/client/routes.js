@@ -68,8 +68,6 @@ function ServerRedirect({to}) {
   return null;
 }
 
-PostLogin />
-
 /**
  *  See Keycloak admin console to view and configure roles
  */
