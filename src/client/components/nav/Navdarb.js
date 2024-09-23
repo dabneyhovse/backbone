@@ -132,8 +132,8 @@ function Navdarb() {
   let location = useLocation();
 
   const { user, userClaims, navbar } = useSelector((state) => ({
-    user: state.user,
-    userClaims: state.user.backbone_roles ? state.user.backbone_roles : [],
+    user: state.user.data,
+    userClaims: state.user.data.backbone_roles ? state.user.data.backbone_roles : [],
     navbar: state.navbar,
   }));
 

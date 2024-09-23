@@ -74,7 +74,7 @@ function ServerRedirect({to}) {
 
 function SiteRoutes() {
   const { userClaims } = useSelector((state) => ({
-    userClaims: state.user?.backbone_roles ? state.user.backbone_roles : [],
+    userClaims: state.user.data?.backbone_roles ? state.user.data.backbone_roles : [],
   }));
 
   return (
