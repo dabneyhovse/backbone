@@ -50,7 +50,13 @@ export const clearUserError = () => ({
  */
 export const me = () => async (dispatch, getState) => {
   try {
-    const res = await axios.get("/auth/me");
+    const res = await axios.get("/auth/me").catch(function(error) {
+      if (error.response && error.response.status === 401) {
+        dispatch(loadedAuth());
+        dispatch(getUser(defaultUser));
+        throw new Error("justUnauthenticated");
+      }
+    });
     // if (res.status === 401) {
     //   toast.warn("Melissa screwed up!", {
     //     autoClose: AUTH_ERR_TOAST_TIME,
@@ -66,7 +72,7 @@ export const me = () => async (dispatch, getState) => {
     dispatch(loadedAuth());
     dispatch(getUser(res.data));
   } catch (err) {
-    if (err.response?.status === 401) {
+    if (err.message === "justUnauthenticated") {
       dispatch(loadedAuth());
       dispatch(getUser(defaultUser));
     }
@@ -203,6 +209,7 @@ export const logout = () => async (dispatch) => {
   try {
     history.push("/");
     dispatch(removeUser());
+    dispatch(getUser(defaultUser));
   } catch (err) {
     toast.error("There was an error logging out", {
       autoClose: AUTH_ERR_TOAST_TIME,
