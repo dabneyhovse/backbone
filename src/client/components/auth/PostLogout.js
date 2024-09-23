@@ -13,15 +13,13 @@ import { useNavigate } from "react-router-dom";
 import { logout } from "../../store/user";
 
 function PostLogout() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    navigate('/home', { replace: true });
     dispatch(logout());
   });
 
-  return (<></>);
+  return null;
 }
 
-export default PostLogout;
+export default React.memo(PostLogout);

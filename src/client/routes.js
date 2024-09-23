@@ -26,7 +26,7 @@ const Gallery = React.lazy(() => import("./components/basic/DarbGallery"));
 const Calender = React.lazy(() => import("./components/basic/Calender"));
 const AdminPanel = React.lazy(() => import("./components/admin/AdminPanel"));
 import PostLogin from "./components/auth/PostLogin";
-const PostLogout = React.lazy(() => import("./components/auth/PostLogout"));
+import PostLogout from "./components/auth/PostLogout";
 
 // SERVICES NOTE: add services lazy load main component here:
 // const Example = React.lazy(() => import("service-example/React"));
@@ -142,23 +142,11 @@ function SiteRoutes() {
       />
       <Route
         exact={true}
-        path={"/auth/postlogin"}
-        element={
-          <PostLogin />
-        }
-      />
-      <Route
-        exact={true}
         path={"/auth/postlogout"}
         element={
-          <LazyAuth
-            requiredClaims={[]}
-            userClaims={userClaims}
-            lazyElement={<PostLogout />}
-          />
+          <PostLogout />
         }
       />
-
       <Route
         exact={false}
         path={"/adminpanel/*"}
