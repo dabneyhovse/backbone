@@ -51,6 +51,7 @@ export const clearUserError = () => ({
 export const me = () => async (dispatch, getState) => {
   try {
     const res = await axios.get("/auth/me");
+    console.dir(res);
     if (res.status === 401) {
       toast.warn("Melissa screwed up!", {
         autoClose: AUTH_ERR_TOAST_TIME,
@@ -58,16 +59,20 @@ export const me = () => async (dispatch, getState) => {
       dispatch(loadedAuth());
       dispatch(getUser(defaultUser));
     }
-    if (res.data.email_verified !== true) {
+    else if (res.data.email_verified !== true) {
       toast.warn("Please verify your email", {
         autoClose: AUTH_ERR_TOAST_TIME,
       });
     }
     dispatch(loadedAuth());
+    console.log("Almost there!")
     dispatch(getUser(res.data));
   } catch (err) {
     if (err.response?.status === 401) {
       dispatch(loadedAuth());
+      toast.warn("D'oh!", {
+        autoClose: AUTH_ERR_TOAST_TIME,
+      });
       dispatch(getUser(defaultUser));
     }
     else {
