@@ -25,7 +25,7 @@ function PostLogin() {
     dispatch(me());
   }, []);
 
-  return (<></>);
+  return null;
 }
 
 export default memo(PostLogin);
