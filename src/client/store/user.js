@@ -51,7 +51,6 @@ export const clearUserError = () => ({
 export const me = () => async (dispatch, getState) => {
   try {
     const res = await axios.get("/auth/me");
-    console.dir(res);
     // if (res.status === 401) {
     //   toast.warn("Melissa screwed up!", {
     //     autoClose: AUTH_ERR_TOAST_TIME,
