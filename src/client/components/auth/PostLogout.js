@@ -14,9 +14,11 @@ import { logout } from "../../store/user";
 
 function PostLogout() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(logout());
+    navigate("/", { replace: true });
   });
 
   return null;
