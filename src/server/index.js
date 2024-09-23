@@ -101,19 +101,19 @@ const createApp = () => {
         client_id: process.env.CLIENT_ID
       },
       routes: {
-        login: false,
+        // login: false,
         logout: "/logout",
         postLogoutRedirect: "/auth/postlogout"
       }
     })
   );
 
-  app.get('/login', (req, res) =>
-    res.oidc.login({
-      // returnTo: `/auth/postlogin?redirect=${encodeURIComponent(req.originalUrl)}`,
-      returnTo: '/',
-    })
-  );
+  // app.get('/login', (req, res) =>
+  //   res.oidc.login({
+  //     // returnTo: `/auth/postlogin?redirect=${encodeURIComponent(req.originalUrl)}`,
+  //     returnTo: '/',
+  //   })
+  // );
 
   app.use("/auth", require("./auth"));
   // app.use("/api", require("./api"));
