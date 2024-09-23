@@ -23,7 +23,7 @@ function PostLogin() {
   useEffect(() => {
     navigate(redirectURL || '/', { replace: true });
     dispatch(me());
-  });
+  }, []);
 
   return (<></>);
 }
