@@ -6,7 +6,7 @@
  *
  */
 
-import React, { useEffect } from "react";
+import { memo, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
@@ -28,4 +28,4 @@ function PostLogin() {
   return (<></>);
 }
 
-export default PostLogin;
+export default memo(PostLogin);
