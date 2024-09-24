@@ -8,7 +8,7 @@
     "npm": ">= 8.0"
   },
   "scripts": {
-    "link-services": "npm link service-frotator service-example service-gallery",
+    "link-services": "npm link service-frotator service-gallery",
     "clean-and-link": "rm -rf node_modules && npm install && npm run link-services",
     "build": "webpack",
     "build-watch": "webpack --watch",
