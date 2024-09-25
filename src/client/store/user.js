@@ -50,37 +50,27 @@ export const clearUserError = () => ({
  */
 export const me = () => async (dispatch, getState) => {
   try {
-    const res = await axios.get("/auth/me").catch(function(error) {
-      if (error.response && error.response.status === 401) {
-        throw new Error("justUnauthenticated");
-      }
-    });
-    // if (res.status === 401) {
-    //   toast.warn("Melissa screwed up!", {
-    //     autoClose: AUTH_ERR_TOAST_TIME,
-    //   });
-    //   dispatch(loadedAuth());
-    //   dispatch(getUser(defaultUser));
-    // }
-    if (res.data.email_verified !== true) {
-      toast.warn("Please verify your email", {
-        autoClose: AUTH_ERR_TOAST_TIME,
-      });
-    }
-    dispatch(loadedAuth());
-    dispatch(getUser(res.data));
-  } catch (err) {
-    if (err.message === "justUnauthenticated") {
+    const res = await axios.get("/auth/me");
+    // server sends status 204 (No Content) if user is not logged in
+    if (res.status === 204) {
       dispatch(loadedAuth());
       dispatch(getUser(defaultUser));
     }
     else {
+      if (res.data.email_verified !== true) {
+        toast.warn("Please verify your email", {
+          autoClose: AUTH_ERR_TOAST_TIME,
+        });
+      }
+      dispatch(loadedAuth());
+      dispatch(getUser(res.data));
+    }
+  } catch (err) {
       dispatch(loadedAuth());
       console.error(err);
       toast.error(`There was an error loading your user.`, {
         autoClose: AUTH_ERR_TOAST_TIME,
       });
-    }
   }
 };
 
