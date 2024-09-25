@@ -274,7 +274,10 @@ module.exports = router;
 
 router.get("/me", async (req, res) => {
     if (req.oidc.isAuthenticated()) {
-        res.json(req.oidc.user);
+        userData = req.oidc.user
+        // base profile URL; contains the actual link and the referrer parameter - client adds the referrer_uri parameter for back link
+        userData.profileBaseURL = `${req.oidc.idTokenClaims.iss}/account?referrer=${req.oidc.idTokenClaims.aud}`
+        res.json(userData);
     }
     else {
         res.sendStatus(204);

@@ -192,7 +192,7 @@ function Navdarb() {
                   </NavDropdown.Item>
                 ) : (
                   <React.Fragment>
-                    <NavDropdown.Item pullRight={false} href="https://accounts.dabney.caltech.edu/realms/dabneyhovse/account">
+                    <NavDropdown.Item pullRight={false} href={`${user.profileBaseURL}&referrer_uri=${window.location.href}`}>
                         Profile
                     </NavDropdown.Item>
                     {userClaims.includes("backbone-admin") ? (
