@@ -52,8 +52,6 @@ export const me = () => async (dispatch, getState) => {
   try {
     const res = await axios.get("/auth/me").catch(function(error) {
       if (error.response && error.response.status === 401) {
-        dispatch(loadedAuth());
-        dispatch(getUser(defaultUser));
         throw new Error("justUnauthenticated");
       }
     });
