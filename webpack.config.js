@@ -68,7 +68,7 @@ module.exports = {
           and: [/node_modules/], // Exclude libraries in node_modules ...
           not: [
             // Except for the local services
-            /service-example/,
+            // /service-example/,
             /service-frotator/,
             /service-gallery/,
           ],
