@@ -56,7 +56,7 @@ class DarbHero extends React.Component {
         },
         {
           id: 3,
-          img: "./resources/images/home_page/sheared_sheep.jpg",
+          img: "./resources/images/home_page/sheared_sheep.jpeg",
           title: "During Powerpoint Karaoke Darbs Present Rants Made By Other Darbs",
           paragraph: 'They usually consist of very good content.',
         },
