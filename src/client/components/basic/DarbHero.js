@@ -54,6 +54,12 @@ class DarbHero extends React.Component {
           paragraph:
             "Our social events are scheduled at the start of each term (see the social calender), but sometimes random events emerge from the chaos that is Dabney Hovse...",
         },
+        {
+          id: 3,
+          img: "./resources/images/home_page/sheared_sheep.jpg",
+          title: "During Powerpoint Karaoke Darbs Present Rants Made By Other Darbs",
+          paragraph: 'They usually consist of very good content.',
+        },
       ],
     };
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
