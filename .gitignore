@@ -5,3 +5,4 @@ sendgrid.env
 /src/script/test.js
 aaaaaa.sendgrid.env
 .editorconfig
+package-lock.json

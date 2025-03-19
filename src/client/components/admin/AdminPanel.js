@@ -66,8 +66,8 @@ const addSuspense = (lazy) => {
 };
 
 const Frotator = React.lazy(() => import("service-frotator/Admin"));
-const Example = React.lazy(() => import("service-example/Admin"));
-const APIRoutes = React.lazy(() => import("./api/ApiRoutes"));
+// const Example = React.lazy(() => import("service-example/Admin"));
+// const APIRoutes = React.lazy(() => import("./api/ApiRoutes"));
 
 /**
  * admin panel components which are built into backbone
@@ -80,32 +80,31 @@ const BUILT_IN_ADMIN = [
     route: "",
     element: (
       <div>
-        TODO add actual explination text here. Not my job anymore... But
-        basically this area lets admin manage the website and linked services.
+        This is the Backbone admin panel. Here you can manage services on the website. If you're looking for user and group configuration, you're in the wrong place! Go to the IdM or Keycloak admin panel.
       </div>
     ),
   },
-  {
-    importAdmin: true,
-    name: "Users",
-    moduleName: "users",
-    route: "users",
-    element: <UserPanel />,
-  },
-  {
-    importAdmin: true,
-    name: "Groups",
-    moduleName: "groups",
-    route: "groups",
-    element: <GroupPanel />,
-  },
-  {
-    importAdmin: true,
-    name: "API",
-    moduleName: "api",
-    route: "api",
-    element: <APIRoutes />,
-  },
+  // {
+  //   importAdmin: true,
+  //   name: "Users",
+  //   moduleName: "users",
+  //   route: "users",
+  //   element: <UserPanel />,
+  // },
+  // {
+  //   importAdmin: true,
+  //   name: "Groups",
+  //   moduleName: "groups",
+  //   route: "groups",
+  //   element: <GroupPanel />,
+  // },
+  // {
+  //   importAdmin: true,
+  //   name: "API",
+  //   moduleName: "api",
+  //   route: "api",
+  //   element: <APIRoutes />,
+  // },
   {
     importAdmin: true,
     name: "Frotator",

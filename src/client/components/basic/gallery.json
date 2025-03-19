@@ -238,5 +238,10 @@
     "src": "./resources/images/carousel/hands.gif",
     "thumbnail": "./resources/images/carousel/hands.gif",
     "caption": "A normal day in the lounge"
+  },
+  {
+    "src": "./resources/images/carousel/sheared_sheep.jpeg",
+    "thumbnail": "./resources/images/carousel/sheared_sheep.jpeg",
+    "caption": "Powerpoint Karaoke"
   }
 ]

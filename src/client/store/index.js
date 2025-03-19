@@ -14,9 +14,9 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import user from "./user";
 import auth from "./authModal";
-import admin from "./admin";
+// import admin from "./admin";
 import navbar from "./navbar";
-import affiliation from "./affiliation";
+// import affiliation from "./affiliation";
 
 import { createReducerManager } from "./manager";
 
@@ -41,10 +41,10 @@ import frotatorReducer from "service-frotator/Redux";
 const staticReducers = {
   user,
   auth,
-  admin,
+  // admin,
   navbar,
-  affiliation,
-  example: exampleReducer,
+  // affiliation,
+  // example: exampleReducer,
   frotator: frotatorReducer,
 };
 

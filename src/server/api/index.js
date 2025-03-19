@@ -46,15 +46,15 @@ function attachServices(apiRouter) {
   console.log(`Attached ${count} service api Route(s)\n`);
 }
 
-router.use(populateApiKey);
+// router.use(populateApiKey);
 // attach base backbone routes
-router.use("/users", require("./users"));
-router.use("/affiliations", require("./affiliations"));
-router.use("/groups", require("./groups"));
-router.use("/keys", require("./keys"));
-router.use("/scopes", require("./scopes"));
-router.use("/dbux", require("./dbux"));
-router.use("/telegram", require("./telegram"));
+// router.use("/users", require("./users"));
+// router.use("/affiliations", require("./affiliations"));
+// router.use("/groups", require("./groups"));
+// router.use("/keys", require("./keys"));
+// router.use("/scopes", require("./scopes"));
+// router.use("/dbux", require("./dbux"));
+// router.use("/telegram", require("./telegram"));
 
 // attach routes for services
 attachServices(router);

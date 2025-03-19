@@ -21,7 +21,7 @@ const builtInServiceNames = [
   "social-calendar",
   "wiki-service",
   "dmail-service",
-  "print-service",
+  // "print-service",
 ];
 // all config information that toplevel backbone structure needs
 let serviceConfigs = [

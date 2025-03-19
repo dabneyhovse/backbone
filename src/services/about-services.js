@@ -19,7 +19,7 @@ module.exports = {
 
   /**
    * the route you want your service to occupy ie "example" gives the service dabney.caltech.edu/example/*
-   * simply use your own routes to get varried routes from the base ie
+   * simply use your own routes to get varied routes from the base ie
    * dabney.caltech.edu/example/about and dabney.caltech.edu/example/home
    * would be two different routes
    *
@@ -76,35 +76,11 @@ module.exports = {
   tooltip: "Info on services.",
 
   /**
-   *  Amount of authorization that the user needs to view the service
-   *  possible values:
-   *    -1 => prefrosh only                         (lol this isnt real, we cant check)
-   *    0 => no login required                      (or 1/2/3/4 reqs)
-   *    1 => login required (non darbs can access)  (or 2/3/4 reqs)
-   *    2 => login & socialDarb required            (or 3/4 reqs)
-   *    3 => login & fullDarb required              (or 4 reqs)
-   *    4 => admin status required
-   *    5 => login but only non darbs
-   *    6 => login but only social darbs
-   *    7 => login but only full darbs
-   *
-   *  I'm not sure why someone would want the 5-7 settings but i'm including it
-   *  just so every config is possible.
+   *  OpenID Connect claims (as strings) that the user needs to view the service
+   *  Administrators can create new roles and make roles from other clients visible
+   *  to Backbone in the Keycloak admin console.
    */
-  requiredAuth: 0,
-
-  /**
-   * Similar to before, but simply restricts to current students only.
-   *
-   * Yeah the current student status of users will be self declared in the
-   * profile settings section, so I imagine itll be annoying to verify, but
-   * comptrollers wil have easy access to change user statuses
-   *
-   * To avoid annoying debate later, yes I'm going to include students on temp leave
-   * y'all can bicker about this however you want but its best to default to yes
-   * and deal with exceptions later.
-   */
-  requireCurrentStudent: false,
+  requiredClaims: [],
 
   /**
    * the below are all false since this is a built in service
