@@ -40,7 +40,10 @@ module.exports = {
     clean: true,
   },
   resolve: {
-    extensions: [".js", ".jsx", ".ts"],
+  extensions: [".js", ".jsx", ".ts"],
+  // Always resolve packages from this project's node_modules, even when
+  // importing files from sibling folders via symlinks (npm link / file: deps)
+  modules: [path.resolve(__dirname, "node_modules"), "node_modules"],
     alias: {
       react: path.resolve(__dirname, "node_modules/react"),
       redux: path.resolve(__dirname, "node_modules/redux"),
