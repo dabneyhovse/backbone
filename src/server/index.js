@@ -21,7 +21,6 @@ const session = require("express-session");
 const { auth } = require("express-openid-connect");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const db = require("./db");
-const { default: mTLSAgent } = import("module-keycloak/mTLSAgent");
 const sessionStore = new SequelizeStore({ db });
 const PORT = process.env.PORT || 8080;
 const app = express();
@@ -55,7 +54,7 @@ if (process.env.NODE_ENV !== "development") {
 //   }
 // });
 
-const createApp = () => {
+const createApp = async () => {
   // logging middleware
   app.use(morgan("dev"));
 
@@ -80,33 +79,57 @@ const createApp = () => {
 
   // // auth and api routes
 
-  app.use(
-    auth({
-      authRequired: false,
-      idpLogout: true,
-      attemptSilentLogin: true,
-      errorOnRequiredAuth: true,
-      clientAuthMethod: "none",
-      session: {
-        store: sessionStore,
-      },
-      httpAgent: {
-        https: mTLSAgent,
-      },
-      idTokenSigningAlg: "EdDSA",
-      authorizationParams: {
-        response_type: 'id_token',
-        response_mode: 'form_post',
-        scope: 'openid profile email',
-        client_id: process.env.CLIENT_ID
-      },
-      routes: {
-        // login: false,
-        logout: "/logout",
-        postLogoutRedirect: "/auth/postlogout"
-      }
-    })
-  );
+  // Optionally enable mTLS for the IdP only if cert/key paths are configured
+  let httpAgentOption;
+  if (process.env.CLIENT_KEY_PATH && process.env.CLIENT_CERT_PATH) {
+    try {
+      const { default: mTLSAgent } = await import("module-keycloak/mTLSAgent");
+      httpAgentOption = { https: mTLSAgent };
+      console.log("OIDC mTLS enabled via module-keycloak/mTLSAgent");
+    } catch (err) {
+      console.warn("Failed to load mTLS agent; proceeding without mTLS:", err.message);
+    }
+  }
+
+  const hasOidc =
+    !!process.env.ISSUER_BASE_URL &&
+    !!process.env.CLIENT_ID &&
+    !!process.env.SECRET;
+
+  if (hasOidc) {
+    app.use(
+      auth({
+        authRequired: false,
+        idpLogout: true,
+        attemptSilentLogin: true,
+        errorOnRequiredAuth: true,
+        clientAuthMethod: "none",
+        secret: process.env.SECRET,
+        baseURL: process.env.BASE_URL,
+        issuerBaseURL: process.env.ISSUER_BASE_URL,
+        session: {
+          store: sessionStore,
+        },
+        ...(httpAgentOption ? { httpAgent: httpAgentOption } : {}),
+        idTokenSigningAlg: "EdDSA",
+        authorizationParams: {
+          response_type: 'id_token',
+          response_mode: 'form_post',
+          scope: 'openid profile email',
+          client_id: process.env.CLIENT_ID
+        },
+        routes: {
+          // login: false,
+          logout: "/logout",
+          postLogoutRedirect: "/auth/postlogout"
+        }
+      })
+    );
+  } else {
+    console.warn(
+      "OIDC disabled: missing ISSUER_BASE_URL, CLIENT_ID, or SECRET. Running without login."
+    );
+  }
 
   app.use("/auth", require("./auth"));
   app.use("/api", require("./api"));

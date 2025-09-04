@@ -31,14 +31,20 @@ function attachServices(apiRouter) {
   let count = 0;
   allServices.forEach((service) => {
     if (service.importExpress) {
-      apiRouter.use(
-        `/${service.route}`,
-        require(`${service.moduleName}/Express`)
-      );
-      count++;
-      console.log(
-        `\t[${service.name}]:\tattached api routes at /api/${service.route}/`
-      );
+      try {
+        apiRouter.use(
+          `/${service.route}`,
+          require(`${service.moduleName}/Express`)
+        );
+        count++;
+        console.log(
+          `\t[${service.name}]:\tattached api routes at /api/${service.route}/`
+        );
+      } catch (err) {
+        console.warn(
+          `\t[${service.name}]:\tskipping api attach (missing deps?): ${err.message}`
+        );
+      }
     } else {
       console.log(`\t[${service.name}]:\tdoes not have api routes`);
     }

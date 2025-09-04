@@ -27,8 +27,16 @@ const builtInServiceNames = [
 let serviceConfigs = [
   ...builtInServiceNames.map((name) => require(`./${name}.js`)),
   // require("service-example/Config"),
-  require("service-frotator/Config"),
 ];
+
+// Attempt to load optional services that may be linked or installed via file: deps
+try {
+  // eslint-disable-next-line global-require
+  const frotator = require("service-frotator/Config");
+  serviceConfigs.push(frotator);
+} catch (err) {
+  console.warn("Optional service missing: service-frotator. Skipping UI wiring.");
+}
 
 module.exports = {
   serviceConfigs,
